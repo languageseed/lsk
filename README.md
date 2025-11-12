@@ -13,6 +13,18 @@
 
 ---
 
+## 💡 Why does this LSK exist?
+
+During 2025, as I experimented with AI-assisted coding projects, a natural approach emerged: I started keeping a folder of prompts, specification markdowns, plans, and various other artefacts. Over time, this evolved into a loose, contract-based YAML system with set plays and patterns. I carried forward the lessons learned from project to project, gradually building a handy reference I could review with tools like cursor or cline to give context on my approach and how I stay organized.
+
+By the latter half of 2025, many specification-driven planning systems and approaches have emerged that are much more sophisticated that LSK. Nevertheless, it has remained a consistent starting point for every project, providing structure and clarity until the project matures into a defined application or system.
+
+LSK is an abbreviation for Language Seed Kit.
+
+It’s a prompting bootstrap for an AI assistant and a coder/programmer to work together in an IDE. LSK isn’t prescriptive—there’s no right or wrong way to do it. This is simply what has worked for me.
+
+---
+
 ## 📦 What is LSK?
 
 **LSK (Language Seed Kit)** is a collection of specialized frameworks designed to structure and optimize AI-assisted development across different domains. Each framework provides:
