@@ -1,4 +1,4 @@
-# LSKv4 - Automation Prompts
+# LSK Core v1.0 - Automation Prompts
 # Version: 4.0.0
 # Last Updated: 2025-08-24
 #
@@ -1110,7 +1110,7 @@ prompts:
       1. Follow the specified pattern from patterns.yaml#{pattern_id}
       2. Implement architectural approach from approaches.yaml#{approach_id}
       3. Improve code quality and maintainability
-      4. Update to match the LSKv4 architecture
+      4. Update to match the LSK Core architecture
       
       Code to refactor:
       {code_to_refactor}

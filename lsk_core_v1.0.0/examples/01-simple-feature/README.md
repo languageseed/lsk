@@ -19,7 +19,7 @@ You're working on a Node.js/Express API that currently has no authentication. Yo
 
 ---
 
-## LSK Core Usage
+## LSK Core v1.0 Usage
 
 ### Step 1: Create Context Pack
 
@@ -47,7 +47,7 @@ As you progress, create checkpoints:
 ## Example Conversation with AI
 
 ```markdown
-I'm using LSK Core v5.0 for structured development. 
+I'm using LSK Core v1.0 for structured development. 
 
 Here's my context pack for adding authentication to my API:
 

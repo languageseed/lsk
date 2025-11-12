@@ -1,4 +1,4 @@
-# LSK Core v5.0 - Complete Index
+# LSK Core v1.0 - Complete Index
 ## The Proven Foundation for AI-Assisted Development
 
 ---
@@ -8,9 +8,9 @@
 ### Core Documents
 1. **[README.md](README.md)** - Project overview and framework introduction
 2. **[QUICK_START.md](QUICK_START.md)** - Get productive in 5 minutes
-3. **[WHATS_NEW_v5.0.md](WHATS_NEW_v5.0.md)** - ⭐ What changed in v5.0
-4. **[EVOLUTION_GUIDE.md](EVOLUTION_GUIDE.md)** - How to keep improving LSK Core
-5. **[VERSION.yaml](VERSION.yaml)** - Complete version history and roadmap
+3. **[WHATS_NEW_v1.0.0.md](WHATS_NEW_v1.0.0.md)** - ⭐ What's in v1.0.0
+4. **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
+5. **[VERSION.yaml](VERSION.yaml)** - Complete version details and roadmap
 
 ### Practical Guides
 6. **[WORKSPACE_ORGANIZATION_GUIDE.md](WORKSPACE_ORGANIZATION_GUIDE.md)** - Spec vs implementation separation
@@ -24,7 +24,7 @@
 
 ---
 
-## 🎯 Five Proven Patterns (Validated in Production)
+## 🎯 Five Proven Patterns
 
 ### Pattern 1: Risk Assessment & PoC Validation
 **Files:**
@@ -157,7 +157,7 @@ Phase 4: Polish (2-6 weeks, optional)
 
 ---
 
-## 📋 LSK Core v5.0 Pipeline
+## 📋 LSK Core Pipeline
 
 ```
 1. Definition          → Work in: spec/requirements/
@@ -179,9 +179,9 @@ Phase 4: Polish (2-6 weeks, optional)
 
 ---
 
-## 🎓 Success Patterns (Validated in 5+ Production Projects)
+## 🎓 Success Patterns
 
-### From Conversation Analysis (11 conversations, 5.5M tokens)
+### Based on Real-World Validation (11 conversations, 5.5M tokens, 5+ projects)
 
 1. **Progressive Disclosure** - Build context layer by layer, not all at once
 2. **Evidence-Based Diagnosis** - Gather data before proposing solutions
@@ -481,9 +481,9 @@ Share learnings to improve framework.
 
 ## 🚀 Bottom Line
 
-**LSK Core v5.0 makes explicit what successful developers do implicitly.**
+**LSK Core makes explicit what successful developers do implicitly.**
 
-Based on 11 real Cursor AI conversations (5.5M tokens) and 5+ production projects, we identified patterns that separate high-performing from struggling AI-assisted development.
+Based on 11 real conversations (5.5M tokens) and 5+ production projects, we've identified patterns that deliver measurable improvements in AI-assisted development.
 
 **Five Proven Patterns:**
 1. Risk Assessment & PoC Validation - 10-20x ROI on time saved
@@ -497,6 +497,6 @@ Based on 11 real Cursor AI conversations (5.5M tokens) and 5+ production project
 ---
 
 **Start with:** [QUICK_START.md](QUICK_START.md)  
-**What's new:** [WHATS_NEW_v5.0.md](WHATS_NEW_v5.0.md)  
+**What's new:** [WHATS_NEW_v1.0.0.md](WHATS_NEW_v1.0.0.md)  
 **Keep improving:** [EVOLUTION_GUIDE.md](EVOLUTION_GUIDE.md)
 

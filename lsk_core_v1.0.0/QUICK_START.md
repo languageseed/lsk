@@ -1,15 +1,15 @@
-# LSK Core v5.0 Quick Start Guide
+# LSK Core v1.0 Quick Start Guide
 **Get productive with AI-assisted development in 5 minutes**
 
-## **🚀 What is LSK Core v5.0?**
-LSK Core v5.0 is a **proven methodology** for AI-assisted development. It's a collection of **validated templates, recipes, and patterns** that help you build better software with AI.
+## **🚀 What is LSK Core?**
+LSK Core is a **proven methodology** for AI-assisted development. It's a collection of **validated templates, recipes, and patterns** that help you build better software with AI.
 
 ## **⚡ 2-Minute First Task**
 
 ### **Step 1: Copy a Template (30 seconds)**
 ```bash
 # Copy the basic context pack template
-cp lsk_core_v5.0/core/templates/context.pack.yaml my-task.yaml
+cp lsk_core_v1.0.0/core/templates/context.pack.yaml my-task.yaml
 ```
 
 ### **Step 2: Fill the Basics (90 seconds)**
@@ -38,14 +38,14 @@ prompt_inputs:
 ### **Step 3: Use with AI (30 seconds)**
 Copy/paste this to your AI:
 ```
-I'm using LSK Core v5.0 for structured development. Here's my context pack:
+I'm using LSK Core v1.0 for structured development. Here's my context pack:
 
 [paste your filled my-task.yaml]
 
 Please generate the login form component following the specified requirements.
 ```
 
-**That's it!** You just used LSK Core v5.0 to structure an AI conversation.
+**That's it!** You just used LSK Core to structure an AI conversation.
 
 ## **🎯 Choose Your Path**
 
@@ -94,7 +94,7 @@ Please generate the login form component following the specified requirements.
 - Skipping the acceptance criteria section
 - Ignoring the example direction in templates
 
-## **🔄 The LSK Core v5.0 Loop**
+## **🔄 The LSK Core Loop**
 ```
 1. Copy Template → 2. Fill Context → 3. AI Conversation → 4. Update Progress → Repeat
 ```
@@ -128,7 +128,7 @@ Each conversation builds on the previous one, with templates helping you maintai
 ### **Systematic Approaches**
 - **Requirements gathering**: Use `requirements-gathering.recipe.md`
 - **Architecture review**: Use `architecture-review.recipe.md`
-- **Full feature development**: Follow the 9-phase LSK Core v5.0 pipeline
+- **Full feature development**: Follow the 9-phase LSK Core pipeline
 
 ### **Advanced Features**
 - **Conversation checkpoints**: Track AI dialogue state
@@ -152,16 +152,16 @@ Each conversation builds on the previous one, with templates helping you maintai
 → Use `conversation.checkpoint.template.md` to track state
 
 ### **"I'm working on a complex feature"**
-→ Use the full LSK Core v5.0 pipeline with phase plans
+→ Use the full LSK Core pipeline with phase plans
 
 ## **🎉 You're Ready!**
 
-LSK Core v5.0 is designed to **grow with you**:
+LSK Core is designed to **grow with you**:
 - Start simple with basic templates
 - Add recipes when you need structured approaches
 - Use advanced features for complex projects
 - Adapt everything to your specific needs
 
-**Remember**: LSK Core v5.0 is **non-prescriptive**. Use what helps, ignore what doesn't, and adapt everything to your workflow.
+**Remember**: LSK Core is **non-prescriptive**. Use what helps, ignore what doesn't, and adapt everything to your workflow.
 
 Happy coding! 🚀

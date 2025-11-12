@@ -1,4 +1,4 @@
-# LSK Core v5.0 - Core-First Development: Quick Reference
+# LSK Core v1.0 - Core-First Development: Quick Reference
 ## Prove the Software Before Building the Wrapper
 
 ---

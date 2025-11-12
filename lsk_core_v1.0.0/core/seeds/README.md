@@ -1,6 +1,6 @@
-# LSKv4 Seeds & Extensions
+# LSK Core v1.0 Seeds & Extensions
 
-This directory contains optional templates and patterns that extend the core LSKv4 functionality. These are **copy-ready templates** that you can use when the basic templates need more specialized structure.
+This directory contains optional templates and patterns that extend the core LSK functionality. These are **copy-ready templates** that you can use when the basic templates need more specialized structure.
 
 ## Enhanced Context Packs (`context_packs/`)
 
@@ -59,7 +59,7 @@ Added requirements and example generation prompts:
 
 ### **New `workflows.md`**
 Visual Mermaid diagrams showing:
-- Core LSKv4 pipeline flow
+- Core LSK pipeline flow
 - AI conversation loops
 - Context pack usage patterns
 - Recipe-based conversation flows

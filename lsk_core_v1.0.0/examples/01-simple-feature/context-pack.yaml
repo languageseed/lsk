@@ -1,12 +1,12 @@
-# LSK Core v5.0 Context Pack
+# LSK Core v1.0 Context Pack
 # Example: Adding User Authentication to REST API
 
 metadata:
   id: "example-auth-feature-001"
-  created: "2025-10-11"
+  created: "2025-11-12"
   project: "Example REST API"
   feature: "User Authentication"
-  lsk_version: "5.0.0"
+  lsk_version: "1.0.0"
 
 objective:
   problem_statement: |

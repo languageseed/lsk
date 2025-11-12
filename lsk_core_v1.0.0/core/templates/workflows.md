@@ -1,12 +1,12 @@
-# LSKv4 Visual Workflows
+# LSK Core v1.0 Visual Workflows
 
-This file provides visual workflow diagrams using Mermaid to illustrate LSKv4 processes and conversation flows.
+This file provides visual workflow diagrams using Mermaid to illustrate LSK Core processes and conversation flows.
 
 ## **🚀 First-Time User Workflow**
 
 ```mermaid
 graph TD
-    A["👋 New to LSKv4?"] --> B{What do you want to do?}
+    A["👋 New to LSK Core?"] --> B{What do you want to do?}
     
     B -->|"Fix a bug"| C["🐛 Copy context.debug.template.yaml"]
     B -->|"Build something new"| D["📋 Copy context.pack.yaml"]
@@ -33,14 +33,14 @@ graph TD
     Q --> S
     R --> S
     
-    S --> T["🎉 You're now using LSKv4 effectively!"]
+    S --> T["🎉 You're now using LSK Core effectively!"]
     
     style A fill:#fff3e0
     style T fill:#e8f5e8
     style F fill:#e3f2fd
 ```
 
-## Core LSKv4 Pipeline
+## Core LSK Core Pipeline
 
 ```mermaid
 graph LR
@@ -118,7 +118,7 @@ graph LR
     B -->|🐛 Debug| C["Debug Recipe<br/>Problem → Analysis → Solution"]
     B -->|🏗️ Architecture| D["Architecture Recipe<br/>Context → Analysis → Options"]
     B -->|📋 Requirements| E["Requirements Recipe<br/>Discovery → Stories → Criteria"]
-    B -->|✨ Feature| F["Feature Recipe<br/>Full LSKv4 Pipeline"]
+    B -->|✨ Feature| F["Feature Recipe<br/>Full LSK Core Pipeline"]
     B -->|🔄 Refactor| G["Refactor Recipe<br/>Issues → Patterns → Implementation"]
     
     C --> H["📝 Follow Recipe Steps"]
@@ -224,7 +224,7 @@ graph TD
 
 ```mermaid
 gantt
-    title LSKv4 Feature Development Timeline
+    title LSK Core Feature Development Timeline
     dateFormat  X
     axisFormat  %s
     
@@ -286,7 +286,7 @@ graph TD
 
 ### **Choosing the Right Workflow**
 
-1. **New Feature**: Use full LSKv4 Pipeline
+1. **New Feature**: Use full LSK Core Pipeline
 2. **Bug Fix**: Start with Debugging Conversation Flow
 3. **Architecture Changes**: Use Architecture Recipe Flow
 4. **Requirements Unclear**: Use Requirements Recipe Flow

@@ -21,9 +21,9 @@
 
 ---
 
-## What is LSK Core v1.0?
+## What is LSK Core?
 
-LSK Core v1.0 is a **proven methodology** for AI-assisted development. It provides:
+LSK Core is a **proven methodology** for AI-assisted development. It provides:
 
 - **Templates** for structuring context and requirements
 - **Recipes** for common development workflows
@@ -64,6 +64,8 @@ Every pattern comes from real project experience:
 
 > **👉 New to LSK Core?** Start here: **[QUICK_START.md](QUICK_START.md)** (5 minutes)
 
+For complete details on this release, see **[WHATS_NEW_v1.0.0.md](WHATS_NEW_v1.0.0.md)**
+
 ### Option 1: Jump Right In (5 minutes)
 1. Read [QUICK_START.md](QUICK_START.md)
 2. Copy `core/templates/context.pack.yaml` to your project
@@ -71,16 +73,16 @@ Every pattern comes from real project experience:
 4. Start building
 
 ### Option 2: Learn the Patterns (30 minutes)
-1. Read [SUMMARY_OF_IMPROVEMENTS.md](SUMMARY_OF_IMPROVEMENTS.md) for the four critical patterns
+1. Read [WHATS_NEW_v1.0.0.md](WHATS_NEW_v1.0.0.md) for the five proven patterns
 2. Pick one pattern that fits your current work
 3. Try it on a small task
 4. Expand usage as you see value
 
 ### Option 3: Deep Dive (2 hours)
-1. Read [LSKV4.1_IMPROVEMENT_ANALYSIS.md](LSKV4.1_IMPROVEMENT_ANALYSIS.md) for complete analysis
-2. Review conversation examples
-3. Try multiple patterns
-4. Integrate into workflow
+1. Review all templates in `core/templates/`
+2. Try multiple patterns together
+3. Set up workspace organization
+4. Integrate into your full workflow
 
 ---
 
@@ -269,30 +271,26 @@ echo "## [Pattern] - [What worked]" >> lessons-learned/$(date +%Y-%m).md
 
 ## 📈 Version History
 
-### v4.1.3 (October 2025) - Current
-**The Practical Patterns Release**
+### v1.0.0 (November 2025) - Current
+**The Foundation Release** - First Public Release
 
-Added four critical patterns from real-world experience:
-- ✅ Risk Assessment & PoC Validation
-- ✅ Spike-and-Refine
-- ✅ Workspace Organization
-- ✅ Service Boundaries
+Includes five proven patterns:
+- ✅ Risk Assessment & PoC Validation (10-20x ROI)
+- ✅ Spike-and-Refine (2-3x faster)
+- ✅ Core-First Development (50-70% time saved)
+- ✅ Workspace Organization (reduced cognitive load)
+- ✅ Service Boundaries (78% fewer issues)
 
-Enhanced:
-- Debugging recipe with evidence checkpoints
-- Pipeline with new phases (v4.2)
-- Pre-flight checklist
-- Conversation quality tracking
+Complete toolkit:
+- 15 templates for structuring development
+- 8 recipes for common workflows
+- Automated validation system
+- Quality gates and traceability
+- Examples and comprehensive documentation
 
-Documented:
-- 11 conversation analysis
-- Success patterns from 9.0+ conversations
-- Anti-patterns from failures
-- Evolution system for continuous improvement
+**Based on:** 11 conversations (5.5M tokens), 5+ production projects
 
-**Based on:** 5.5M tokens of real conversations + months of project experience
-
-See [VERSION.yaml](VERSION.yaml) for complete history.
+See [WHATS_NEW_v1.0.0.md](WHATS_NEW_v1.0.0.md) and [CHANGELOG.md](CHANGELOG.md) for details.
 
 ---
 
@@ -426,10 +424,10 @@ See [EVOLUTION_GUIDE.md](EVOLUTION_GUIDE.md) for details.
 
 **Documentation:** All guides in this repo  
 **Version:** See [VERSION.yaml](VERSION.yaml) and [CHANGELOG.md](CHANGELOG.md)  
-**Status:** Stable Foundation, v5.0.0  
+**Status:** Stable Foundation, v1.0.0  
 **Maintainer:** Ben  
 **Repository:** https://github.com/languageseed/lsk  
-**Last Updated:** October 11, 2025
+**Last Updated:** November 12, 2025
 
 ### Getting Help
 - 📖 **Read the docs:** Start with [INDEX.md](INDEX.md) for complete navigation
@@ -454,15 +452,15 @@ Result:
 - ✅ Better architecture (78% fewer integration issues)
 - ✅ Higher quality (measurable quality gates)
 - ✅ Fewer repeated mistakes (validated patterns)
-- ✅ Stable foundation (backward compatible v5.x)
+- ✅ Stable foundation (backward compatible v1.x)
 
 ---
 
 **Start with:** [QUICK_START.md](QUICK_START.md)  
-**What's new:** [WHATS_NEW_v5.0.md](WHATS_NEW_v5.0.md)  
+**What's new:** [WHATS_NEW_v1.0.0.md](WHATS_NEW_v1.0.0.md)  
 **Keep improving:** [EVOLUTION_GUIDE.md](EVOLUTION_GUIDE.md)
 
-**This is v5.0.0 - The Stable Foundation. Your insights will shape v5.1 and beyond.**
+**This is v1.0.0 - The Stable Foundation. Your insights will shape v1.1 and beyond.**
 
 ---
 

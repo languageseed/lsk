@@ -1,6 +1,6 @@
-# LSK Core v5.0 - Examples
+# LSK Core v1.0 - Examples
 
-This directory contains practical examples of using LSK Core v5.0 in real-world scenarios.
+This directory contains practical examples of using LSK Core in real-world scenarios.
 
 ---
 
