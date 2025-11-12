@@ -1,0 +1,97 @@
+# Context Pack Example - User Authentication Feature
+
+metadata:
+  task_id: "AUTH-001"
+  title: "Implement JWT Authentication Service"
+  owner: "backend-team"
+  created_at: "2025-08-24T09:00:00Z"
+  updated_at: "2025-08-24T14:30:00Z"
+  notes: 
+    - "Following OAuth 2.0 patterns"
+    - "Security review required"
+
+objective:
+  problem_statement: |
+    Build a secure authentication service that handles user login/logout,
+    JWT token management, and role-based authorization for our web application.
+  constraints:
+    - "Must use JWT tokens (company standard)"
+    - "24-hour token expiration max (security policy)"
+    - "Support role-based permissions"
+    - "Stateless for horizontal scaling"
+  acceptance_criteria:
+    - "Users can login with email/password"
+    - "JWT tokens issued on successful login"
+    - "Tokens validated on protected routes"
+    - "Role-based access control enforced"
+    - "Secure logout invalidates tokens"
+
+context:
+  code_targets:
+    - path: "src/services/auth/"
+      reason: "Main authentication logic location"
+      include:
+        - "AuthService class"
+        - "JWT utilities"
+        - "User model interfaces"
+      exclude:
+        - "Third-party OAuth providers (future)"
+    - path: "src/middleware/auth.ts"
+      reason: "Request authentication middleware"
+  diffs:
+    - ref: "PR #123 - User model updates"
+      summary: "Added role field to User interface"
+  glossary:
+    - term: "JWT"
+      definition: "JSON Web Token for stateless authentication"
+    - term: "RBAC"
+      definition: "Role-Based Access Control"
+  dependencies:
+    - name: "jsonwebtoken"
+      version: "^9.0.0"
+      purpose: "JWT token creation and validation"
+    - name: "bcrypt"
+      version: "^5.1.0"
+      purpose: "Password hashing"
+
+governance:
+  direction:
+    start_point: "No authentication system exists"
+    current_state: "User model updated, dependencies added"
+    decisions:
+      - "Using JWT over sessions for scalability"
+      - "bcrypt for password hashing (cost factor 12)"
+    pending_decisions:
+      - "Refresh token strategy"
+      - "Password reset flow design"
+    target_outcome: "Secure, scalable auth service ready for production"
+    next_steps:
+      - "Implement AuthService interface"
+      - "Create JWT middleware"
+      - "Add authentication tests"
+
+prompt_inputs:
+  task_kind: "generate"
+  primary_prompt_id: "service-gen-001"
+  supplemental_prompts: 
+    - "service-test-001"
+  examples:
+    - "Express.js JWT authentication patterns"
+
+outputs:
+  expected_artifacts:
+    - name: "AuthService"
+      path: "src/services/auth/AuthService.ts"
+      description: "Main authentication service class"
+    - name: "JWT Middleware"
+      path: "src/middleware/auth.ts"
+      description: "Express middleware for token validation"
+    - name: "Auth Tests"
+      path: "src/services/auth/__tests__/"
+      description: "Comprehensive test suite"
+  review_checklist:
+    - "Password hashing implemented securely"
+    - "JWT tokens properly signed and validated"
+    - "Error handling for invalid credentials"
+    - "Rate limiting for login attempts"
+    - "Tests cover success and failure cases"

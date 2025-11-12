@@ -1,0 +1,695 @@
+# Development Sequencing: Core-First vs UI-First
+# What to build first, what to defer, and why
+
+metadata:
+  template_type: "development_sequencing"
+  purpose: "Define build order to validate core value before investing in infrastructure"
+  when_to_use: "New projects, proof of concepts, MVP development"
+
+# The Philosophy
+
+philosophy:
+  problem: |
+    It's tempting to build everything at once:
+    - Beautiful UI
+    - Full authentication system
+    - Complete infrastructure
+    - Security hardening
+    - Polished admin panel
+    
+    Result: Weeks of work before discovering if the core idea even works.
+  
+  solution: |
+    Sequence development to validate value first:
+    1. Prove the core idea works (API + logic + data)
+    2. Add basic UI to make it usable
+    3. Then layer on infrastructure, auth, security, polish
+    
+    Result: Know if it's worth building before investing in the wrapper.
+
+# Two Approaches
+
+approaches:
+  core_first:
+    name: "Core-First (API/Logic/Data → UI)"
+    proponent: "Backend/systems thinkers"
+    
+    sequence:
+      1:
+        phase: "Core Logic & API"
+        focus: "The actual problem being solved"
+        deliverable: "Working API with core functionality"
+        time: "1-2 weeks"
+        
+      2:
+        phase: "Data Layer"
+        focus: "How data is stored and queried"
+        deliverable: "Database schema, basic CRUD"
+        time: "3-5 days"
+        
+      3:
+        phase: "Basic/Admin UI"
+        focus: "Usable interface, not beautiful"
+        deliverable: "Forms, tables, basic interactions"
+        time: "1 week"
+        
+      4:
+        phase: "Validation"
+        focus: "Does this solve the problem?"
+        deliverable: "Working prototype with real data"
+        decision_point: "Continue or pivot?"
+        
+      5:
+        phase: "Infrastructure (if continuing)"
+        focus: "Deployment, scaling, monitoring"
+        deliverable: "Production-ready infrastructure"
+        time: "1-2 weeks"
+        
+      6:
+        phase: "Security & Auth (if continuing)"
+        focus: "Proper authentication, authorization"
+        deliverable: "Secure multi-user system"
+        time: "1-2 weeks"
+        
+      7:
+        phase: "UI Polish (if continuing)"
+        focus: "Beautiful, refined interface"
+        deliverable: "Production-quality UI"
+        time: "2-4 weeks"
+    
+    advantages:
+      - "Validates core value proposition early"
+      - "Can pivot quickly if idea doesn't work"
+      - "Less wasted effort on infrastructure for failed ideas"
+      - "Technical risk (can we build it?) addressed first"
+      - "API-first means UI can be swapped/improved later"
+    
+    disadvantages:
+      - "Harder to sell to stakeholders without polished UI"
+      - "May need to rework if UX assumptions are wrong"
+      - "Less visual/tangible early on"
+    
+    best_for:
+      - "B2B/enterprise tools"
+      - "Backend-heavy systems"
+      - "Technical founders"
+      - "When core algorithm/logic is the innovation"
+      - "Internal tools"
+      - "APIs/services"
+  
+  ui_first:
+    name: "UI-First (Design → Implementation)"
+    proponent: "Product/design thinkers"
+    
+    sequence:
+      1:
+        phase: "UI Design/Sketch"
+        focus: "What the user sees and does"
+        deliverable: "Mockups, prototypes, user flows"
+        time: "1 week"
+        
+      2:
+        phase: "Frontend Implementation"
+        focus: "Build the UI"
+        deliverable: "Working frontend (with mocked data)"
+        time: "1-2 weeks"
+        
+      3:
+        phase: "Backend to Support UI"
+        focus: "APIs that frontend needs"
+        deliverable: "Backend matching UI requirements"
+        time: "1-2 weeks"
+        
+      4:
+        phase: "Integration"
+        focus: "Connect frontend to backend"
+        deliverable: "Functional prototype"
+        time: "3-5 days"
+        
+      5:
+        phase: "Infrastructure, Auth, etc."
+        focus: "Production concerns"
+        deliverable: "Production-ready system"
+        time: "2-4 weeks"
+    
+    advantages:
+      - "Stakeholders can see and interact early"
+      - "UX validated before backend investment"
+      - "Easier to get buy-in/funding"
+      - "User testing possible earlier"
+      - "Clearer requirements (UI defines the contract)"
+    
+    disadvantages:
+      - "May design UI that's technically infeasible"
+      - "Backend constraints discovered late"
+      - "Risk of beautiful UI for unsolvable problem"
+      - "More rework if core technical assumptions wrong"
+    
+    best_for:
+      - "Consumer apps"
+      - "Design-driven products"
+      - "When UX is the innovation"
+      - "Products where stakeholder buy-in is critical"
+      - "Mobile apps"
+
+# Decision Framework
+
+decision_framework:
+  choose_core_first_when:
+    - "Core problem is technically complex/uncertain"
+    - "Backend logic is the innovation"
+    - "Building for technical users (developers, admins)"
+    - "Internal tools where UI polish isn't critical initially"
+    - "API will be consumed by multiple frontends"
+    - "Technical risk is higher than UX risk"
+    
+    examples:
+      - "Real-time data processing system"
+      - "AI/ML service"
+      - "Database/storage system"
+      - "Developer tools/APIs"
+      - "Data transformation pipeline"
+  
+  choose_ui_first_when:
+    - "UX is the primary differentiator"
+    - "Need stakeholder/investor buy-in"
+    - "Consumer-facing product"
+    - "User experience is complex/innovative"
+    - "Backend requirements are straightforward"
+    - "UX risk is higher than technical risk"
+    
+    examples:
+      - "Consumer mobile app"
+      - "E-commerce site"
+      - "Social platform"
+      - "Dashboard/analytics tool"
+      - "Content management system"
+
+# What to Defer (Core-First Approach)
+
+defer_until_validated:
+  infrastructure:
+    what:
+      - "Production deployment setup"
+      - "CI/CD pipelines"
+      - "Container orchestration (Kubernetes, etc.)"
+      - "Load balancing"
+      - "CDN setup"
+      - "Monitoring/alerting (beyond basics)"
+      - "Backup/disaster recovery"
+    
+    why_defer: |
+      These are critical for production but don't validate if the idea works.
+      Use simple deployment (single server, docker-compose) until validated.
+    
+    when_to_add: "After core concept is validated and you're committed to production"
+    
+    initial_alternative: |
+      - Single VPS/VM
+      - Docker Compose
+      - Manual deployment
+      - Basic logging
+      - Simple backups
+  
+  security:
+    what:
+      - "Comprehensive security audit"
+      - "Penetration testing"
+      - "Rate limiting"
+      - "DDoS protection"
+      - "Security headers"
+      - "Vulnerability scanning"
+      - "Compliance (GDPR, HIPAA, etc.)"
+    
+    why_defer: |
+      Security is important but doesn't prove the concept works.
+      For prototypes, basic security is enough.
+    
+    when_to_add: "Before any real user data or production deployment"
+    
+    initial_alternative: |
+      - Basic input validation
+      - HTTPS (even with self-signed cert)
+      - Simple API keys
+      - No public access (VPN/internal only)
+  
+  authentication:
+    what:
+      - "Full OAuth/SAML integration"
+      - "Multi-factor authentication"
+      - "Role-based access control (RBAC)"
+      - "User management system"
+      - "Password reset flows"
+      - "Session management"
+      - "SSO integration"
+    
+    why_defer: |
+      Auth doesn't prove the core functionality works.
+      For prototypes, hardcoded credentials or simple auth is fine.
+    
+    when_to_add: "When moving to multi-user or production"
+    
+    initial_alternative: |
+      - Hardcoded admin credentials
+      - Simple API key
+      - HTTP Basic Auth
+      - Single user mode
+      - Trust internal network
+  
+  ui_polish:
+    what:
+      - "Beautiful design system"
+      - "Custom animations"
+      - "Responsive mobile layouts"
+      - "Accessibility (WCAG compliance)"
+      - "Cross-browser testing"
+      - "Internationalization"
+      - "Dark mode"
+      - "Branding/marketing pages"
+    
+    why_defer: |
+      Polish doesn't validate functionality.
+      Basic UI proves the concept; polish sells it.
+    
+    when_to_add: "After core functionality validated and pre-launch"
+    
+    initial_alternative: |
+      - Bootstrap/Tailwind default styles
+      - Forms and tables
+      - Desktop-only layout
+      - Admin panel UI frameworks
+      - Functional but not beautiful
+
+# Core-First Sequencing Pattern
+
+core_first_pattern:
+  phase_1_prove_the_core:
+    name: "Phase 1: Prove the Core (1-3 weeks)"
+    goal: "Validate the core idea works technically"
+    
+    build:
+      api:
+        - "Core endpoints (the main functionality)"
+        - "Basic error handling"
+        - "Simple responses (JSON)"
+        
+      logic:
+        - "Core algorithms/business logic"
+        - "Data transformation"
+        - "Integration with external services (if needed)"
+        
+      data:
+        - "Database schema (basic)"
+        - "CRUD operations"
+        - "Sample data seeding"
+      
+      testing:
+        - "API testing (curl, Postman)"
+        - "Unit tests for core logic"
+        - "Manual testing with sample data"
+    
+    explicitly_skip:
+      - "Authentication (use hardcoded key)"
+      - "Authorization (single user)"
+      - "UI (use curl/Postman)"
+      - "Production deployment (run locally/dev server)"
+      - "Monitoring (console logs are fine)"
+      - "Polish (rough edges everywhere)"
+    
+    success_criteria:
+      - "Core functionality works end-to-end"
+      - "Can demonstrate with API calls"
+      - "Handles typical use cases"
+      - "Performance is acceptable"
+    
+    decision_point:
+      question: "Does this solve the problem?"
+      if_yes: "Continue to Phase 2"
+      if_no: "Pivot or abandon (saved 10-20 weeks!)"
+  
+  phase_2_make_it_usable:
+    name: "Phase 2: Make It Usable (1-2 weeks)"
+    goal: "Add basic UI so non-technical users can interact"
+    
+    build:
+      ui:
+        - "Admin panel or basic UI"
+        - "Forms for input"
+        - "Tables for viewing data"
+        - "Basic navigation"
+        
+      framework:
+        - "Use admin generators (Django admin, Flask-Admin, etc.)"
+        - "Or simple templates (Jinja, EJS)"
+        - "Or lightweight SPA (Vue, React with no customization)"
+      
+      styling:
+        - "Bootstrap or Tailwind defaults"
+        - "No custom design"
+        - "Functional but not pretty"
+    
+    explicitly_skip:
+      - "Custom design"
+      - "Responsive layouts"
+      - "Animations"
+      - "Branding"
+      - "Still using hardcoded auth"
+    
+    success_criteria:
+      - "Can demo to stakeholders without terminal"
+      - "Users can perform core tasks"
+      - "Functional for testing"
+    
+    decision_point:
+      question: "Do users find this valuable?"
+      if_yes: "Continue to Phase 3"
+      if_no: "Rework core or pivot"
+  
+  phase_3_prepare_for_real_use:
+    name: "Phase 3: Prepare for Real Use (2-4 weeks)"
+    goal: "Add infrastructure, security, auth for production"
+    
+    build:
+      infrastructure:
+        - "Proper deployment (VPS, cloud, containers)"
+        - "Basic CI/CD"
+        - "Monitoring and logging"
+        - "Backups"
+        
+      security:
+        - "Input validation and sanitization"
+        - "HTTPS"
+        - "Security headers"
+        - "Rate limiting"
+        
+      auth:
+        - "User registration/login"
+        - "Password hashing"
+        - "Session management"
+        - "Basic RBAC if needed"
+      
+      reliability:
+        - "Error handling and recovery"
+        - "Data validation"
+        - "Transaction management"
+    
+    success_criteria:
+      - "Can handle real users safely"
+      - "Won't lose data"
+      - "Reasonably secure"
+      - "Can be maintained"
+  
+  phase_4_polish:
+    name: "Phase 4: Polish (2-6 weeks)"
+    goal: "Make it beautiful and professional"
+    
+    build:
+      ui:
+        - "Custom design system"
+        - "Responsive layouts"
+        - "Animations and transitions"
+        - "Accessibility"
+        - "Cross-browser compatibility"
+        
+      ux:
+        - "User onboarding"
+        - "Help documentation"
+        - "Error messages (user-friendly)"
+        - "Loading states"
+        - "Empty states"
+      
+      marketing:
+        - "Landing page"
+        - "About/pricing pages"
+        - "Blog/content"
+    
+    success_criteria:
+      - "Professional appearance"
+      - "Delightful user experience"
+      - "Ready for public launch"
+
+# Real-World Example: DOCeater Development
+
+example_doceater:
+  project: "DOCeater - Document processing and AI chat system"
+  
+  approach_used: "Core-First"
+  
+  phase_1_core:
+    duration: "2 weeks"
+    
+    built:
+      - "Document extraction API (PyMuPDF, pdfplumber)"
+      - "Vector storage integration (ChromaDB)"
+      - "AI chat API (Ollama)"
+      - "Basic FastAPI endpoints"
+      - "Docker Compose for services"
+    
+    deferred:
+      - "No authentication"
+      - "No web UI"
+      - "Tested with curl/Postman"
+      - "Single VPS deployment"
+      - "Basic logging only"
+    
+    validation:
+      result: "Core concept works!"
+      evidence: "Could upload PDF, extract text, chat about it"
+      decision: "Continue to Phase 2"
+  
+  phase_2_usable:
+    duration: "1 week"
+    
+    built:
+      - "Basic web UI (HTML forms)"
+      - "File upload interface"
+      - "Chat interface (simple)"
+      - "Document list view"
+    
+    deferred:
+      - "Still no auth (single user)"
+      - "Ugly but functional"
+      - "Desktop only"
+      - "No polish"
+    
+    validation:
+      result: "Users can interact without curl"
+      evidence: "Successful internal demos"
+      decision: "Continue to Phase 3"
+  
+  phase_3_production:
+    duration: "2 weeks"
+    
+    built:
+      - "API key authentication"
+      - "Multi-container deployment"
+      - "Nginx reverse proxy"
+      - "Basic monitoring"
+      - "Service boundaries"
+    
+    still_deferred:
+      - "Full user management (API keys are enough)"
+      - "UI polish (admin tool for now)"
+      - "Advanced infrastructure"
+  
+  phase_4_polish:
+    status: "Not needed yet"
+    reason: "Internal tool, functionality > polish"
+  
+  total_time_to_production: "5 weeks"
+  
+  comparison_if_built_everything_first:
+    estimated_time: "12-16 weeks"
+    risk: "Would have built full auth, beautiful UI before knowing if core works"
+    saved_time: "7-11 weeks"
+
+# AI Collaboration Strategy
+
+ai_prompts:
+  phase_1_core_focus:
+    prompt: |
+      I'm building [project] and starting with core-first approach.
+      
+      For Phase 1 (Prove the Core), I want to focus on:
+      - Core API endpoints
+      - Core logic/algorithms
+      - Basic data layer
+      
+      I'm explicitly DEFERRING:
+      - Authentication (will use hardcoded key)
+      - UI (will test with curl)
+      - Infrastructure (running locally)
+      - Polish
+      
+      Help me implement the core [feature] with this focus.
+      Don't suggest auth, UI, or infrastructure yet.
+  
+  phase_2_basic_ui:
+    prompt: |
+      Phase 1 complete - core API works!
+      
+      Now for Phase 2 (Make It Usable), I need a basic UI.
+      
+      Requirements:
+      - Simple forms and tables
+      - Use [Bootstrap/Tailwind/admin framework]
+      - Functional, not beautiful
+      - Desktop only
+      
+      Still deferring:
+      - Custom design
+      - Responsive layouts
+      - Authentication
+      
+      Help me create a basic UI for [feature].
+  
+  phase_3_production_ready:
+    prompt: |
+      Phases 1-2 complete - core works and has basic UI!
+      
+      Now for Phase 3 (Production Ready), I need:
+      - Proper authentication
+      - Deployment setup
+      - Security basics
+      - Monitoring
+      
+      Help me make this production-ready.
+  
+  resisting_premature_optimization:
+    prompt: |
+      Note: I'm in Phase 1 (Prove the Core).
+      
+      If you suggest authentication, complex infrastructure, or UI polish,
+      I'll remind you: "Not yet - Phase 1 is about proving the core works."
+      
+      We'll add those in later phases once validated.
+
+# Anti-Patterns
+
+anti_patterns:
+  premature_infrastructure:
+    problem: "Building Kubernetes cluster before validating core idea"
+    impact: "Weeks wasted on infrastructure for concept that doesn't work"
+    solution: "Docker Compose until validated"
+    
+    example_bad: |
+      Week 1-2: Set up Kubernetes, Helm charts, CI/CD
+      Week 3-4: Implement core logic
+      Week 5: Discover core idea is flawed
+      Result: Wasted 4 weeks on infrastructure
+    
+    example_good: |
+      Week 1-2: Implement core logic, run in Docker Compose
+      Week 2: Validate core idea works
+      Week 3-4: Add proper infrastructure
+      Result: Saved 2 weeks, validated early
+  
+  premature_authentication:
+    problem: "Building full OAuth before proving functionality"
+    impact: "Time spent on auth instead of validating core"
+    solution: "Hardcoded credentials until Phase 3"
+    
+    example_bad: |
+      Week 1: Set up Auth0, implement OAuth flow
+      Week 2: User management, password reset
+      Week 3: Start core functionality
+      Week 4: Discover core doesn't work
+      Result: Wasted 2 weeks on auth
+    
+    example_good: |
+      Week 1-2: Core functionality, hardcoded API key
+      Week 2: Validate it works
+      Week 3: Add proper auth now that it's worth it
+      Result: Saved 1 week, validated early
+  
+  premature_polish:
+    problem: "Designing beautiful UI before validating backend"
+    impact: "Design for features that won't exist"
+    solution: "Rough UI until validated"
+    
+    example_bad: |
+      Week 1-2: Design system, mockups
+      Week 3-4: Beautiful frontend
+      Week 5-6: Implement backend
+      Week 7: Discover backend constraints require UI redesign
+      Result: Wasted 4 weeks on UI
+    
+    example_good: |
+      Week 1-2: Basic UI + core backend
+      Week 2: Validate flow works
+      Week 3: Discover backend constraints
+      Week 4-5: Design proper UI with full knowledge
+      Result: Saved 2 weeks, better-informed design
+
+# Decision Checklist
+
+decision_checklist:
+  before_starting:
+    - "[ ] Is the core technical problem uncertain?"
+    - "[ ] Would full infrastructure/auth delay validation?"
+    - "[ ] Can I test with API/admin UI initially?"
+    - "[ ] Is this for technical users initially?"
+    
+    if_mostly_yes: "Use core-first approach"
+    if_mostly_no: "Consider UI-first approach"
+  
+  during_phase_1:
+    - "[ ] Focusing on core logic only"
+    - "[ ] Using hardcoded auth/single user"
+    - "[ ] Testing with curl/Postman/scripts"
+    - "[ ] Running on single server/locally"
+    - "[ ] Rough edges everywhere (that's okay!)"
+    
+  before_moving_to_phase_2:
+    - "[ ] Core functionality works end-to-end"
+    - "[ ] Can demonstrate with API calls"
+    - "[ ] Performance is acceptable"
+    - "[ ] Confident in technical approach"
+    
+  before_moving_to_phase_3:
+    - "[ ] Users can interact with basic UI"
+    - "[ ] Core value is validated"
+    - "[ ] Ready to commit to production"
+    - "[ ] Worth investing in infrastructure/auth"
+
+# Summary
+
+summary:
+  core_first_philosophy: |
+    Prove the software works before investing in the wrapper.
+    
+    Build: API → Logic → Data → Basic UI
+    Defer: Infrastructure, Security, Auth, UI Polish
+    
+    Why: These can "bog down" the idea. Validate the core first.
+  
+  sequencing:
+    phase_1: "Prove the core (1-3 weeks)"
+    phase_2: "Make it usable (1-2 weeks)"
+    phase_3: "Production ready (2-4 weeks)"
+    phase_4: "Polish (2-6 weeks, optional)"
+  
+  key_insight: |
+    "Infrastructure, security, and auth can bog down the idea.
+    The software needs to be proven first, then the other elements
+    can be added on."
+    
+    vs others who prefer: "UI sketch first, work backwards"
+    
+    Both valid - choose based on what's riskier: UX or technology.
+
+# When to Use This Template
+
+use_when:
+  - "Starting new project with technical uncertainty"
+  - "Building MVP or proof of concept"
+  - "Internal tools where polish isn't critical initially"
+  - "API-first products"
+  - "Need to validate quickly before full investment"
+
+avoid_when:
+  - "UX is the primary innovation"
+  - "Consumer product where UI is critical for buy-in"
+  - "Technical feasibility is certain, UX is uncertain"
+  - "Stakeholders need polished demo for funding"
+

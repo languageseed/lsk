@@ -1,0 +1,40 @@
+# Example: Phase Plan (Filled)
+
+pipeline:
+  mode: "strict"
+  contract_name: "auth-service"
+
+current_phase: "validation"
+next_phase: "implementation"
+
+phases:
+  definition:
+    status: "complete"
+    started: "2025-08-24T09:00:00Z"
+    checkpoint: "checkpoint@auth-service_definition_2025-08-24.md"
+  validation:
+    status: "in_progress"
+    started: "2025-08-24T10:00:00Z"
+    checkpoint: "checkpoint@auth-service_validation_2025-08-24_inprogress.md"
+  implementation:
+    status: "not_started"
+    started: null
+    checkpoint: null
+  integration:
+    status: "not_started"
+    started: null
+    checkpoint: null
+  uat:
+    status: "not_started"
+    started: null
+    checkpoint: null
+  certify:
+    status: "not_started"
+    started: null
+    checkpoint: null
+
+checkpoints:
+  definition: "checkpoint@auth-service_definition_2025-08-24.md"
+  validation: "checkpoint@auth-service_validation_2025-08-24_inprogress.md"
+
+

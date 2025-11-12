@@ -1,0 +1,173 @@
+# Context Pack Template - API/Service Integration
+# Copy and fill this YAML, then paste relevant sections into your AI tool.
+
+metadata:
+  task_id: ""
+  title: ""
+  owner: ""
+  created_at: ""
+  updated_at: ""
+  notes: []
+
+objective:
+  problem_statement: |
+    # Example: "Integrate our user service with third-party payment processor API"
+    # Example: "Connect React frontend to new GraphQL backend service"
+    # Example: "Add real-time notifications via WebSocket integration"
+    
+    # Your integration challenge:
+  constraints:
+    # Example: "Third-party API has rate limits of 100 req/min"
+    # Example: "Must maintain backward compatibility with existing REST endpoints"
+    # Example: "Integration must handle network failures gracefully"
+    - ""
+    - ""
+  acceptance_criteria:
+    # Example: "Successfully process payments with 99.9% reliability"
+    # Example: "Frontend displays real-time data updates within 2 seconds"
+    # Example: "Graceful fallback when external service is unavailable"
+    - ""
+    - ""
+
+context:
+  integration_endpoints:
+    # Details about external services/APIs:
+    # - name: "Stripe Payment API"
+    #   url: "https://api.stripe.com/v1/"
+    #   auth: "Bearer token"
+    #   rate_limits: "100 requests per second"
+    #   docs: "https://stripe.com/docs/api"
+    - name: ""
+      url: ""
+      auth: ""
+      rate_limits: ""
+      docs: ""
+  data_contracts:
+    # Expected data formats and schemas:
+    # - direction: "outbound"
+    #   format: "JSON"
+    #   schema: "{ amount: number, currency: string, customer_id: string }"
+    # - direction: "inbound" 
+    #   format: "JSON"
+    #   schema: "{ transaction_id: string, status: 'success'|'failed', receipt_url: string }"
+    - direction: ""
+      format: ""
+      schema: ""
+  code_targets:
+    # Example patterns:
+    - path: "src/services/payment-service.ts"
+      reason: "Main integration logic will be implemented here"
+      include:
+        - "API client configuration"
+        - "Request/response handling"
+        - "Error handling and retries"
+      exclude:
+        - "UI components (separate concern)"
+    # - path: "src/types/payment.ts"
+    #   reason: "Type definitions for payment data"
+    #   include:
+    #     - "Payment request/response types"
+    #     - "Error type definitions"
+  authentication:
+    # How authentication works with external service:
+    # method: "API key in header"
+    # details: "X-API-Key: your-api-key"
+    # refresh: "Keys rotate monthly, stored in environment variables"
+    method: ""
+    details: ""
+    refresh: ""
+  error_scenarios:
+    # Expected failure modes:
+    # - "Network timeout after 30 seconds"
+    # - "Rate limit exceeded (429 status)"
+    # - "Invalid API key (401 status)"
+    # - "Malformed request data (400 status)"
+    - ""
+  glossary:
+    # Integration-specific terms:
+    - term: "webhook"
+      definition: "HTTP callback from external service to notify of events"
+    # - term: "idempotency"
+    #   definition: "Same request can be made multiple times safely"
+  dependencies:
+    # Libraries needed for integration:
+    - name: "axios"
+      version: "^1.4.0"
+      purpose: "HTTP client for API requests"
+    # - name: "zod"
+    #   version: "^3.21.0"
+    #   purpose: "Runtime data validation for API responses"
+
+# Integration-specific governance
+governance:
+  spaces:
+    - name: "external_api_specs"
+      scope: "third-party API documentation and contracts"
+      sources: ["API documentation", "OpenAPI specs", "vendor examples"]
+    - name: "integration_patterns"
+      scope: "how our system connects to external services"
+      sources: ["existing integrations", "architecture decisions", "retry policies"]
+    - name: "data_transformation"
+      scope: "mapping between our data and external formats"
+      sources: ["data models", "transformation rules", "validation schemas"]
+  direction:
+    # Example integration flow:
+    start_point: "Need to integrate with external service for new functionality"
+    current_state: "API documentation reviewed, authentication method identified"
+    decisions:
+      # - "Use axios HTTP client rather than fetch for better error handling"
+      # - "Implement exponential backoff for retry logic"
+      # - "Store API responses in database for audit trail"
+      - ""
+    pending_decisions:
+      # - "Whether to use webhook notifications vs polling for status updates"
+      # - "How to handle partial failures in batch operations"
+      - ""
+    target_outcome: "Reliable integration that handles all expected scenarios gracefully"
+    options:
+      # - "Direct API integration vs using vendor SDK"
+      # - "Synchronous vs asynchronous processing"
+      # - "Real-time updates vs periodic sync"
+      - ""
+    next_steps:
+      # - "Implement basic API client with authentication"
+      # - "Add comprehensive error handling and retries"
+      # - "Create integration tests with mock responses"
+      - ""
+
+prompt_inputs:
+  task_kind: "generate"  # Usually generate new integration code
+  primary_prompt_id: "service-gen-001"  # For backend service integration
+  supplemental_prompts:
+    # - "platform-adapter-gen-001"  # For creating adapter pattern
+    # - "component-test-001"         # For integration testing
+    - ""
+  examples:
+    # Examples of integration patterns:
+    # - "REST API client with retry logic and circuit breaker"
+    # - "GraphQL integration with subscription handling"
+    # - "WebSocket connection with reconnection logic"
+    - ""
+
+outputs:
+  expected_artifacts:
+    - name: "Integration Service"
+      path: ""
+      description: "Service that handles communication with external API"
+    - name: "Type Definitions"
+      path: ""
+      description: "TypeScript types for request/response data"
+    # - name: "Integration Tests"
+    #   path: ""
+    #   description: "Tests covering integration scenarios including failures"
+    # - name: "Error Handling"
+    #   path: ""
+    #   description: "Comprehensive error handling for all failure modes"
+  review_checklist:
+    - "All API endpoints properly integrated and tested"
+    - "Authentication working correctly with proper credential management"
+    - "Error handling covers all documented failure modes"
+    - "Rate limiting respected with appropriate backoff strategies"
+    - "Data validation ensures type safety for all responses"
+    - "Integration monitoring and logging added"
+    - "Graceful degradation when external service unavailable"

@@ -1,0 +1,167 @@
+# Context Pack Template (for prompting)
+# Copy and fill this YAML, then paste relevant sections into your AI tool.
+
+metadata:
+  task_id: ""
+  title: ""
+  owner: ""
+  created_at: ""
+  updated_at: ""
+  notes: []
+
+objective:
+  problem_statement: |
+    # What are we building and why?
+    # Example: "Build user authentication service to replace legacy login system"
+    # Example: "Optimize dashboard loading time from 5 seconds to under 2 seconds"
+    # Example: "Add real-time chat feature to support customer collaboration"
+  constraints:
+    # Example: "Must use existing PostgreSQL database (no schema changes)"
+    # Example: "Budget: maximum 40 hours development time" 
+    # Example: "Must maintain 99.9% backward compatibility with existing API"
+    - ""
+    - ""
+  acceptance_criteria:
+    # Example: "Users can login with email/password and receive JWT token"
+    # Example: "Dashboard loads completely within 2 seconds on 3G connection"
+    # Example: "Chat messages appear in real-time (under 500ms latency)"
+    - ""
+    - ""
+
+context:
+  code_targets:
+    # Examples of different target types:
+    - path: "src/services/auth/"
+      reason: "Contains authentication logic that needs updating"
+      include:
+        - "AuthService class and login methods"
+        - "JWT token generation functions"
+      exclude:
+        - "Password hashing utilities (working correctly)"
+    # - path: "src/components/Dashboard.tsx"
+    #   reason: "Performance bottleneck - slow rendering"
+    #   include:
+    #     - "useEffect hooks and data fetching"
+    #     - "Heavy computation in render"
+    #   exclude:
+    #     - "CSS styling (not performance related)"
+  diffs:
+    # Example: Recent changes that provide context
+    - ref: "PR #156 - Add user roles to database"
+      summary: "Added role column to users table, affects auth logic"
+    # - ref: "commit abc123f - Update API endpoints"
+    #   summary: "Changed /login endpoint structure"
+  glossary:
+    # Example: Domain-specific terms
+    - term: "JWT"
+      definition: "JSON Web Token for stateless authentication"
+    # - term: "SSR"
+    #   definition: "Server-Side Rendering for improved performance"
+  dependencies:
+    # Example: Relevant libraries and tools
+    - name: "jsonwebtoken"
+      version: "^9.0.0"
+      purpose: "JWT token creation and validation"
+    # - name: "react-window"
+    #   version: "^1.8.0"
+    #   purpose: "Virtual scrolling for large lists"
+
+# Optional: lightweight governance to steer prompting without bloat
+# Captures Context Space, Hierarchy, and Direction in one place
+governance:
+  spaces:
+    # Example: Different types of context spaces
+    - name: "lsk_settings"
+      scope: "framework config and prompts"
+      sources: ["core/contracts/*", "core/templates/*"]
+    - name: "user_environment"
+      scope: "local tools, editor, network"
+      sources: ["IDE configuration", "local dependencies", "development setup"]
+    - name: "project_code"
+      scope: "implementation files"
+      sources: ["src/**", "apps/**", "tests/**"]
+    - name: "subject_matter"
+      scope: "principles, patterns, techniques"
+      sources: ["architecture docs", "coding standards", "best practices"]
+    - name: "business_context"
+      scope: "requirements, constraints, stakeholder needs"
+      sources: ["user stories", "acceptance criteria", "business rules"]
+    - name: "telemetry"
+      scope: "logs, traces, test outputs"
+      sources: ["monitoring dashboards", "error logs", "performance metrics"]
+    - name: "chat_history"
+      scope: "prior AI/user decisions"
+      sources: ["conversation checkpoints", "decision records", "previous solutions"]
+  hierarchy:
+    topics:
+      # Example: How different topics relate to each other
+      - name: "authentication"
+        tags: ["security", "session", "jwt"]
+        relates_to: ["user_management", "api_security", "frontend_routing"]
+      - name: "data_model"
+        tags: ["schema", "persistence", "relationships"]
+        relates_to: ["api_design", "performance", "migrations"]
+      - name: "performance"
+        tags: ["optimization", "caching", "database"]
+        relates_to: ["user_experience", "scalability", "monitoring"]
+      - name: "user_interface"
+        tags: ["components", "styling", "accessibility"]
+        relates_to: ["user_experience", "responsive_design", "testing"]
+  direction:
+    # Example: Project direction tracking
+    start_point: "Legacy authentication system with security vulnerabilities"
+    current_state: "New JWT-based auth implemented, testing in progress"
+    decisions:
+      # Example: Key decisions made during development
+      - "Use JWT tokens instead of server-side sessions for scalability"
+      - "Implement role-based access control with middleware"
+      - "Store user preferences in separate microservice"
+    pending_decisions:
+      # Example: Decisions that need to be made
+      - "Choose between Redis and in-memory cache for session storage"
+      - "Decide on token refresh strategy (sliding vs fixed expiration)"
+      - "Determine multi-factor authentication approach"
+    target_outcome: "Secure, scalable authentication system supporting 10K concurrent users"
+    options:
+      # Example: Approaches being considered
+      - "OAuth 2.0 integration for social login vs custom implementation"
+      - "Centralized auth service vs distributed auth per service"
+      - "Database-backed sessions vs stateless JWT-only approach"
+    next_steps:
+      # Example: Immediate actions
+      - "Complete integration testing with frontend application"
+      - "Implement rate limiting for login attempts"
+      - "Add comprehensive audit logging for security events"
+
+prompt_inputs:
+  task_kind: "generate|refactor|review|test|document|plan"
+  primary_prompt_id: "service-gen-001"  # See prompts.yaml for options
+  supplemental_prompts: 
+    # Example: Additional prompts to use in sequence
+    # - "component-test-001"    # For adding tests
+    # - "doc-gen-001"           # For documentation
+    - ""
+  examples:
+    # Examples to guide AI understanding:
+    # - "Similar authentication flow in our mobile app"
+    # - "Error handling pattern from payment service"  
+    # - "Performance optimization approach from search feature"
+    - ""
+
+outputs:
+  expected_artifacts:
+    # Example: What files/deliverables should be created
+    - name: "Authentication Service"
+      path: "src/services/AuthService.ts"
+      description: "Main service handling login/logout functionality"
+    # - name: "API Documentation"
+    #   path: "docs/auth-api.md"
+    #   description: "Updated API documentation with new endpoints"
+  review_checklist:
+    # Example: Criteria for validating the work
+    - "Authentication flow works end-to-end"
+    - "Error handling covers all failure scenarios"
+    - "Security best practices implemented"
+    - "Performance meets requirements (< 2s response time)"
+    - "Tests added for all new functionality"
+    - "Documentation updated with changes"

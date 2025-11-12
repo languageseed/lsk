@@ -1,0 +1,596 @@
+# Service Boundaries: Managing Multi-Service Complexity
+# Clear inputs/outputs prevent integration point explosion
+
+metadata:
+  template_type: "service_boundaries"
+  purpose: "Define clear service boundaries to manage integration complexity"
+  when_to_use: "Multi-service/microservices architectures"
+
+# The Complexity Problem
+complexity_growth:
+  problem_statement: |
+    Integration points grow exponentially with services:
+    - 2 services = 1 connection
+    - 5 services = 10 possible connections
+    - 10 services = 45 possible connections
+    - 20 services = 190 possible connections
+    
+    Formula: N(N-1)/2 for bidirectional
+    
+    Without clear boundaries, complexity becomes unmanageable.
+  
+  real_world_example: |
+    DOCeater v2 architecture:
+    - 8+ services (chromadb, document-processor, ai-chat, logging, etc.)
+    - Potential: 28+ integration points
+    - Without boundaries: Chaos
+    - With boundaries: Manageable
+
+# The Solution: Clear Service Boundaries
+
+principle:
+  statement: "One container per service with clear inputs and outputs"
+  
+  benefits:
+    - "Services can be developed independently"
+    - "Integration points are explicit and documented"
+    - "Complexity stays manageable"
+    - "Testing becomes straightforward"
+    - "Deployment is independent"
+  
+  key_insight: |
+    "It can be easy to make an easy API call across systems but as complexity
+    grows the communications and integration points square minus 1 or whatever
+    it is so being clear about dependencies and defining a container per 
+    service is helpful"
+
+# Service Definition Template
+
+service_definition:
+  service_name: ""  # Example: "document-processor"
+  
+  purpose:
+    what_it_does: |
+      # Single responsibility description
+      # Example: "Extracts text and metadata from uploaded documents"
+      # Example: "Manages real-time WebSocket connections for chat"
+    
+    what_it_does_NOT: |
+      # Important: What this service is NOT responsible for
+      # Example: "Does NOT store documents (storage service does that)"
+      # Example: "Does NOT handle authentication (auth service does that)"
+  
+  boundaries:
+    owns: []
+      # What this service owns/controls
+      # Example: "Document extraction logic"
+      # Example: "Text processing algorithms"
+      # Example: "Extraction cache"
+    
+    does_not_own: []
+      # What this service does NOT own
+      # Example: "Document storage (belongs to storage service)"
+      # Example: "User management (belongs to auth service)"
+  
+  container:
+    image: ""  # Example: "doceater-document-processor:latest"
+    port: 0    # Example: 8670
+    health_endpoint: ""  # Example: "/health"
+    
+  dependencies:
+    # CRITICAL: Be explicit about what this service depends on
+    upstream_services: []
+      # Services this one calls
+      # Example:
+      # - service: "chromadb"
+      #   endpoint: "http://chromadb:8000"
+      #   purpose: "Store extracted vectors"
+      #   required: true
+    
+    downstream_services: []
+      # Services that call this one
+      # Example:
+      # - service: "api-gateway"
+      #   endpoint: "http://api-gateway:8080"
+      #   purpose: "Receives document upload requests"
+
+# Clear Inputs and Outputs
+
+inputs:
+  api_endpoints: []
+    # What APIs does this service expose?
+    # Example:
+    # - endpoint: "POST /process"
+    #   input_format:
+    #     content_type: "multipart/form-data"
+    #     fields:
+    #       - name: "file"
+    #         type: "binary"
+    #         required: true
+    #       - name: "options"
+    #         type: "json"
+    #         required: false
+    #   output_format:
+    #     content_type: "application/json"
+    #     schema:
+    #       document_id: "string"
+    #       text: "string"
+    #       metadata: "object"
+    #   errors:
+    #     - code: 400
+    #       reason: "Invalid file format"
+    #     - code: 413
+    #       reason: "File too large"
+  
+  events_consumed: []
+    # What events does this service listen to?
+    # Example:
+    # - event: "document.uploaded"
+    #   source: "storage-service"
+    #   format:
+    #     document_id: "string"
+    #     storage_url: "string"
+    #   action: "Trigger document processing"
+  
+  environment_config: []
+    # What configuration does this service need?
+    # Example:
+    # - name: "CHROMADB_URL"
+    #   required: true
+    #   purpose: "Vector database connection"
+    # - name: "MAX_FILE_SIZE"
+    #   required: false
+    #   default: "10MB"
+    #   purpose: "Maximum document size"
+
+outputs:
+  api_responses: []
+    # What does this service return?
+    # (Defined in inputs.api_endpoints)
+  
+  events_produced: []
+    # What events does this service emit?
+    # Example:
+    # - event: "document.processed"
+    #   format:
+    #     document_id: "string"
+    #     text: "string"
+    #     metadata: "object"
+    #     processing_time_ms: "number"
+    #   consumers:
+    #     - "ai-chat-service"
+    #     - "search-indexer"
+  
+  side_effects: []
+    # What external state changes does this service make?
+    # Example:
+    # - "Stores vectors in ChromaDB"
+    # - "Caches results in Redis"
+    # - "Updates processing metrics in database"
+
+# Integration Contract
+
+integration_contract:
+  service_name: ""
+  version: "1.0.0"
+  
+  provides:
+    # What does this service provide to other services?
+    - capability: ""
+      endpoint: ""
+      method: ""
+      input_schema: {}
+      output_schema: {}
+      sla:
+        response_time_ms: 0
+        availability: ""  # Example: "99.9%"
+  
+  requires:
+    # What does this service require from other services?
+    - capability: ""
+      from_service: ""
+      endpoint: ""
+      criticality: ""  # critical | high | medium | low
+      fallback: ""  # What happens if this service is unavailable?
+  
+  assumptions:
+    # Critical assumptions about other services
+    - ""  # Example: "chromadb service is always available"
+    - ""  # Example: "document storage service handles file retention"
+
+# Dependency Graph
+
+dependency_graph:
+  # Visual representation of dependencies
+  visualization: |
+    # Example for DOCeater:
+    #
+    # api-gateway
+    #   ↓
+    # document-processor → chromadb
+    #   ↓                    ↑
+    # ai-chat-service ──────┘
+    #   ↓
+    # logging-service
+    
+  complexity_analysis:
+    total_services: 0
+    direct_dependencies: 0
+    indirect_dependencies: 0
+    potential_integration_points: 0  # N(N-1)/2
+    actual_integration_points: 0
+    
+    complexity_score: ""  # low | medium | high | critical
+    
+    notes: |
+      # Complexity assessment
+      # Example: "5 services with 4 direct connections = manageable"
+      # Example: "10 services with 30 connections = needs simplification"
+
+# Service Independence Checklist
+
+independence_checklist:
+  can_deploy_independently:
+    status: false
+    blockers: []  # What prevents independent deployment?
+    
+  can_develop_independently:
+    status: false
+    requirements: []  # What's needed for independent development?
+    
+  can_test_independently:
+    status: false
+    test_strategy: ""  # How to test without other services?
+    
+  has_clear_boundaries:
+    status: false
+    issues: []  # Boundary violations or unclear areas
+    
+  minimal_dependencies:
+    status: false
+    dependency_count: 0
+    acceptable_limit: 3  # Adjust based on architecture
+    
+  versioned_api:
+    status: false
+    versioning_strategy: ""
+
+# Anti-Patterns to Avoid
+
+anti_patterns:
+  service_coupling:
+    problem: "Services directly access each other's databases"
+    impact: "Tight coupling, can't evolve independently"
+    solution: "Each service owns its data, communicate via APIs only"
+    
+    example_bad: |
+      # document-processor directly queries ai-chat-service database
+      SELECT * FROM ai_chat_service.conversations WHERE document_id = ?
+    
+    example_good: |
+      # document-processor calls ai-chat-service API
+      GET http://ai-chat-service:8668/api/conversations?document_id={id}
+  
+  shared_database:
+    problem: "Multiple services write to same database tables"
+    impact: "Schema changes affect multiple services"
+    solution: "Each service has its own database/schema"
+    
+  chatty_interfaces:
+    problem: "Service makes many small API calls to complete one operation"
+    impact: "Network overhead, performance issues"
+    solution: "Design coarse-grained APIs, batch operations"
+    
+    example_bad: |
+      for each document:
+        call process_document(doc)      # 100 API calls for 100 docs
+    
+    example_good: |
+      call process_documents([docs])    # 1 API call for 100 docs
+  
+  god_service:
+    problem: "One service does too many things"
+    impact: "Complex, hard to maintain, bottleneck"
+    solution: "Split into smaller services with single responsibilities"
+    
+  distributed_monolith:
+    problem: "Services must always deploy together"
+    impact: "Lost benefits of microservices"
+    solution: "Versioned APIs, backward compatibility"
+
+# Real-World Example: DOCeater v2 Architecture
+
+example_doceater:
+  services:
+    document_processor:
+      purpose: "Extract text and metadata from documents"
+      container: "doceater-v2-document-processor:8670"
+      
+      inputs:
+        - "POST /process - Upload document"
+        - "env: CHROMADB_URL"
+      
+      outputs:
+        - "JSON: { text, metadata, vectors }"
+        - "Stores vectors in chromadb"
+      
+      dependencies:
+        upstream:
+          - "chromadb (vector storage)"
+          - "logging-service (audit logs)"
+        downstream:
+          - "api-gateway (receives requests)"
+      
+      independence:
+        can_deploy_independently: true
+        can_test_with_mocks: true
+        clear_boundaries: true
+    
+    ai_chat_service:
+      purpose: "Handle AI chat interactions with documents"
+      container: "doceater-v2-ai-chat-service:8668"
+      
+      inputs:
+        - "POST /chat - Send message"
+        - "env: OLLAMA_BASE_URL"
+        - "env: CHROMADB_URL"
+      
+      outputs:
+        - "JSON: { response, context, sources }"
+        - "event: chat.message.sent"
+      
+      dependencies:
+        upstream:
+          - "chromadb (retrieve context)"
+          - "ollama (generate responses)"
+        downstream:
+          - "api-gateway"
+          - "ui-service"
+      
+      independence:
+        can_deploy_independently: true
+        can_test_with_mocks: true
+        clear_boundaries: true
+    
+    chromadb:
+      purpose: "Vector database for semantic search"
+      container: "doceater-v2-chromadb:8630"
+      
+      inputs:
+        - "POST /collections/{name}/add - Store vectors"
+        - "POST /collections/{name}/query - Query vectors"
+      
+      outputs:
+        - "Vector storage and retrieval"
+      
+      dependencies:
+        upstream: []  # Leaf service
+        downstream:
+          - "document-processor"
+          - "ai-chat-service"
+      
+      independence:
+        can_deploy_independently: true
+        shared_by_multiple_services: true
+        clear_boundaries: true
+  
+  integration_points:
+    actual: 4  # document-processor→chromadb, ai-chat→chromadb, ai-chat→ollama, etc.
+    potential: 28  # 8 services = 8(7)/2 = 28 possible
+    complexity: "Well managed - only 4 actual connections"
+  
+  key_decisions:
+    - "Each service owns its data"
+    - "Communication via HTTP APIs only"
+    - "Shared services (chromadb) have clear APIs"
+    - "No direct database access between services"
+    - "Each service independently deployable"
+
+# AI Collaboration Strategy
+
+ai_prompts:
+  defining_service_boundaries:
+    prompt: |
+      I'm designing a multi-service architecture with [N] services.
+      
+      Help me define clear boundaries for this service:
+      
+      Service: [name]
+      Purpose: [what it does]
+      
+      Questions:
+      1. What should this service own vs not own?
+      2. What are the minimum required dependencies?
+      3. What's the clearest API contract?
+      4. How can this service be as independent as possible?
+      5. What integration points are necessary vs nice-to-have?
+  
+  reviewing_dependencies:
+    prompt: |
+      Review these service dependencies for complexity:
+      
+      [Paste service dependency list]
+      
+      Analyze:
+      1. How many integration points exist?
+      2. Are there any circular dependencies?
+      3. Can any dependencies be eliminated?
+      4. Are there shared databases that should be split?
+      5. What's the complexity score (low/medium/high)?
+  
+  identifying_coupling:
+    prompt: |
+      Review this service architecture for coupling issues:
+      
+      [Paste service definitions and integration points]
+      
+      Identify:
+      1. Where are services too tightly coupled?
+      2. Are there shared databases?
+      3. Are APIs too chatty?
+      4. Can services deploy independently?
+      5. What refactoring would reduce coupling?
+
+# Integration Testing Strategy
+
+testing:
+  unit_tests:
+    scope: "Single service in isolation"
+    approach: "Mock all external dependencies"
+    example: |
+      Test document-processor:
+      - Mock chromadb API
+      - Mock logging-service API
+      - Test extraction logic
+  
+  integration_tests:
+    scope: "Service with real dependencies"
+    approach: "Test actual integration points"
+    example: |
+      Test document-processor with real chromadb:
+      - Spin up chromadb container
+      - Test vector storage
+      - Validate retrieval
+  
+  contract_tests:
+    scope: "API contracts between services"
+    approach: "Consumer-driven contract testing"
+    example: |
+      ai-chat-service expects from chromadb:
+      - POST /collections/{name}/query
+      - Response: { ids, distances, documents }
+      
+      Test that chromadb meets this contract
+
+# Deployment Strategy
+
+deployment:
+  independent_deployment:
+    principle: "Each service deploys without coordinating with others"
+    
+    requirements:
+      - "Versioned APIs with backward compatibility"
+      - "Feature flags for breaking changes"
+      - "Health checks and graceful degradation"
+    
+    example: |
+      Deploy document-processor v2:
+      - v2 API at /v2/process
+      - v1 API still available at /v1/process
+      - Consumers migrate at their own pace
+  
+  rolling_updates:
+    principle: "Update one service at a time"
+    
+    process:
+      - "Deploy new version alongside old"
+      - "Shift traffic gradually"
+      - "Monitor health and errors"
+      - "Rollback if issues detected"
+  
+  blue_green:
+    principle: "Run two environments, switch traffic"
+    
+    use_case: "When independent deployment isn't possible"
+
+# Monitoring and Observability
+
+observability:
+  per_service_metrics:
+    - "Request rate"
+    - "Error rate"
+    - "Response time (p50, p95, p99)"
+    - "Dependency health"
+  
+  integration_point_metrics:
+    - "Inter-service latency"
+    - "Failure rate between services"
+    - "Circuit breaker status"
+  
+  distributed_tracing:
+    purpose: "Track requests across services"
+    example: |
+      Trace ID: abc123
+      1. api-gateway (5ms)
+      2. document-processor (150ms)
+      3. chromadb (30ms)
+      Total: 185ms
+
+# Complexity Management Rules
+
+rules:
+  rule_1:
+    statement: "Each service should have ≤3 direct dependencies"
+    rationale: "More dependencies = harder to maintain and test"
+    
+  rule_2:
+    statement: "No circular dependencies between services"
+    rationale: "Makes deployment ordering complex and creates coupling"
+    
+  rule_3:
+    statement: "Each service owns its data exclusively"
+    rationale: "Prevents coupling through shared database"
+    
+  rule_4:
+    statement: "APIs must be versioned and backward compatible"
+    rationale: "Enables independent deployment"
+    
+  rule_5:
+    statement: "Every integration point must be documented"
+    rationale: "Makes complexity visible and manageable"
+
+# Summary Checklist
+
+checklist:
+  service_definition:
+    - "[ ] Service has single, clear responsibility"
+    - "[ ] Boundaries are well-defined (owns X, doesn't own Y)"
+    - "[ ] One container per service"
+    
+  inputs_outputs:
+    - "[ ] All inputs documented (APIs, events, config)"
+    - "[ ] All outputs documented (responses, events, side effects)"
+    - "[ ] Input/output formats specified"
+    
+  dependencies:
+    - "[ ] All dependencies explicitly listed"
+    - "[ ] Dependency count ≤3"
+    - "[ ] No circular dependencies"
+    - "[ ] Fallback strategy for each dependency"
+    
+  independence:
+    - "[ ] Can deploy independently"
+    - "[ ] Can develop independently"
+    - "[ ] Can test independently (with mocks)"
+    - "[ ] Has its own database/storage"
+    
+  integration:
+    - "[ ] APIs are versioned"
+    - "[ ] Integration points documented"
+    - "[ ] Complexity score calculated"
+    - "[ ] No shared database access"
+  
+  monitoring:
+    - "[ ] Health check endpoint defined"
+    - "[ ] Key metrics identified"
+    - "[ ] Distributed tracing configured"
+
+# Key Principle
+
+principle_summary: |
+  "It can be easy to make an easy API call across systems but as complexity
+  grows the communications and integration points square minus 1..."
+  
+  Therefore:
+  1. Keep services independent with clear boundaries
+  2. Define explicit inputs and outputs
+  3. Document every integration point
+  4. Minimize dependencies (≤3 per service)
+  5. One container per service
+  
+  Result: Manageable complexity even as system grows
+  
+  5 services with clear boundaries = 4-6 managed connections
+  vs
+  5 services without boundaries = 10 chaotic connections
+

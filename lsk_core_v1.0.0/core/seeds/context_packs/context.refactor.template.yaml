@@ -1,0 +1,159 @@
+# Context Pack Template - Code Refactoring
+# Copy and fill this YAML, then paste relevant sections into your AI tool.
+
+metadata:
+  task_id: ""
+  title: ""
+  owner: ""
+  created_at: ""
+  updated_at: ""
+  notes: []
+
+objective:
+  problem_statement: |
+    # Example: "Refactor legacy user authentication module to use modern patterns"
+    # Example: "Clean up monolithic API controller into smaller, focused services"
+    # Example: "Update React class components to functional components with hooks"
+    
+    # Your refactoring challenge:
+  constraints:
+    # Example: "Must maintain exact same public API - no breaking changes"
+    # Example: "All existing tests must continue to pass without modification"
+    # Example: "Refactoring must be done incrementally (not big-bang rewrite)"
+    - ""
+    - ""
+  acceptance_criteria:
+    # Example: "Code follows established patterns and style guidelines"
+    # Example: "Cyclomatic complexity reduced by at least 30%"
+    # Example: "Module dependencies clearly defined and minimal"
+    - ""
+    - ""
+
+context:
+  current_issues:
+    # What's wrong with the existing code:
+    # - "300-line function with multiple responsibilities"
+    # - "Tight coupling between authentication and user management"
+    # - "No error handling for network failures"
+    # - "Inconsistent naming conventions across modules"
+    - ""
+  target_patterns:
+    # Patterns to apply during refactoring:
+    # - "Single Responsibility Principle - one function per concern"
+    # - "Repository pattern for data access layer"
+    # - "Strategy pattern for different authentication methods"
+    - ""
+  code_targets:
+    # Example patterns:
+    - path: "src/controllers/user-controller.ts"
+      reason: "Monolithic controller that needs to be broken down"
+      include:
+        - "Authentication logic"
+        - "User CRUD operations"
+        - "Profile management functions"
+      exclude:
+        - "Route definitions (will stay in controller)"
+    # - path: "src/services/legacy-auth.js"
+    #   reason: "Legacy authentication service to modernize"
+    #   include:
+    #     - "Login/logout functions"
+    #     - "Token management"
+    #   exclude:
+    #     - "Password hashing (already secure)"
+  existing_tests:
+    # Tests that must continue to pass:
+    # - "All authentication integration tests"
+    # - "User CRUD operation unit tests"
+    # - "Error handling test scenarios"
+    - ""
+  quality_metrics:
+    # Current code quality measurements:
+    # - "Cyclomatic complexity: 15 (target: 8)"
+    # - "Test coverage: 65% (maintain or improve)"
+    # - "Function length: average 45 lines (target: 20)"
+    - ""
+  diffs:
+    # Recent changes that inform refactoring approach:
+    - ref: ""
+      summary: ""
+  glossary:
+    # Domain terms that should be preserved:
+    - term: ""
+      definition: ""
+  dependencies:
+    # Libraries that might change during refactoring:
+    - name: ""
+      version: ""
+      purpose: ""
+
+# Refactoring-specific governance
+governance:
+  spaces:
+    - name: "existing_behavior"
+      scope: "current functionality that must be preserved"
+      sources: ["existing tests", "API documentation", "user workflows"]
+    - name: "code_quality_goals"
+      scope: "target patterns and quality improvements"
+      sources: ["style guides", "architecture decisions", "best practices"]
+    - name: "refactoring_constraints"
+      scope: "what cannot change during refactoring"
+      sources: ["public APIs", "database schemas", "external integrations"]
+  direction:
+    # Example refactoring flow:
+    start_point: "Legacy code with quality issues and maintenance burden"
+    current_state: "Issues identified, target patterns chosen, tests documented"
+    decisions:
+      # - "Extract services first, then refactor internal logic"
+      # - "Use dependency injection rather than singleton pattern"
+      # - "Maintain backward compatibility with wrapper functions"
+      - ""
+    pending_decisions:
+      # - "Whether to refactor all at once vs module-by-module"
+      # - "Keep existing error messages vs improve them"
+      - ""
+    target_outcome: "Clean, maintainable code that follows established patterns"
+    options:
+      # - "Big-bang refactor vs gradual migration"
+      # - "Extract to new modules vs refactor in place"
+      # - "TypeScript conversion vs JavaScript cleanup"
+      - ""
+    next_steps:
+      # - "Extract user service from controller"
+      # - "Add comprehensive unit tests for extracted logic"
+      # - "Update imports and dependency injection"
+      - ""
+
+prompt_inputs:
+  task_kind: "refactor"
+  primary_prompt_id: "refactor-001"
+  supplemental_prompts:
+    # - "service-gen-001"        # For extracting services
+    # - "component-gen-001"      # For component refactoring
+    # - "component-test-001"     # For updating tests
+    - ""
+  examples:
+    # Examples of refactoring approaches:
+    # - "Extract method: break large functions into smaller ones"
+    # - "Extract class: separate concerns into different classes"
+    # - "Replace conditional with polymorphism for complex if/else chains"
+    - ""
+
+outputs:
+  expected_artifacts:
+    - name: "Refactored Implementation"
+      path: ""
+      description: "Improved code following target patterns"
+    - name: "Updated Tests"
+      path: ""
+      description: "Tests updated to work with new structure"
+    # - name: "Migration Guide"
+    #   path: ""
+    #   description: "Documentation of changes made and any API updates"
+  review_checklist:
+    - "All existing functionality preserved (tests pass)"
+    - "Code follows established patterns and conventions"
+    - "Complexity reduced and readability improved"
+    - "Dependencies properly managed and minimal"
+    - "No breaking changes to public APIs"
+    - "Performance maintained or improved"
+    - "Documentation updated to reflect changes"

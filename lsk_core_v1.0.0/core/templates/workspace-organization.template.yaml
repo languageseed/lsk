@@ -1,0 +1,621 @@
+# Workspace Organization: Specification vs Implementation
+# Keep planning separate from coding for better focus and clarity
+
+metadata:
+  template_type: "workspace_organization"
+  purpose: "Separate specification from implementation to reduce cognitive load"
+  when_to_use: "Complex builds where mixing specs and code creates confusion"
+
+# The Core Principle
+principle:
+  problem: |
+    When specifications and implementation live together:
+    - Hard to focus on coding (distracted by planning docs)
+    - Hard to focus on planning (distracted by code)
+    - Context switching is mentally expensive
+    - AI gets confused about what to focus on
+    - Hard to hand off between planning and coding phases
+    
+  solution: |
+    Physical separation creates mental separation:
+    - Specification folder: WHAT and WHY
+    - Implementation folder: HOW
+    - Clean mental context for each activity
+    - AI can focus on appropriate artifacts
+    - Clear handoff points
+
+# Directory Structure
+
+recommended_structure:
+  root:
+    description: "Project root with clear separation"
+    structure: |
+      project-root/
+      ├── spec/                    # WHAT to build (specification focus)
+      │   ├── requirements/
+      │   ├── architecture/
+      │   ├── decisions/
+      │   ├── risks/
+      │   └── acceptance/
+      │
+      ├── implementation/          # HOW to build (code focus)
+      │   ├── src/
+      │   ├── tests/
+      │   ├── docs/                # Code documentation only
+      │   └── config/
+      │
+      └── .lsk/                    # LSKv4.2 artifacts (bridge between spec and impl)
+          ├── context-packs/
+          ├── checkpoints/
+          └── phase-plans/
+
+# Specification Folder (WHAT/WHY)
+specification_directory:
+  path: "spec/"
+  purpose: "Everything about WHAT to build and WHY"
+  mindset: "Product thinking, requirements, decisions"
+  
+  structure:
+    requirements:
+      path: "spec/requirements/"
+      contains:
+        - "user-stories.md"
+        - "acceptance-criteria.md"
+        - "constraints.md"
+        - "success-metrics.md"
+      
+      when_to_work_here: |
+        - Defining what to build
+        - Refining requirements
+        - Discussing with stakeholders
+        - Writing acceptance criteria
+    
+    architecture:
+      path: "spec/architecture/"
+      contains:
+        - "system-design.md"
+        - "component-diagram.md"
+        - "data-model.md"
+        - "integration-points.md"
+        - "technology-choices.md"
+      
+      when_to_work_here: |
+        - Designing system architecture
+        - Evaluating options
+        - Making technology decisions
+        - Planning components
+    
+    decisions:
+      path: "spec/decisions/"
+      contains:
+        - "adr-001-database-choice.md"  # Architecture Decision Records
+        - "adr-002-api-framework.md"
+        - "trade-offs-considered.md"
+      
+      when_to_work_here: |
+        - Recording architectural decisions
+        - Documenting trade-offs
+        - Explaining why choices were made
+    
+    risks:
+      path: "spec/risks/"
+      contains:
+        - "risk-assessment.yaml"
+        - "poc-plans.md"
+        - "poc-results.md"
+        - "assumptions.md"
+      
+      when_to_work_here: |
+        - Identifying uncertainties
+        - Planning PoCs
+        - Documenting validation results
+    
+    acceptance:
+      path: "spec/acceptance/"
+      contains:
+        - "test-scenarios.md"
+        - "edge-cases.md"
+        - "uat-plan.md"
+      
+      when_to_work_here: |
+        - Defining how to validate success
+        - Planning testing approach
+        - Writing acceptance tests
+
+# Implementation Folder (HOW)
+implementation_directory:
+  path: "implementation/"
+  purpose: "Everything about HOW to build it"
+  mindset: "Engineering execution, code, tests"
+  
+  structure:
+    source:
+      path: "implementation/src/"
+      contains:
+        - "Core application code"
+        - "No requirements docs"
+        - "No planning artifacts"
+      
+      when_to_work_here: |
+        - Writing code
+        - Debugging
+        - Refactoring
+        - Performance optimization
+    
+    tests:
+      path: "implementation/tests/"
+      contains:
+        - "unit/"
+        - "integration/"
+        - "e2e/"
+      
+      when_to_work_here: |
+        - Writing tests
+        - Test-driven development
+        - Debugging test failures
+    
+    docs:
+      path: "implementation/docs/"
+      contains:
+        - "api-reference.md"      # Generated from code
+        - "code-guide.md"         # How to work with the code
+        - "setup.md"              # Development setup
+      
+      note: "Code documentation only, not requirements"
+    
+    config:
+      path: "implementation/config/"
+      contains:
+        - "Configuration files"
+        - "Environment settings"
+        - "Deployment configs"
+
+# AI Collaboration with Separated Workspace
+
+ai_prompts:
+  when_in_spec_folder:
+    mindset: "We're in specification mode - focus on WHAT and WHY"
+    
+    example_prompts:
+      requirements: |
+        I'm working in spec/requirements/.
+        
+        Help me refine these requirements:
+        [requirements content]
+        
+        Focus on:
+        - Clarity and completeness
+        - Missing edge cases
+        - Measurable acceptance criteria
+        
+        Don't worry about implementation details yet.
+      
+      architecture: |
+        I'm working in spec/architecture/.
+        
+        Review this system design and suggest improvements:
+        [architecture content]
+        
+        Focus on:
+        - Component boundaries
+        - Integration patterns
+        - Scalability considerations
+        
+        We'll figure out implementation later.
+      
+      risks: |
+        I'm working in spec/risks/.
+        
+        Help me identify what could go wrong with this approach:
+        [approach description]
+        
+        Focus on:
+        - Technical risks
+        - Assumptions to validate
+        - PoC plans to de-risk
+        
+        Implementation concerns come later.
+  
+  when_in_implementation_folder:
+    mindset: "We're in implementation mode - focus on HOW"
+    
+    example_prompts:
+      coding: |
+        I'm working in implementation/src/.
+        
+        Here's the code I'm implementing:
+        [code context]
+        
+        Focus on:
+        - Code quality and patterns
+        - Performance optimization
+        - Error handling
+        
+        The requirements are already defined in spec/.
+      
+      debugging: |
+        I'm working in implementation/ and debugging an issue.
+        
+        [Error details and code context]
+        
+        Focus on:
+        - Root cause analysis
+        - Code-level fixes
+        - Test coverage
+        
+        The requirements/specs are in spec/ if needed for reference.
+      
+      testing: |
+        I'm working in implementation/tests/.
+        
+        Help me write tests for:
+        [component description]
+        
+        Focus on:
+        - Test coverage
+        - Edge cases
+        - Test quality
+        
+        Acceptance criteria are defined in spec/acceptance/.
+
+# Bridge: LSK Artifacts (.lsk/)
+lsk_directory:
+  path: ".lsk/"
+  purpose: "Bridge between specification and implementation"
+  
+  context_packs:
+    location: ".lsk/context-packs/"
+    purpose: "Combine spec + implementation context for AI"
+    
+    structure: |
+      context-pack-feature-x.yaml:
+        # References to spec/
+        requirements_ref: "spec/requirements/feature-x.md"
+        architecture_ref: "spec/architecture/component-y.md"
+        
+        # References to implementation/
+        code_targets:
+          - "implementation/src/feature-x/"
+        
+        # Current work focus
+        current_activity: "implementation"  # or "specification"
+  
+  checkpoints:
+    location: ".lsk/checkpoints/"
+    purpose: "Track progress across both spec and implementation"
+    
+    captures:
+      - "Specification decisions made"
+      - "Implementation progress"
+      - "Handoff between planning and coding"
+  
+  phase_plans:
+    location: ".lsk/phase-plans/"
+    purpose: "Track which phase, which folder to focus on"
+    
+    phase_mapping:
+      definition: "Work in spec/requirements/"
+      validation: "Work in spec/requirements/ + spec/acceptance/"
+      risk_assessment: "Work in spec/risks/"
+      options_analysis: "Work in spec/architecture/"
+      implementation: "Work in implementation/"
+      integration: "Work in implementation/tests/"
+      uat: "Work in spec/acceptance/ + implementation/tests/"
+
+# Workflow: Moving Between Folders
+
+workflow:
+  phase_1_specification:
+    location: "spec/"
+    activities:
+      - "Define requirements"
+      - "Design architecture"
+      - "Assess risks"
+      - "Plan PoCs"
+    
+    ai_context: |
+      Share spec/ files only
+      Don't share implementation code yet
+      Focus on WHAT and WHY
+    
+    deliverables:
+      - "spec/requirements/*.md"
+      - "spec/architecture/*.md"
+      - "spec/risks/*.yaml"
+    
+    handoff_criteria:
+      - "Requirements clear and approved"
+      - "Architecture designed and reviewed"
+      - "Critical risks validated via PoCs"
+  
+  phase_2_implementation:
+    location: "implementation/"
+    activities:
+      - "Write code"
+      - "Write tests"
+      - "Debug issues"
+      - "Optimize performance"
+    
+    ai_context: |
+      Share implementation/ code
+      Reference spec/ for requirements (but don't mix)
+      Focus on HOW
+    
+    deliverables:
+      - "implementation/src/**"
+      - "implementation/tests/**"
+    
+    handoff_criteria:
+      - "Code complete and tested"
+      - "Meets requirements from spec/"
+      - "Ready for integration"
+  
+  phase_3_validation:
+    location: "Both spec/ and implementation/"
+    activities:
+      - "Validate against acceptance criteria"
+      - "Compare implementation to spec"
+      - "UAT testing"
+    
+    ai_context: |
+      Share both spec/acceptance/ and implementation/
+      Validate implementation meets specification
+    
+    deliverables:
+      - "Test results"
+      - "Acceptance sign-off"
+
+# Benefits of Separation
+
+benefits:
+  cognitive_load:
+    problem: "Context switching between planning and coding is mentally expensive"
+    solution: "Work in one folder at a time, single mental context"
+    
+  focus:
+    problem: "Hard to focus on coding when requirements docs are mixed in"
+    solution: "Implementation folder has only code, tests, and code docs"
+    
+  ai_clarity:
+    problem: "AI gets confused when specs and code are mixed"
+    solution: "Clear context about whether to focus on WHAT or HOW"
+    
+  handoffs:
+    problem: "Unclear when to stop planning and start implementing"
+    solution: "Physical folder change = clear phase transition"
+    
+  collaboration:
+    problem: "Product and engineering work on same files"
+    solution: "Product focuses on spec/, Engineering on implementation/"
+
+# Anti-Patterns to Avoid
+
+anti_patterns:
+  mixing_in_src:
+    problem: "Putting requirements.md in src/ folder"
+    why_bad: "Distracting when trying to focus on code"
+    solution: "Keep requirements in spec/requirements/"
+  
+  duplicating_docs:
+    problem: "Same information in both spec/ and implementation/docs/"
+    why_bad: "Gets out of sync, unclear which is source of truth"
+    solution: "spec/ = WHAT/WHY, implementation/docs/ = HOW/API reference"
+  
+  no_bridge:
+    problem: "No way to connect spec to implementation"
+    why_bad: "Hard to trace requirements to code"
+    solution: "Use .lsk/context-packs/ to link them"
+  
+  working_across_folders:
+    problem: "Jumping between spec/ and implementation/ frequently"
+    why_bad: "Constant context switching, mental fatigue"
+    solution: "Complete work in one folder before moving to next"
+
+# Real-World Example
+
+example:
+  project: "Real-time Chat Feature"
+  
+  specification_phase:
+    location: "spec/"
+    duration: "2 days"
+    
+    artifacts_created:
+      - "spec/requirements/chat-feature.md"
+      - "spec/architecture/websocket-design.md"
+      - "spec/risks/risk-assessment.yaml"
+      - "spec/risks/poc-websocket-scaling.md"
+      - "spec/decisions/adr-001-websocket-vs-polling.md"
+    
+    ai_conversations:
+      focus: "Requirements, architecture, risk assessment"
+      shared_context: "spec/ files only"
+      outcome: "Clear specification, validated risks, architectural decisions"
+  
+  implementation_phase:
+    location: "implementation/"
+    duration: "5 days"
+    
+    artifacts_created:
+      - "implementation/src/chat/websocket-server.ts"
+      - "implementation/src/chat/message-handler.ts"
+      - "implementation/tests/chat/websocket.test.ts"
+      - "implementation/docs/chat-api.md"
+    
+    ai_conversations:
+      focus: "Code implementation, debugging, testing"
+      shared_context: "implementation/ code + reference to spec/ for requirements"
+      outcome: "Working feature, tested, documented"
+  
+  validation_phase:
+    location: "Both"
+    duration: "1 day"
+    
+    activities:
+      - "Compare implementation/ code to spec/requirements/"
+      - "Run acceptance tests from spec/acceptance/"
+      - "Validate edge cases from spec/risks/"
+    
+    ai_conversations:
+      focus: "Validation of implementation against specification"
+      shared_context: "Both spec/ and implementation/"
+      outcome: "Feature validated, acceptance criteria met"
+
+# LSKv4.2 Integration
+
+integration_with_lsk:
+  phase_plan:
+    location: ".lsk/phase-plans/chat-feature-plan.yaml"
+    
+    includes_folder_guidance: |
+      current_phase: "implementation"
+      current_folder: "implementation/src/chat/"
+      
+      next_phase: "integration"
+      next_folder: "implementation/tests/"
+      
+      notes: "Currently focused on coding. Spec is in spec/, don't mix contexts."
+  
+  context_pack:
+    location: ".lsk/context-packs/chat-feature.yaml"
+    
+    references_both: |
+      # Specification references (WHAT)
+      requirements: "spec/requirements/chat-feature.md"
+      architecture: "spec/architecture/websocket-design.md"
+      
+      # Implementation targets (HOW)
+      code_targets:
+        - path: "implementation/src/chat/"
+          reason: "Main implementation focus"
+      
+      # Current activity determines which to emphasize
+      current_activity: "implementation"
+      focus: "implementation/ folder, reference spec/ only when needed"
+  
+  checkpoint:
+    location: ".lsk/checkpoints/chat-feature-implementation.md"
+    
+    tracks_both: |
+      ## Specification Status
+      - ✅ Requirements defined (spec/requirements/)
+      - ✅ Architecture designed (spec/architecture/)
+      - ✅ Risks validated (spec/risks/)
+      
+      ## Implementation Status
+      - ✅ WebSocket server implemented (implementation/src/chat/)
+      - ✅ Message handler implemented
+      - 🔄 Testing in progress (implementation/tests/)
+      
+      ## Current Focus
+      Working in: implementation/tests/
+      Not working in: spec/ (specifications are complete)
+
+# AI Collaboration Strategy
+
+ai_strategy:
+  when_planning:
+    location: "spec/"
+    
+    prompt_template: |
+      I'm in specification mode, working in spec/[folder].
+      
+      [Share spec/ content]
+      
+      Focus on requirements, architecture, and planning.
+      We'll handle implementation later in implementation/.
+      
+      Help me with: [specific planning task]
+  
+  when_coding:
+    location: "implementation/"
+    
+    prompt_template: |
+      I'm in implementation mode, working in implementation/[folder].
+      
+      [Share implementation/ code]
+      
+      The requirements are defined in spec/ (can reference if needed).
+      Focus on code quality, tests, and implementation.
+      
+      Help me with: [specific coding task]
+  
+  when_validating:
+    location: "Both"
+    
+    prompt_template: |
+      I'm validating implementation against specification.
+      
+      Specification: [Share spec/requirements/, spec/acceptance/]
+      Implementation: [Share implementation/src/, implementation/tests/]
+      
+      Does the implementation meet the specification?
+      What gaps exist?
+
+# Tips for Managing Separation
+
+tips:
+  - tip: "Complete work in one folder before switching"
+    rationale: "Reduces context switching, maintains focus"
+    
+  - tip: "Use .lsk/ as the bridge, not direct mixing"
+    rationale: "Clean separation with explicit connections"
+    
+  - tip: "Tell AI which folder you're working in"
+    rationale: "AI can focus on appropriate level (WHAT vs HOW)"
+    
+  - tip: "Finish spec/ before starting implementation/"
+    rationale: "Prevents thrashing between planning and coding"
+    
+  - tip: "Reference spec/ from implementation/, don't copy"
+    rationale: "Spec remains source of truth, no duplication"
+    
+  - tip: "Keep implementation/docs/ minimal"
+    rationale: "Auto-generated API docs only, not requirements"
+
+# When Separation Works Best
+
+best_for:
+  complex_projects:
+    reason: "More cognitive load to manage, separation helps"
+    
+  team_collaboration:
+    reason: "Product works in spec/, Engineering in implementation/"
+    
+  long_running_projects:
+    reason: "Spec and implementation evolve at different rates"
+    
+  unclear_requirements:
+    reason: "Need to iterate on spec/ before committing to implementation/"
+
+# When Separation May Be Overkill
+
+not_needed_for:
+  simple_tasks:
+    reason: "Adding structure overhead for minimal benefit"
+    alternative: "Single folder with clear file naming"
+    
+  rapid_prototypes:
+    reason: "Spec and implementation evolving together"
+    alternative: "Spike-and-refine approach in single location"
+    
+  solo_development:
+    reason: "No collaboration benefits, just personal preference"
+    alternative: "Whatever works for your mental model"
+
+# Success Criteria
+
+separation_working:
+  indicators:
+    - "Can focus on coding without distraction from specs"
+    - "Can update requirements without touching code"
+    - "Clear handoff points between planning and implementation"
+    - "AI understands whether to focus on WHAT or HOW"
+    - "Easy to trace requirements to implementation via .lsk/"
+    
+  metrics:
+    - "Reduced context switching during work sessions"
+    - "Fewer requirements/code sync issues"
+    - "Clearer AI conversations (less confusion about focus)"
+    - "Easier onboarding (clear structure)"
+

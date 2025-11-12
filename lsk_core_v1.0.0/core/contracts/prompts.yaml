@@ -1,0 +1,1623 @@
+# LSKv4 - Automation Prompts
+# Version: 4.0.0
+# Last Updated: 2025-08-24
+#
+# This file documents automation prompts organized by architectural tier.
+# Use the metadata section to track changes and dependencies.
+
+metadata:
+  version: "4.0.0"
+  last_updated: "2025-08-24"
+  source_codebase: "lskv4"
+  contract_type: "prompt"
+  validation_rules:
+    - "Must include clear instructions"
+    - "Must specify input/output format"
+    - "Must provide example usage"
+    - "Must indicate applicable tiers"
+
+prompts:
+  # Component Generation Prompts
+  - id: "component-gen-001"
+    name: "UI Component Generator"
+    category: "code_generation"
+    applicable_tiers: ["component"]
+    description: "Generates a UI component following component patterns and best practices"
+    template: |
+      Generate a UI component for {component_name} with the following requirements:
+      1. Follow the Component Factory Pattern (patterns.yaml#component-factory-001)
+      2. Implement TypeScript with strong typing
+      3. Use React hooks for state management
+      4. Include proper error handling
+      
+      Component props:
+      {component_props}
+      
+      State requirements:
+      {state_requirements}
+      
+      Component behavior:
+      {component_behavior}
+      
+      Example usage:
+      {example_usage}
+    input_format:
+      component_name: "string"
+      component_props: "array of prop definitions"
+      state_requirements: "description of state needs"
+      component_behavior: "description of component behavior"
+      example_usage: "code snippet"
+    output_format: "TypeScript React component"
+    example:
+      input:
+        component_name: "DataTable"
+        component_props:
+          - "data: Array<any> // The data to display"
+          - "columns: Column[] // Column definitions"
+          - "loading?: boolean // Loading state"
+          - "onRowClick?: (row: any) => void // Row click handler"
+        state_requirements: "Need to track sorted column, sort direction, and pagination state"
+        component_behavior: "Table should support sorting, pagination, and row selection"
+        example_usage: |
+          <DataTable
+            data={users}
+            columns={userColumns}
+            loading={isLoading}
+            onRowClick={handleRowClick}
+          />
+      output: |
+        import React, { useState, useEffect } from 'react';
+        
+        interface Column {
+          key: string;
+          title: string;
+          sortable?: boolean;
+          render?: (value: any, record: any) => React.ReactNode;
+        }
+        
+        interface DataTableProps {
+          data: Array<any>;
+          columns: Column[];
+          loading?: boolean;
+          onRowClick?: (row: any) => void;
+        }
+        
+        export const DataTable: React.FC<DataTableProps> = ({
+          data,
+          columns,
+          loading = false,
+          onRowClick
+        }) => {
+          const [sortedColumn, setSortedColumn] = useState<string | null>(null);
+          const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+          const [page, setPage] = useState(1);
+          const [pageSize] = useState(10);
+          
+          const handleSort = (column: Column) => {
+            if (!column.sortable) return;
+            
+            if (sortedColumn === column.key) {
+              setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+            } else {
+              setSortedColumn(column.key);
+              setSortDirection('asc');
+            }
+          };
+          
+          const sortedData = React.useMemo(() => {
+            if (!sortedColumn) return data;
+            
+            return [...data].sort((a, b) => {
+              const aValue = a[sortedColumn];
+              const bValue = b[sortedColumn];
+              
+              if (sortDirection === 'asc') {
+                return aValue > bValue ? 1 : -1;
+              } else {
+                return aValue < bValue ? 1 : -1;
+              }
+            });
+          }, [data, sortedColumn, sortDirection]);
+          
+          const paginatedData = React.useMemo(() => {
+            const start = (page - 1) * pageSize;
+            const end = start + pageSize;
+            return sortedData.slice(start, end);
+          }, [sortedData, page, pageSize]);
+          
+          return (
+            <div className="data-table">
+              {loading ? (
+                <div className="loading">Loading...</div>
+              ) : (
+                <>
+                  <table>
+                    <thead>
+                      <tr>
+                        {columns.map(column => (
+                          <th 
+                            key={column.key}
+                            onClick={() => handleSort(column)}
+                            className={column.sortable ? 'sortable' : ''}
+                          >
+                            {column.title}
+                            {sortedColumn === column.key && (
+                              <span className="sort-indicator">
+                                {sortDirection === 'asc' ? '↑' : '↓'}
+                              </span>
+                            )}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.map((row, rowIndex) => (
+                        <tr 
+                          key={rowIndex}
+                          onClick={() => onRowClick && onRowClick(row)}
+                          className={onRowClick ? 'clickable' : ''}
+                        >
+                          {columns.map(column => (
+                            <td key={column.key}>
+                              {column.render 
+                                ? column.render(row[column.key], row) 
+                                : row[column.key]}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="pagination">
+                    <button 
+                      onClick={() => setPage(p => Math.max(1, p - 1))}
+                      disabled={page === 1}
+                    >
+                      Previous
+                    </button>
+                    <span>Page {page}</span>
+                    <button 
+                      onClick={() => setPage(p => p + 1)}
+                      disabled={paginatedData.length < pageSize}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        };
+
+  - id: "component-test-001"
+    name: "Component Test Generator"
+    category: "testing"
+    applicable_tiers: ["component"]
+    description: "Generates tests for a UI component following testing best practices"
+    template: |
+      Generate tests for the {component_name} component using:
+      1. React Testing Library
+      2. Jest
+      3. Component Contract Testing approach
+      
+      Component code:
+      {component_code}
+      
+      Test cases to cover:
+      {test_cases}
+    input_format:
+      component_name: "string"
+      component_code: "code snippet"
+      test_cases: "array of test case descriptions"
+    output_format: "TypeScript test file"
+    example:
+      input:
+        component_name: "DataTable"
+        component_code: "/* DataTable component code here */"
+        test_cases:
+          - "Renders with data"
+          - "Shows loading state"
+          - "Sorts when column header is clicked"
+          - "Paginates data correctly"
+          - "Calls onRowClick when a row is clicked"
+      output: |
+        import React from 'react';
+        import { render, screen, fireEvent } from '@testing-library/react';
+        import { DataTable } from './DataTable';
+        
+        const mockData = [
+          { id: 1, name: 'John', age: 25 },
+          { id: 2, name: 'Jane', age: 30 },
+          { id: 3, name: 'Bob', age: 20 },
+        ];
+        
+        const columns = [
+          { key: 'id', title: 'ID', sortable: true },
+          { key: 'name', title: 'Name', sortable: true },
+          { key: 'age', title: 'Age', sortable: true },
+        ];
+        
+        describe('DataTable', () => {
+          test('renders with data', () => {
+            render(<DataTable data={mockData} columns={columns} />);
+            
+            expect(screen.getByText('John')).toBeInTheDocument();
+            expect(screen.getByText('Jane')).toBeInTheDocument();
+            expect(screen.getByText('Bob')).toBeInTheDocument();
+          });
+          
+          test('shows loading state', () => {
+            render(<DataTable data={[]} columns={columns} loading={true} />);
+            
+            expect(screen.getByText('Loading...')).toBeInTheDocument();
+          });
+          
+          test('sorts when column header is clicked', () => {
+            render(<DataTable data={mockData} columns={columns} />);
+            
+            // Get column headers
+            const nameHeader = screen.getByText('Name');
+            
+            // Click on name header to sort
+            fireEvent.click(nameHeader);
+            
+            // Get all names in order
+            const rows = screen.getAllByRole('row').slice(1); // Skip header row
+            expect(rows[0]).toHaveTextContent('Bob');
+            expect(rows[1]).toHaveTextContent('Jane');
+            expect(rows[2]).toHaveTextContent('John');
+            
+            // Click again to reverse sort
+            fireEvent.click(nameHeader);
+            
+            const rowsAfterSecondClick = screen.getAllByRole('row').slice(1);
+            expect(rowsAfterSecondClick[0]).toHaveTextContent('John');
+            expect(rowsAfterSecondClick[1]).toHaveTextContent('Jane');
+            expect(rowsAfterSecondClick[2]).toHaveTextContent('Bob');
+          });
+          
+          test('calls onRowClick when a row is clicked', () => {
+            const onRowClick = jest.fn();
+            render(<DataTable data={mockData} columns={columns} onRowClick={onRowClick} />);
+            
+            const firstRow = screen.getAllByRole('row')[1]; // Skip header row
+            fireEvent.click(firstRow);
+            
+            expect(onRowClick).toHaveBeenCalledWith(mockData[0]);
+          });
+        });
+
+  # Module Generation Prompts
+  - id: "module-gen-001"
+    name: "Module Generator"
+    category: "code_generation"
+    applicable_tiers: ["module"]
+    description: "Generates a module that orchestrates multiple components"
+    template: |
+      Generate a module for {module_name} that:
+      1. Follows the Module Orchestrator Pattern (patterns.yaml#module-orchestrator-001)
+      2. Orchestrates the specified components
+      3. Implements proper error handling and state management
+      4. Uses TypeScript with strong typing
+      
+      Components to orchestrate:
+      {components}
+      
+      Module requirements:
+      {requirements}
+      
+      Data flow:
+      {data_flow}
+      
+      Example usage:
+      {example_usage}
+    input_format:
+      module_name: "string"
+      components: "array of component names and descriptions"
+      requirements: "array of functional requirements"
+      data_flow: "description of data flow between components"
+      example_usage: "code snippet"
+    output_format: "TypeScript module implementation"
+    example:
+      input:
+        module_name: "UserManagement"
+        components:
+          - "UserList: Displays a list of users with filtering"
+          - "UserForm: Form for creating/editing users"
+          - "UserSearch: Search component for filtering users"
+        requirements:
+          - "Module must handle CRUD operations for users"
+          - "Changes in one component should update other components"
+          - "Error handling must be implemented for API calls"
+        data_flow: "UserSearch filters UserList; selecting a user in UserList populates UserForm; submitting UserForm updates UserList"
+        example_usage: |
+          <UserManagementModule />
+      output: |
+        import React, { useState, useEffect } from 'react';
+        import { UserList } from './components/UserList';
+        import { UserForm } from './components/UserForm';
+        import { UserSearch } from './components/UserSearch';
+        import { UserService } from '../services/UserService';
+        
+        interface User {
+          id: string;
+          name: string;
+          email: string;
+          role: string;
+        }
+        
+        export const UserManagementModule: React.FC = () => {
+          const [users, setUsers] = useState<User[]>([]);
+          const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+          const [selectedUser, setSelectedUser] = useState<User | null>(null);
+          const [loading, setLoading] = useState(false);
+          const [error, setError] = useState<string | null>(null);
+          
+          const userService = new UserService();
+          
+          // Load users
+          useEffect(() => {
+            const loadUsers = async () => {
+              setLoading(true);
+              setError(null);
+              
+              try {
+                const loadedUsers = await userService.getUsers();
+                setUsers(loadedUsers);
+                setFilteredUsers(loadedUsers);
+              } catch (err) {
+                setError('Failed to load users');
+                console.error(err);
+              } finally {
+                setLoading(false);
+              }
+            };
+            
+            loadUsers();
+          }, []);
+          
+          // Handle user selection
+          const handleUserSelect = (user: User) => {
+            setSelectedUser(user);
+          };
+          
+          // Handle user search
+          const handleSearch = (query: string) => {
+            if (!query) {
+              setFilteredUsers(users);
+              return;
+            }
+            
+            const filtered = users.filter(user => 
+              user.name.toLowerCase().includes(query.toLowerCase()) ||
+              user.email.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            setFilteredUsers(filtered);
+          };
+          
+          // Handle user form submit (create/update)
+          const handleUserSubmit = async (userData: Partial<User>) => {
+            setLoading(true);
+            setError(null);
+            
+            try {
+              if (selectedUser) {
+                // Update existing user
+                const updatedUser = await userService.updateUser(
+                  selectedUser.id,
+                  userData
+                );
+                
+                // Update user in the list
+                setUsers(users.map(user => 
+                  user.id === updatedUser.id ? updatedUser : user
+                ));
+                setFilteredUsers(filteredUsers.map(user => 
+                  user.id === updatedUser.id ? updatedUser : user
+                ));
+                
+                setSelectedUser(null);
+              } else {
+                // Create new user
+                const newUser = await userService.createUser(userData);
+                
+                // Add new user to the list
+                setUsers([...users, newUser]);
+                setFilteredUsers([...filteredUsers, newUser]);
+              }
+            } catch (err) {
+              setError(
+                selectedUser 
+                  ? 'Failed to update user' 
+                  : 'Failed to create user'
+              );
+              console.error(err);
+            } finally {
+              setLoading(false);
+            }
+          };
+          
+          // Handle user deletion
+          const handleUserDelete = async (userId: string) => {
+            setLoading(true);
+            setError(null);
+            
+            try {
+              await userService.deleteUser(userId);
+              
+              // Remove user from lists
+              setUsers(users.filter(user => user.id !== userId));
+              setFilteredUsers(filteredUsers.filter(user => user.id !== userId));
+              
+              if (selectedUser && selectedUser.id === userId) {
+                setSelectedUser(null);
+              }
+            } catch (err) {
+              setError('Failed to delete user');
+              console.error(err);
+            } finally {
+              setLoading(false);
+            }
+          };
+          
+          return (
+            <div className="user-management-module">
+              {error && <div className="error-message">{error}</div>}
+              
+              <div className="module-header">
+                <h2>User Management</h2>
+                <UserSearch onSearch={handleSearch} />
+              </div>
+              
+              <div className="module-content">
+                <div className="user-list-container">
+                  <UserList 
+                    users={filteredUsers}
+                    loading={loading}
+                    selectedUserId={selectedUser?.id}
+                    onUserSelect={handleUserSelect}
+                    onUserDelete={handleUserDelete}
+                  />
+                </div>
+                
+                <div className="user-form-container">
+                  <UserForm 
+                    user={selectedUser}
+                    loading={loading}
+                    onSubmit={handleUserSubmit}
+                    onCancel={() => setSelectedUser(null)}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+  # Service Generation Prompts
+  - id: "service-gen-001"
+    name: "Service Generator (TypeScript)"
+    category: "code_generation"
+    applicable_tiers: ["service"]
+    description: "Generates a TypeScript service class following the service pattern"
+    template: |
+      Generate a service class for {service_name} that:
+      1. Follows the Service Pattern (patterns.yaml#service-001)
+      2. Implements proper error handling and logging
+      3. Uses TypeScript with strong typing
+      4. Creates a clear interface for the service
+      
+      Required methods:
+      {required_methods}
+      
+      Dependencies:
+      {dependencies}
+      
+      Error handling:
+      {error_handling}
+      
+      Example usage:
+      {example_usage}
+    input_format:
+      service_name: "string"
+      required_methods: "array of method signatures"
+      dependencies: "array of dependency descriptions"
+      error_handling: "description of error handling requirements"
+      example_usage: "code snippet"
+    output_format: "TypeScript service implementation"
+    example:
+      input:
+        service_name: "UserService"
+        required_methods:
+          - "getUsers(): Promise<User[]>"
+          - "getUserById(id: string): Promise<User | null>"
+          - "createUser(userData: Partial<User>): Promise<User>"
+          - "updateUser(id: string, userData: Partial<User>): Promise<User>"
+          - "deleteUser(id: string): Promise<void>"
+        dependencies:
+          - "ApiClient: HTTP client for API requests"
+          - "LoggingService: Service for logging errors and activities"
+        error_handling: "Use try/catch for all API calls, log errors with context, and throw typed exceptions"
+        example_usage: |
+          const userService = new UserService();
+          const users = await userService.getUsers();
+          const user = await userService.getUserById('123');
+      output: |
+        import { ApiClient } from '../api/ApiClient';
+        import { LoggingService } from './LoggingService';
+        
+        export interface User {
+          id: string;
+          name: string;
+          email: string;
+          role: string;
+          createdAt: string;
+          updatedAt: string;
+        }
+        
+        export interface UserServiceInterface {
+          getUsers(): Promise<User[]>;
+          getUserById(id: string): Promise<User | null>;
+          createUser(userData: Partial<User>): Promise<User>;
+          updateUser(id: string, userData: Partial<User>): Promise<User>;
+          deleteUser(id: string): Promise<void>;
+        }
+        
+        export class UserService implements UserServiceInterface {
+          private apiClient: ApiClient;
+          private logger: LoggingService;
+          
+          constructor() {
+            this.apiClient = new ApiClient();
+            this.logger = LoggingService.getInstance();
+          }
+          
+          async getUsers(): Promise<User[]> {
+            try {
+              const response = await this.apiClient.get<User[]>('/users');
+              return response.data;
+            } catch (error) {
+              this.logger.error('Failed to get users', { error });
+              throw new Error('Failed to get users');
+            }
+          }
+          
+          async getUserById(id: string): Promise<User | null> {
+            try {
+              const response = await this.apiClient.get<User>(`/users/${id}`);
+              return response.data;
+            } catch (error) {
+              if ((error as any).status === 404) {
+                return null;
+              }
+              
+              this.logger.error('Failed to get user by ID', { id, error });
+              throw new Error(`Failed to get user with ID ${id}`);
+            }
+          }
+          
+          async createUser(userData: Partial<User>): Promise<User> {
+            try {
+              const response = await this.apiClient.post<User>('/users', userData);
+              
+              this.logger.info('User created', { 
+                userId: response.data.id, 
+                name: response.data.name 
+              });
+              
+              return response.data;
+            } catch (error) {
+              this.logger.error('Failed to create user', { userData, error });
+              throw new Error('Failed to create user');
+            }
+          }
+          
+          async updateUser(id: string, userData: Partial<User>): Promise<User> {
+            try {
+              const response = await this.apiClient.put<User>(`/users/${id}`, userData);
+              
+              this.logger.info('User updated', { 
+                userId: id, 
+                updatedFields: Object.keys(userData) 
+              });
+              
+              return response.data;
+            } catch (error) {
+              this.logger.error('Failed to update user', { id, userData, error });
+              throw new Error(`Failed to update user with ID ${id}`);
+            }
+          }
+          
+          async deleteUser(id: string): Promise<void> {
+            try {
+              await this.apiClient.delete(`/users/${id}`);
+              
+              this.logger.info('User deleted', { userId: id });
+            } catch (error) {
+              this.logger.error('Failed to delete user', { id, error });
+              throw new Error(`Failed to delete user with ID ${id}`);
+            }
+          }
+        }
+  
+  - id: "service-gen-python-001"
+    name: "Service Generator (Python)"
+    category: "code_generation"
+    applicable_tiers: ["service"]
+    description: "Generates a Python service class following the service pattern"
+    template: |
+      Generate a Python service class for {service_name} that:
+      1. Follows the Service Pattern (patterns.yaml#service-001)
+      2. Uses dataclasses and type hints
+      3. Implements proper error handling and logging
+      4. Creates a clear protocol interface
+      
+      Required methods:
+      {required_methods}
+      
+      Dependencies:
+      {dependencies}
+      
+      Error handling:
+      {error_handling}
+      
+      Example usage:
+      {example_usage}
+    input_format:
+      service_name: "string"
+      required_methods: "array of method signatures"
+      dependencies: "array of dependency descriptions"
+      error_handling: "description of error handling requirements"
+      example_usage: "code snippet"
+    output_format: "Python service implementation with type hints"
+    example:
+      input:
+        service_name: "UserService"
+        required_methods:
+          - "get_users() -> List[User]"
+          - "get_user_by_id(user_id: str) -> Optional[User]"
+          - "create_user(user_data: UserCreate) -> User"
+          - "update_user(user_id: str, user_data: UserUpdate) -> User"
+          - "delete_user(user_id: str) -> None"
+        dependencies:
+          - "httpx: HTTP client for API requests"
+          - "structlog: Structured logging"
+        error_handling: "Use custom exceptions, log with context, implement retry logic"
+        example_usage: |
+          user_service = UserService()
+          users = await user_service.get_users()
+          user = await user_service.get_user_by_id('123')
+      output: |
+        from typing import List, Optional, Protocol
+        from dataclasses import dataclass
+        import structlog
+        import httpx
+        
+        logger = structlog.get_logger()
+        
+        @dataclass
+        class User:
+            id: str
+            name: str
+            email: str
+            role: str
+            created_at: str
+            updated_at: str
+        
+        @dataclass 
+        class UserCreate:
+            name: str
+            email: str
+            role: str
+        
+        @dataclass
+        class UserUpdate:
+            name: Optional[str] = None
+            email: Optional[str] = None
+            role: Optional[str] = None
+        
+        class UserServiceProtocol(Protocol):
+            async def get_users(self) -> List[User]: ...
+            async def get_user_by_id(self, user_id: str) -> Optional[User]: ...
+            async def create_user(self, user_data: UserCreate) -> User: ...
+            async def update_user(self, user_id: str, user_data: UserUpdate) -> User: ...
+            async def delete_user(self, user_id: str) -> None: ...
+        
+        class UserServiceError(Exception):
+            """Base exception for user service errors"""
+            pass
+        
+        class UserNotFoundError(UserServiceError):
+            """Raised when user is not found"""
+            pass
+        
+        class UserService:
+            def __init__(self, base_url: str = "http://localhost:8000"):
+                self.client = httpx.AsyncClient(base_url=base_url)
+                self.logger = logger.bind(service="user_service")
+            
+            async def get_users(self) -> List[User]:
+                try:
+                    response = await self.client.get("/users")
+                    response.raise_for_status()
+                    data = response.json()
+                    return [User(**user) for user in data]
+                except httpx.HTTPError as e:
+                    self.logger.error("Failed to get users", error=str(e))
+                    raise UserServiceError("Failed to get users") from e
+            
+            async def get_user_by_id(self, user_id: str) -> Optional[User]:
+                try:
+                    response = await self.client.get(f"/users/{user_id}")
+                    if response.status_code == 404:
+                        return None
+                    response.raise_for_status()
+                    data = response.json()
+                    return User(**data)
+                except httpx.HTTPError as e:
+                    self.logger.error("Failed to get user", user_id=user_id, error=str(e))
+                    raise UserServiceError(f"Failed to get user {user_id}") from e
+            
+            async def create_user(self, user_data: UserCreate) -> User:
+                try:
+                    response = await self.client.post("/users", json=user_data.__dict__)
+                    response.raise_for_status()
+                    data = response.json()
+                    
+                    self.logger.info("User created", user_id=data["id"], name=data["name"])
+                    return User(**data)
+                except httpx.HTTPError as e:
+                    self.logger.error("Failed to create user", user_data=user_data, error=str(e))
+                    raise UserServiceError("Failed to create user") from e
+            
+            async def update_user(self, user_id: str, user_data: UserUpdate) -> User:
+                try:
+                    # Filter out None values
+                    update_data = {k: v for k, v in user_data.__dict__.items() if v is not None}
+                    
+                    response = await self.client.put(f"/users/{user_id}", json=update_data)
+                    response.raise_for_status()
+                    data = response.json()
+                    
+                    self.logger.info("User updated", user_id=user_id, updated_fields=list(update_data.keys()))
+                    return User(**data)
+                except httpx.HTTPError as e:
+                    self.logger.error("Failed to update user", user_id=user_id, error=str(e))
+                    raise UserServiceError(f"Failed to update user {user_id}") from e
+            
+            async def delete_user(self, user_id: str) -> None:
+                try:
+                    response = await self.client.delete(f"/users/{user_id}")
+                    response.raise_for_status()
+                    
+                    self.logger.info("User deleted", user_id=user_id)
+                except httpx.HTTPError as e:
+                    self.logger.error("Failed to delete user", user_id=user_id, error=str(e))
+                    raise UserServiceError(f"Failed to delete user {user_id}") from e
+
+  - id: "service-gen-neutral-001"
+    name: "Service Generator (Language Neutral)"
+    category: "code_generation"
+    applicable_tiers: ["service"]
+    description: "Generates service design in pseudocode, adaptable to any language"
+    template: |
+      Design a service for {service_name} following these principles:
+      1. Clear interface definition with method signatures
+      2. Proper error handling patterns
+      3. Dependency injection for testability
+      4. Logging and observability
+      
+      Service requirements:
+      {service_requirements}
+      
+      Expected methods:
+      {expected_methods}
+      
+      Error scenarios:
+      {error_scenarios}
+      
+      Please provide:
+      1. Interface/contract definition
+      2. Pseudocode implementation
+      3. Error handling strategy
+      4. Usage example
+      5. 10-line implementation guide for common languages
+    input_format:
+      service_name: "string"
+      service_requirements: "list of functional requirements"
+      expected_methods: "list of method descriptions"
+      error_scenarios: "list of error cases to handle"
+    output_format: "Language-neutral service design with implementation guidance"
+
+  - id: "service-test-001"
+    name: "Service Test Generator"
+    category: "testing"
+    applicable_tiers: ["service"]
+    description: "Generates tests for a service following testing best practices"
+    template: |
+      Generate tests for the {service_name} service using:
+      1. Your preferred testing framework
+      2. Mock dependencies
+      3. Service Contract Testing approach
+      
+      Service code:
+      {service_code}
+      
+      Test cases to cover:
+      {test_cases}
+    input_format:
+      service_name: "string"
+      service_code: "code snippet"
+      test_cases: "array of test case descriptions"
+    output_format: "Test file in target language"
+    example:
+      input:
+        service_name: "UserService"
+        service_code: "/* UserService implementation here */"
+        test_cases:
+          - "Successfully retrieves all users"
+          - "Handles empty user list"
+          - "Creates new user with valid data"
+          - "Rejects invalid user data"
+          - "Updates existing user"
+          - "Handles non-existent user ID"
+          - "Deletes user successfully"
+          - "Handles API errors gracefully"
+      output: |
+        import { UserService } from './UserService';
+        import { ApiClient } from '../api/ApiClient';
+        import { LoggingService } from './LoggingService';
+        
+        jest.mock('../api/ApiClient');
+        jest.mock('./LoggingService');
+        
+        describe('UserService', () => {
+          let userService: UserService;
+          let mockApiClient: jest.Mocked<ApiClient>;
+          let mockLogger: jest.Mocked<LoggingService>;
+          
+          beforeEach(() => {
+            mockApiClient = new ApiClient() as jest.Mocked<ApiClient>;
+            mockLogger = LoggingService.getInstance() as jest.Mocked<LoggingService>;
+            userService = new UserService();
+          });
+          
+          describe('getUsers', () => {
+            it('successfully retrieves all users', async () => {
+              const mockUsers = [
+                { id: '1', name: 'John', email: 'john@test.com', role: 'user' },
+                { id: '2', name: 'Jane', email: 'jane@test.com', role: 'admin' }
+              ];
+              
+              mockApiClient.get.mockResolvedValue({ data: mockUsers });
+              
+              const users = await userService.getUsers();
+              
+              expect(users).toEqual(mockUsers);
+              expect(mockApiClient.get).toHaveBeenCalledWith('/users');
+            });
+            
+            it('handles empty user list', async () => {
+              mockApiClient.get.mockResolvedValue({ data: [] });
+              
+              const users = await userService.getUsers();
+              
+              expect(users).toEqual([]);
+            });
+            
+            it('handles API errors gracefully', async () => {
+              mockApiClient.get.mockRejectedValue(new Error('Network error'));
+              
+              await expect(userService.getUsers()).rejects.toThrow('Failed to get users');
+              expect(mockLogger.error).toHaveBeenCalledWith('Failed to get users', expect.any(Object));
+            });
+          });
+          
+          describe('createUser', () => {
+            it('creates new user with valid data', async () => {
+              const userData = { name: 'New User', email: 'new@test.com', role: 'user' };
+              const createdUser = { id: '3', ...userData };
+              
+              mockApiClient.post.mockResolvedValue({ data: createdUser });
+              
+              const result = await userService.createUser(userData);
+              
+              expect(result).toEqual(createdUser);
+              expect(mockApiClient.post).toHaveBeenCalledWith('/users', userData);
+              expect(mockLogger.info).toHaveBeenCalledWith('User created', {
+                userId: '3',
+                name: 'New User'
+              });
+            });
+            
+            it('rejects invalid user data', async () => {
+              const invalidData = { email: 'invalid' }; // Missing required fields
+              
+              mockApiClient.post.mockRejectedValue(new Error('Validation error'));
+              
+              await expect(userService.createUser(invalidData as any)).rejects.toThrow('Failed to create user');
+              expect(mockLogger.error).toHaveBeenCalledWith('Failed to create user', expect.any(Object));
+            });
+          });
+        });
+
+  # Platform Generation Prompts
+  - id: "platform-adapter-gen-001"
+    name: "Platform Adapter Generator"
+    category: "code_generation"
+    applicable_tiers: ["platform"]
+    description: "Generates a platform adapter following the adapter pattern"
+    template: |
+      Generate a platform adapter for {platform_name} that:
+      1. Follows the Platform Adapter Pattern (patterns.yaml#platform-adapter-001)
+      2. Implements a clean interface for the platform
+      3. Handles errors and edge cases
+      4. Uses TypeScript with strong typing
+      
+      Platform details:
+      {platform_details}
+      
+      Required methods:
+      {required_methods}
+      
+      Error handling:
+      {error_handling}
+      
+      Configuration:
+      {configuration}
+      
+      Example usage:
+      {example_usage}
+    input_format:
+      platform_name: "string"
+      platform_details: "description of the platform"
+      required_methods: "array of method signatures"
+      error_handling: "description of error handling requirements"
+      configuration: "description of configuration options"
+      example_usage: "code snippet"
+    output_format: "TypeScript adapter implementation"
+    example:
+      input:
+        platform_name: "S3Storage"
+        platform_details: "Amazon S3 storage service for file operations"
+        required_methods:
+          - "uploadFile(file: File, path: string): Promise<string>"
+          - "downloadFile(path: string): Promise<Blob>"
+          - "deleteFile(path: string): Promise<void>"
+          - "listFiles(directory: string): Promise<string[]>"
+        error_handling: "Handle network errors, authentication issues, and permission problems"
+        configuration: "Requires bucket name, region, and optional credentials"
+        example_usage: |
+          const storage = new S3StorageAdapter({
+            bucketName: 'my-app-files',
+            region: 'us-west-2'
+          });
+          const url = await storage.uploadFile(file, 'uploads/image.jpg');
+      output: |
+        import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
+        
+        export interface StorageService {
+          uploadFile(file: File, path: string): Promise<string>;
+          downloadFile(path: string): Promise<Blob>;
+          deleteFile(path: string): Promise<void>;
+          listFiles(directory: string): Promise<string[]>;
+        }
+        
+        export interface S3StorageConfig {
+          bucketName: string;
+          region: string;
+          credentials?: {
+            accessKeyId: string;
+            secretAccessKey: string;
+          };
+        }
+        
+        export class S3StorageAdapter implements StorageService {
+          private s3Client: S3Client;
+          private bucketName: string;
+          
+          constructor(config: S3StorageConfig) {
+            this.s3Client = new S3Client({
+              region: config.region,
+              credentials: config.credentials
+            });
+            this.bucketName = config.bucketName;
+          }
+          
+          async uploadFile(file: File, path: string): Promise<string> {
+            try {
+              const arrayBuffer = await file.arrayBuffer();
+              
+              const command = new PutObjectCommand({
+                Bucket: this.bucketName,
+                Key: path,
+                Body: Buffer.from(arrayBuffer),
+                ContentType: file.type
+              });
+              
+              await this.s3Client.send(command);
+              return `https://${this.bucketName}.s3.amazonaws.com/${path}`;
+            } catch (error) {
+              console.error('Failed to upload file to S3', error);
+              throw new Error(`Failed to upload file: ${(error as Error).message}`);
+            }
+          }
+          
+          async downloadFile(path: string): Promise<Blob> {
+            try {
+              const command = new GetObjectCommand({
+                Bucket: this.bucketName,
+                Key: path
+              });
+              
+              const response = await this.s3Client.send(command);
+              
+              if (!response.Body) {
+                throw new Error('Empty response body');
+              }
+              
+              const arrayBuffer = await response.Body.transformToByteArray();
+              return new Blob([arrayBuffer], {
+                type: response.ContentType || 'application/octet-stream'
+              });
+            } catch (error) {
+              console.error('Failed to download file from S3', error);
+              throw new Error(`Failed to download file: ${(error as Error).message}`);
+            }
+          }
+          
+          async deleteFile(path: string): Promise<void> {
+            try {
+              const command = new DeleteObjectCommand({
+                Bucket: this.bucketName,
+                Key: path
+              });
+              
+              await this.s3Client.send(command);
+            } catch (error) {
+              console.error('Failed to delete file from S3', error);
+              throw new Error(`Failed to delete file: ${(error as Error).message}`);
+            }
+          }
+          
+          async listFiles(directory: string): Promise<string[]> {
+            try {
+              const command = new ListObjectsV2Command({
+                Bucket: this.bucketName,
+                Prefix: directory
+              });
+              
+              const response = await this.s3Client.send(command);
+              
+              return (response.Contents || [])
+                .map(item => item.Key as string)
+                .filter(key => !!key);
+            } catch (error) {
+              console.error('Failed to list files from S3', error);
+              throw new Error(`Failed to list files: ${(error as Error).message}`);
+            }
+          }
+        }
+
+  # Cross-Tier Prompts
+  - id: "refactor-001"
+    name: "Code Refactoring Assistant"
+    category: "code_improvement"
+    applicable_tiers: ["component", "module", "service", "platform"]
+    description: "Assists in refactoring code to follow best practices and patterns"
+    template: |
+      Analyze and refactor the following code to:
+      1. Follow the specified pattern from patterns.yaml#{pattern_id}
+      2. Implement architectural approach from approaches.yaml#{approach_id}
+      3. Improve code quality and maintainability
+      4. Update to match the LSKv4 architecture
+      
+      Code to refactor:
+      {code_to_refactor}
+      
+      Target pattern:
+      {pattern_description}
+      
+      Target approach:
+      {approach_description}
+      
+      Applicable tier:
+      {applicable_tier}
+    input_format:
+      code_to_refactor: "code snippet"
+      pattern_id: "string"
+      approach_id: "string"
+      pattern_description: "string"
+      approach_description: "string"
+      applicable_tier: "string (component, module, service, or platform)"
+    output_format: "Refactored code with explanation"
+    example:
+      input:
+        code_to_refactor: |
+          // User management functions
+          function getUsers() {
+            return fetch('/api/users').then(res => res.json());
+          }
+          
+          function createUser(userData) {
+            return fetch('/api/users', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(userData)
+            }).then(res => res.json());
+          }
+          
+          // Usage
+          getUsers().then(users => {
+            console.log(users);
+          });
+        pattern_id: "service-001"
+        approach_id: "service-oriented-001"
+        pattern_description: "Service Pattern for encapsulating business logic"
+        approach_description: "Service-Oriented Architecture for modular services"
+        applicable_tier: "service"
+      output: |
+        // Refactored using Service Pattern and Service-Oriented Architecture
+        
+        // Define the interface for the service
+        interface UserService {
+          getUsers(): Promise<User[]>;
+          createUser(userData: Partial<User>): Promise<User>;
+        }
+        
+        // Define the User type
+        interface User {
+          id: string;
+          name: string;
+          email: string;
+        }
+        
+        // Implement the service
+        class UserServiceImpl implements UserService {
+          private apiClient: ApiClient;
+          
+          constructor(apiClient: ApiClient) {
+            this.apiClient = apiClient;
+          }
+          
+          async getUsers(): Promise<User[]> {
+            try {
+              const response = await this.apiClient.get<User[]>('/users');
+              return response.data;
+            } catch (error) {
+              console.error('Failed to get users', error);
+              throw new Error('Failed to get users');
+            }
+          }
+          
+          async createUser(userData: Partial<User>): Promise<User> {
+            try {
+              const response = await this.apiClient.post<User>('/users', userData);
+              return response.data;
+            } catch (error) {
+              console.error('Failed to create user', error);
+              throw new Error('Failed to create user');
+            }
+          }
+        }
+        
+        // ApiClient abstraction
+        class ApiClient {
+          async get<T>(url: string): Promise<{ data: T }> {
+            const response = await fetch(url);
+            const data = await response.json();
+            return { data };
+          }
+          
+          async post<T>(url: string, body: any): Promise<{ data: T }> {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+            const data = await response.json();
+            return { data };
+          }
+        }
+        
+        // Usage with the service
+        const apiClient = new ApiClient();
+        const userService = new UserServiceImpl(apiClient);
+        
+        userService.getUsers()
+          .then(users => {
+            console.log(users);
+          })
+          .catch(error => {
+            console.error('Error fetching users:', error);
+          });
+        
+        // Explanation:
+        // 1. Created a proper UserService interface
+        // 2. Implemented the service with proper error handling
+        // 3. Added type safety with TypeScript
+        // 4. Extracted the API client logic to a separate class
+        // 5. Improved error handling with try/catch
+
+  - id: "doc-gen-001"
+    name: "Documentation Generator"
+    category: "documentation"
+    applicable_tiers: ["component", "module", "service", "platform"]
+    description: "Generates comprehensive documentation for a component, module, service, or platform"
+    template: |
+      Generate documentation for {target_name} with the following requirements:
+      1. Clear description of purpose and functionality
+      2. Usage examples
+      3. API reference
+      4. Dependencies
+      5. Configuration options
+      
+      Target code:
+      {target_code}
+      
+      Target tier:
+      {target_tier}
+      
+      Additional context:
+      {context}
+    input_format:
+      target_name: "string"
+      target_code: "code snippet"
+      target_tier: "string (component, module, service, or platform)"
+      context: "string"
+    output_format: "Markdown documentation"
+    example:
+      input:
+        target_name: "UserService"
+        target_code: "class UserService { ... }"
+        target_tier: "service"
+        context: "Service for managing user data with CRUD operations"
+      output: |
+        # UserService
+        
+        A service for managing user data with CRUD operations.
+        
+        ## Overview
+        
+        The UserService provides a clean interface for interacting with user data, handling all CRUD operations and proper error handling.
+        
+        ## Installation
+        
+        ```bash
+        npm install @lskv3/services
+        ```
+        
+        ## Usage
+        
+        ```typescript
+        import { UserService } from '@lskv3/services';
+        
+        // Initialize the service
+        const userService = new UserService();
+        
+        // Get all users
+        const users = await userService.getUsers();
+        
+        // Get a specific user
+        const user = await userService.getUserById('123');
+        
+        // Create a new user
+        const newUser = await userService.createUser({
+          name: 'John Doe',
+          email: 'john@example.com',
+          role: 'user'
+        });
+        
+        // Update a user
+        const updatedUser = await userService.updateUser('123', {
+          name: 'Jane Doe'
+        });
+        
+        // Delete a user
+        await userService.deleteUser('123');
+        ```
+        
+        ## API Reference
+        
+        ### getUsers(): Promise<User[]>
+        
+        Retrieves all users.
+        
+        **Returns:**
+        - Promise<User[]>: A promise that resolves to an array of user objects.
+        
+        **Throws:**
+        - Error: If the API request fails.
+        
+        ### getUserById(id: string): Promise<User | null>
+        
+        Retrieves a specific user by ID.
+        
+        **Parameters:**
+        - id (string): The ID of the user to retrieve.
+        
+        **Returns:**
+        - Promise<User | null>: A promise that resolves to the user object or null if not found.
+        
+        **Throws:**
+        - Error: If the API request fails.
+        
+        ### createUser(userData: Partial<User>): Promise<User>
+        
+        Creates a new user.
+        
+        **Parameters:**
+        - userData (Partial<User>): The data for the new user.
+        
+        **Returns:**
+        - Promise<User>: A promise that resolves to the newly created user.
+        
+        **Throws:**
+        - Error: If the API request fails.
+        
+        ### updateUser(id: string, userData: Partial<User>): Promise<User>
+        
+        Updates an existing user.
+        
+        **Parameters:**
+        - id (string): The ID of the user to update.
+        - userData (Partial<User>): The data to update.
+        
+        **Returns:**
+        - Promise<User>: A promise that resolves to the updated user.
+        
+        **Throws:**
+        - Error: If the API request fails.
+        
+        ### deleteUser(id: string): Promise<void>
+        
+        Deletes a user.
+        
+        **Parameters:**
+        - id (string): The ID of the user to delete.
+        
+        **Throws:**
+        - Error: If the API request fails.
+        
+        ## Dependencies
+        
+        - ApiClient: For making HTTP requests
+        - LoggingService: For logging errors and activities
+        
+        ## Types
+        
+        ```typescript
+        interface User {
+          id: string;
+          name: string;
+          email: string;
+          role: string;
+          createdAt: string;
+          updatedAt: string;
+        }
+        ```
+        
+        ## Error Handling
+        
+        All methods include proper error handling with informative error messages. Errors are logged using the LoggingService before being thrown.
+
+# AI Extension Guidelines:
+# 1. Add new prompts with unique IDs
+# 2. Specify applicable tiers (component, module, service, platform)
+# 3. Include clear templates with placeholders
+# 4. Provide comprehensive examples
+# 5. Link to related patterns and approaches 
+
+  - id: "coverage-gen-001"
+    name: "Coverage Report Generator"
+    category: "documentation"
+    applicable_tiers: ["component", "module", "service", "platform"]
+    description: "Generates a simple coverage report template based on indexed contracts and journeys"
+    template: |
+      Analyze the current system artifacts and produce a minimal coverage report in this shape:
+      coverage_report:
+        total_features: <number>
+        features_without_journeys: []
+        ui_elements_without_features: []
+        user_journeys_without_features: []
+        agents_without_catalog: []
+        recommendations: []
+      Inputs (optional excerpts):
+      - index entries
+      - user journeys
+      - ui map
+      - agent catalog
+    input_format:
+      index_entries: "yaml list (optional)"
+      user_journeys: "yaml list (optional)"
+      ui_map: "yaml (optional)"
+      agent_catalog: "yaml list (optional)"
+    output_format: "YAML coverage_report block"
+    example:
+      output: |
+        coverage_report:
+          total_features: 5
+          features_without_journeys: ["Logging"]
+          ui_elements_without_features: ["noteList"]
+          user_journeys_without_features: []
+          agents_without_catalog: ["@monitorbot"]
+          recommendations:
+            - "Add journey for Logging or mark as internal-only"
+
+  # Requirements & Example Generation Prompts
+  - id: "requirements-example-gen-001"
+    name: "Requirements Example Generator"
+    category: "requirements"
+    applicable_tiers: ["component", "module", "service", "platform"]
+    description: "Generate concrete examples during requirements gathering to clarify specifications"
+    template: |
+      Based on this requirement: {requirement_description}
+      
+      Generate 3-5 concrete examples that illustrate:
+      1. **Typical usage scenarios** - How users will interact with this feature
+      2. **Edge cases to handle** - Boundary conditions and unusual inputs
+      3. **Error conditions** - What happens when things go wrong
+      4. **Integration touchpoints** - How this connects to other parts of the system
+      
+      For each example, specify:
+      - **Input/trigger**: What initiates this scenario
+      - **Expected behavior**: What should happen step-by-step
+      - **Success criteria**: How we know it worked correctly
+      - **Failure modes**: What could go wrong and how to handle it
+      
+      Context information:
+      {context_details}
+      
+      Current understanding:
+      {current_understanding}
+    input_format:
+      requirement_description: "string - the requirement to generate examples for"
+      context_details: "string - relevant system/business context"
+      current_understanding: "string - what has been clarified so far"
+    output_format: "Structured examples with scenarios, inputs, expected behaviors, and edge cases"
+    example:
+      input:
+        requirement_description: "Users need to be able to upload profile images"
+        context_details: "Web application with user profiles, currently no file upload capability"
+        current_understanding: "Users want to personalize their profiles, images should be displayed in header"
+      output: |
+        ## Concrete Examples for Profile Image Upload
+        
+        ### 1. Typical Usage Scenarios
+        
+        **Example A: First-time image upload**
+        - Input/trigger: User clicks "Upload Photo" button on profile page
+        - Expected behavior: 
+          1. File picker opens showing image files only
+          2. User selects JPG/PNG file under 5MB
+          3. Preview shows before confirming
+          4. Upload progress indicator displays
+          5. Image appears in profile header immediately
+        - Success criteria: Image displays correctly, loads quickly, persists after page refresh
+        - Failure modes: Network interruption during upload, file too large, unsupported format
+        
+        **Example B: Replacing existing image**
+        - Input/trigger: User clicks "Change Photo" on existing profile image
+        - Expected behavior:
+          1. Current image shows with replace/remove options
+          2. New image preview replaces old one
+          3. Confirmation before saving changes
+          4. Old image properly cleaned up from storage
+        - Success criteria: New image replaces old, no broken image links
+        - Failure modes: Storage cleanup fails, old image still accessible via direct URL
+        
+        ### 2. Edge Cases to Handle
+        
+        **Example C: Very large file**
+        - Input/trigger: User attempts to upload 20MB image
+        - Expected behavior: Immediate validation error with helpful message
+        - Success criteria: Clear error about size limit, suggestion to resize
+        - Failure modes: Upload starts then fails, partial file stored
+        
+        **Example D: Mobile device with poor connection**
+        - Input/trigger: Upload from mobile on slow 3G connection
+        - Expected behavior: Progress indicator, ability to pause/resume, timeout handling
+        - Success criteria: Eventually succeeds or fails gracefully with retry option
+        - Failure modes: Upload hangs indefinitely, app becomes unresponsive
+        
+        ### 3. Error Conditions
+        
+        **Example E: Server storage full**
+        - Input/trigger: Valid image upload when server storage at capacity
+        - Expected behavior: Graceful error message, suggestion to try again later
+        - Success criteria: User understands the issue, doesn't lose their selected image
+        - Failure modes: Confusing error message, user thinks their image is problematic
+        
+        ### 4. Integration Touchpoints
+        
+        **Example F: Profile image in comments/posts**
+        - Input/trigger: User with new profile image makes a comment
+        - Expected behavior: New image appears in comment avatar immediately
+        - Success criteria: Consistent image across all user touchpoints
+        - Failure modes: Old image cached in some places, inconsistent display
+
+  - id: "acceptance-criteria-gen-001"
+    name: "Acceptance Criteria Generator"
+    category: "requirements"
+    applicable_tiers: ["component", "module", "service", "platform"]
+    description: "Convert examples and requirements into testable acceptance criteria"
+    template: |
+      Based on these examples and requirements: {examples_and_requirements}
+      
+      Generate specific, testable acceptance criteria in the format:
+      
+      **GIVEN** [initial context/state]
+      **WHEN** [action or trigger occurs]
+      **THEN** [expected outcome]
+      **AND** [additional expected outcomes]
+      
+      Focus on:
+      1. **Functional requirements** - What the system must do
+      2. **Non-functional requirements** - Performance, security, usability
+      3. **Error handling** - How failures are managed
+      4. **Integration behavior** - How it works with other components
+      
+      Make each criterion:
+      - Specific and measurable
+      - Testable with clear pass/fail conditions
+      - Independent of implementation details
+      - Focused on user value and business outcomes
+      
+      Context: {system_context}
+    input_format:
+      examples_and_requirements: "string - the examples and requirements to convert"
+      system_context: "string - relevant system and business context"
+    output_format: "Structured acceptance criteria using Given/When/Then format"
+    example:
+      input:
+        examples_and_requirements: "Profile image upload feature with file size limits, format validation, and progress indication"
+        system_context: "User profile system in web application with mobile responsive design"
+      output: |
+        ## Acceptance Criteria: Profile Image Upload
+        
+        ### Functional Requirements
+        
+        **AC1: Successful image upload**
+        - GIVEN a user is on their profile page
+        - WHEN they select a valid image file (JPG/PNG, under 5MB)
+        - THEN the image uploads successfully
+        - AND displays as their profile picture within 3 seconds
+        - AND appears consistently across all areas of the application
+        
+        **AC2: File validation**
+        - GIVEN a user attempts to upload a file
+        - WHEN the file is not an image or exceeds 5MB
+        - THEN an informative error message is displayed
+        - AND the upload process does not begin
+        - AND suggestions for resolution are provided
+        
+        ### Non-Functional Requirements
+        
+        **AC3: Upload performance**
+        - GIVEN a user uploads a 2MB image
+        - WHEN they have a normal internet connection
+        - THEN the upload completes within 10 seconds
+        - AND progress is clearly indicated throughout
+        
+        **AC4: Mobile responsiveness**
+        - GIVEN a user accesses the upload feature on mobile
+        - WHEN they tap the upload button
+        - THEN the file picker opens with camera/gallery options
+        - AND the interface remains usable on screen sizes down to 320px width
+        
+        ### Error Handling
+        
+        **AC5: Network failure recovery**
+        - GIVEN an upload is in progress
+        - WHEN the network connection is lost
+        - THEN the user receives a clear error message
+        - AND can retry the upload without losing their selected file
+        
+        ### Integration Behavior
+        
+        **AC6: Profile consistency**
+        - GIVEN a user uploads a new profile image
+        - WHEN the upload completes successfully
+        - THEN the new image appears in all locations (header, comments, etc.)
+        - AND the old image is properly removed from storage
+        - AND image URLs are updated in all relevant systems

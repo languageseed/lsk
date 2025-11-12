@@ -1,0 +1,124 @@
+name: LSK Core Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    name: Validate LSK Core Structure
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Validate directory structure
+      run: |
+        echo "Validating LSK Core v5.0 directory structure..."
+        
+        # Check for required directories
+        required_dirs=(
+          "core"
+          "core/templates"
+          "core/templates/recipes"
+          "core/contracts"
+          "core/seeds"
+          "docs"
+          "scripts"
+          "lessons-learned"
+        )
+        
+        for dir in "${required_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Missing required directory: $dir"
+            exit 1
+          else
+            echo "✅ Found: $dir"
+          fi
+        done
+        
+    - name: Validate required files
+      run: |
+        echo "Validating required files..."
+        
+        required_files=(
+          "README.md"
+          "QUICK_START.md"
+          "INDEX.md"
+          "VERSION.yaml"
+          "LICENSE"
+          "CONTRIBUTING.md"
+          "CHANGELOG.md"
+          "core/templates/context.pack.yaml"
+          "core/templates/phase.plan.yaml"
+          "core/contracts/pipeline.yaml"
+        )
+        
+        for file in "${required_files[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "❌ Missing required file: $file"
+            exit 1
+          else
+            echo "✅ Found: $file"
+          fi
+        done
+        
+    - name: Validate recipes
+      run: |
+        echo "Validating recipe files..."
+        
+        recipe_count=$(find core/templates/recipes -name "*.recipe.md" | wc -l)
+        echo "Found $recipe_count recipe files"
+        
+        if [ "$recipe_count" -lt 5 ]; then
+          echo "❌ Expected at least 5 recipes, found $recipe_count"
+          exit 1
+        else
+          echo "✅ Recipe count is adequate"
+        fi
+        
+    - name: Check for broken internal links
+      run: |
+        echo "Checking for broken internal links in README.md..."
+        
+        # Simple check for referenced files in README
+        if grep -q "QUICK_START.md" README.md; then
+          if [ ! -f "QUICK_START.md" ]; then
+            echo "❌ README references QUICK_START.md but file is missing"
+            exit 1
+          fi
+        fi
+        
+        echo "✅ Basic link validation passed"
+        
+    - name: Validate version consistency
+      run: |
+        echo "Checking version consistency..."
+        
+        # Extract version from VERSION.yaml
+        if [ -f "VERSION.yaml" ]; then
+          version=$(grep "current_version:" VERSION.yaml | cut -d'"' -f2)
+          echo "Version in VERSION.yaml: $version"
+          
+          # Check if README mentions the same version
+          if grep -q "$version" README.md; then
+            echo "✅ Version consistency validated"
+          else
+            echo "⚠️  Warning: Version in VERSION.yaml may not match README.md"
+          fi
+        fi
+        
+    - name: Summary
+      run: |
+        echo "
+        ========================================
+        ✅ LSK Core v5.0 validation complete!
+        ========================================
+        
+        All required files and directories are present.
+        Structure adheres to LSK Core v5.0 standards.
+        "
+

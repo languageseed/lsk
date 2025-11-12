@@ -1,0 +1,160 @@
+# LSK Core v5.0 Context Pack
+# Example: Adding User Authentication to REST API
+
+metadata:
+  id: "example-auth-feature-001"
+  created: "2025-10-11"
+  project: "Example REST API"
+  feature: "User Authentication"
+  lsk_version: "5.0.0"
+
+objective:
+  problem_statement: |
+    Our REST API currently has no authentication system. We need to add
+    user login/logout functionality with JWT tokens to secure our endpoints.
+    
+    Current state: All endpoints are public
+    Desired state: Authentication system with JWT tokens
+  
+  acceptance_criteria:
+    - "User can login with email and password via POST /auth/login"
+    - "System generates JWT token on successful login"
+    - "User can logout via POST /auth/logout"
+    - "Password validation enforces minimum 8 characters"
+    - "Invalid credentials return appropriate error messages"
+    - "JWT token expires after 24 hours"
+    - "All endpoints are documented with examples"
+
+  success_metrics:
+    - "Login endpoint responds in <200ms"
+    - "Password hashing uses bcrypt with cost factor 10"
+    - "100% test coverage for auth routes"
+    - "No credentials stored in plain text"
+
+context:
+  current_state: |
+    - Node.js/Express API running on port 3000
+    - MongoDB database for user storage
+    - No authentication currently implemented
+    - User model exists with email and password fields
+    
+  constraints:
+    - "Must use JWT for tokens (project standard)"
+    - "Cannot change existing User model schema"
+    - "Must work with existing middleware setup"
+    - "Response format must match existing API patterns"
+    
+  code_targets:
+    - path: "src/routes/auth.js"
+      reason: "New auth routes (login, logout)"
+      expected_changes: "Create new file with auth endpoints"
+      
+    - path: "src/middleware/authenticate.js"
+      reason: "JWT verification middleware"
+      expected_changes: "Create JWT token verification"
+      
+    - path: "src/models/User.js"
+      reason: "May need password hashing methods"
+      expected_changes: "Add comparePassword and hashPassword methods"
+      
+    - path: "src/utils/jwt.js"
+      reason: "JWT generation and validation utilities"
+      expected_changes: "Create utility functions for JWT"
+
+  dependencies:
+    - name: "jsonwebtoken"
+      version: "^9.0.0"
+      reason: "JWT token generation and verification"
+      
+    - name: "bcrypt"
+      version: "^5.1.0"
+      reason: "Password hashing"
+
+approach:
+  strategy: "Core-first development"
+  reasoning: |
+    Build the core authentication logic first (JWT generation, password validation)
+    before adding routes and middleware. This allows testing logic independently.
+  
+  phases:
+    - phase: "Definition"
+      tasks:
+        - "Review existing User model"
+        - "Define JWT payload structure"
+        - "Specify error response format"
+      
+    - phase: "Implementation"
+      tasks:
+        - "Create JWT utility functions"
+        - "Add password hashing to User model"
+        - "Implement auth routes"
+        - "Create authentication middleware"
+      
+    - phase: "Testing"
+      tasks:
+        - "Unit tests for JWT utilities"
+        - "Integration tests for auth routes"
+        - "Test invalid credentials handling"
+        - "Test token expiration"
+
+risks:
+  identified:
+    - risk: "JWT secret key management"
+      mitigation: "Use environment variable, document in .env.example"
+      likelihood: "Medium"
+      
+    - risk: "Password hashing performance"
+      mitigation: "Use bcrypt cost factor 10 (industry standard)"
+      likelihood: "Low"
+
+prompt_inputs:
+  primary_prompt_id: "feature-implementation-001"
+  tone: "Technical, concise, example-driven"
+  output_format: "Code with inline comments explaining key decisions"
+  
+  conversation_preferences:
+    - "Discuss approach before implementing"
+    - "Show code examples for key functions"
+    - "Explain security considerations"
+    - "Provide test examples"
+
+validation:
+  tests_required:
+    - "Unit tests for JWT generation"
+    - "Unit tests for password hashing"
+    - "Integration test for successful login"
+    - "Integration test for invalid credentials"
+    - "Integration test for token expiration"
+  
+  quality_gates:
+    - gate: "Test coverage"
+      target: "100% for auth module"
+      
+    - gate: "Security review"
+      target: "No plain text passwords, secure JWT secret"
+      
+    - gate: "Performance"
+      target: "Login endpoint <200ms"
+
+next_steps:
+  immediate:
+    - "Share this context pack with AI"
+    - "Discuss and validate approach"
+    - "Begin with JWT utility implementation"
+  
+  follow_up:
+    - "Create checkpoint after implementation"
+    - "Document any learnings"
+    - "Add to lessons-learned if pattern emerges"
+
+notes: |
+  This is a straightforward feature with clear requirements. Using LSK Core
+  to ensure we don't miss security considerations and maintain consistent
+  code quality throughout implementation.
+  
+  Focus areas:
+  - Security (password hashing, JWT secrets)
+  - Error handling (clear error messages)
+  - Testing (comprehensive coverage)
+  - Documentation (API examples)
+

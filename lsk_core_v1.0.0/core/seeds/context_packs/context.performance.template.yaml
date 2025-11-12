@@ -1,0 +1,141 @@
+# Context Pack Template - Performance Optimization
+# Copy and fill this YAML, then paste relevant sections into your AI tool.
+
+metadata:
+  task_id: ""
+  title: ""
+  owner: ""
+  created_at: ""
+  updated_at: ""
+  notes: []
+
+objective:
+  problem_statement: |
+    # Example: "Optimize user dashboard to load in under 2 seconds for 1000+ concurrent users"
+    # Example: "Reduce API response time from 800ms to under 200ms"
+    # Example: "Fix memory leak causing 90% memory usage after 4 hours of operation"
+    
+    # Your performance optimization challenge:
+  constraints:
+    # Example: "Must maintain backward compatibility with existing API"
+    # Example: "Cannot change database schema during optimization"
+    # Example: "Budget: maximum 3 days of development time"
+    - ""
+    - ""
+  acceptance_criteria:
+    # Example: "Dashboard loads in under 2 seconds on 3G connection"
+    # Example: "API handles 500 req/sec with p95 latency under 200ms"
+    # Example: "Memory usage stays under 70% after 24 hours"
+    - ""
+    - ""
+
+context:
+  code_targets:
+    # Example patterns:
+    - path: "src/components/Dashboard.tsx"
+      reason: "Heavy component causing slow renders"
+      include:
+        - "useState and useEffect hooks"
+        - "Data fetching logic"
+        - "Render-heavy components"
+      exclude:
+        - "Styling and CSS"
+    # - path: "src/api/user-service.ts"
+    #   reason: "Slow database queries"
+    #   include:
+    #     - "Query functions"
+    #     - "Data processing logic"
+    #   exclude:
+    #     - "Authentication middleware"
+  performance_data:
+    # Include current performance metrics:
+    # - "Current load time: 4.2 seconds"
+    # - "Memory usage peaks at 1.2GB after 2 hours"
+    # - "Database queries average 450ms"
+    - ""
+  diffs:
+    # Example: Recent changes that might have caused performance issues
+    - ref: ""
+      summary: ""
+  glossary:
+    # Example performance-related terms:
+    - term: "p95 latency"
+      definition: "95th percentile response time - 95% of requests faster than this"
+    # - term: "TTI"
+    #   definition: "Time to Interactive - when page becomes fully interactive"
+  dependencies:
+    # Example performance tools/libraries:
+    - name: "react-window"
+      version: "^1.8.0"
+      purpose: "Virtualization for large lists"
+    # - name: "compression"
+    #   version: "^1.7.0"  
+    #   purpose: "HTTP response compression"
+
+# Performance-specific governance
+governance:
+  spaces:
+    - name: "performance_metrics"
+      scope: "current measurements and targets"
+      sources: ["monitoring dashboards", "profiling tools", "user reports"]
+    - name: "bottleneck_analysis"
+      scope: "identified performance bottlenecks"
+      sources: ["profiler output", "database query logs", "network analysis"]
+    - name: "optimization_constraints"
+      scope: "what cannot be changed during optimization"
+      sources: ["architectural decisions", "business requirements"]
+  direction:
+    # Example direction flow:
+    start_point: "System currently too slow for user requirements"
+    current_state: "Performance metrics gathered, bottlenecks identified"
+    decisions:
+      # - "Focus on frontend rendering performance over backend optimization"
+      # - "Use caching strategy rather than database query optimization"
+      - ""
+    pending_decisions:
+      # - "Choose between Redis caching vs in-memory caching"
+      # - "Decide on virtualization library for large data sets"
+      - ""
+    target_outcome: "System meets performance requirements with acceptable user experience"
+    options:
+      # - "Client-side optimization (caching, lazy loading, code splitting)"
+      # - "Server-side optimization (query optimization, caching, scaling)"
+      # - "Infrastructure optimization (CDN, load balancing, database tuning)"
+      - ""
+    next_steps:
+      # - "Profile current rendering performance"
+      # - "Implement lazy loading for dashboard components"
+      # - "Add performance monitoring"
+      - ""
+
+prompt_inputs:
+  task_kind: "refactor"  # Usually refactor for performance optimization
+  primary_prompt_id: "refactor-001"  # Or service-gen-001 for backend optimization
+  supplemental_prompts:
+    # - "component-gen-001"  # For optimized component creation
+    # - "doc-gen-001"        # For performance documentation
+    - ""
+  examples:
+    # Examples of performance optimization patterns:
+    # - "React.memo and useMemo for expensive calculations"
+    # - "Database query optimization with proper indexing"
+    # - "Image optimization and lazy loading techniques"
+    - ""
+
+outputs:
+  expected_artifacts:
+    - name: "Optimized Implementation"
+      path: ""
+      description: "Performance-improved version of slow component/service"
+    - name: "Performance Metrics"
+      path: ""
+      description: "Before/after performance measurements"
+    # - name: "Optimization Documentation"
+    #   path: "docs/performance-optimization.md"
+    #   description: "Record of changes made and performance impact"
+  review_checklist:
+    - "Performance targets met (load time, memory usage, etc.)"
+    - "No functionality regression introduced"
+    - "Performance monitoring added for ongoing measurement"
+    - "Code remains maintainable and readable"
+    - "Optimization approach documented for future reference"

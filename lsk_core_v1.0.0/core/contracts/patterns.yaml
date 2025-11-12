@@ -1,0 +1,655 @@
+# LSKv4 - Design Patterns
+# Version: 4.0.0
+# Last Updated: 2025-08-24
+#
+# This file documents design patterns organized by architectural tier.
+# Use the metadata section to track changes and dependencies.
+
+metadata:
+  version: "4.0.0"
+  last_updated: "2025-08-24"
+  source_codebase: "lskv4"
+  contract_type: "pattern"
+  validation_rules:
+    - "Must include implementation example"
+    - "Must specify use cases"
+    - "Must provide benefits and tradeoffs"
+    - "Must indicate applicable tiers"
+
+patterns:
+  # Component Patterns
+  - id: "component-factory-001"
+    name: "Component Factory Pattern"
+    category: "creational"
+    applicable_tiers: ["component"]
+    description: "Creates components with consistent interfaces and behavior"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          class ComponentFactory {
+            static createUIComponent(type: string, config: any): BaseComponent {
+              switch (type) {
+                case 'form':
+                  return new FormComponent(config);
+                case 'list':
+                  return new ListComponent(config);
+                case 'chart':
+                  return new ChartComponent(config);
+                default:
+                  throw new Error(`Unknown component type: ${type}`);
+              }
+            }
+          }
+    use_cases:
+      - "Consistent component creation"
+      - "Dynamic component selection"
+      - "Configuration management"
+    benefits:
+      - "Consistent component interfaces"
+      - "Centralized component creation logic"
+      - "Easier testing and mocking"
+    tradeoffs:
+      - "Additional abstraction layer"
+      - "Potential complexity for simple components"
+    related_patterns:
+      - "module-orchestrator-001"
+      - "component-strategy-001"
+  
+  - id: "component-strategy-001"
+    name: "Component Strategy Pattern"
+    category: "behavioral"
+    applicable_tiers: ["component"]
+    description: "Allows components to have interchangeable behaviors"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          interface RenderStrategy {
+            render(data: any): JSX.Element;
+          }
+
+          class TableRenderStrategy implements RenderStrategy {
+            render(data: any): JSX.Element {
+              return <Table data={data} />;
+            }
+          }
+
+          class CardRenderStrategy implements RenderStrategy {
+            render(data: any): JSX.Element {
+              return <CardGrid data={data} />;
+            }
+          }
+
+          class DataComponent {
+            private strategy: RenderStrategy;
+            
+            constructor(strategy: RenderStrategy) {
+              this.strategy = strategy;
+            }
+            
+            setStrategy(strategy: RenderStrategy): void {
+              this.strategy = strategy;
+            }
+            
+            render(data: any): JSX.Element {
+              return this.strategy.render(data);
+            }
+          }
+    use_cases:
+      - "Switchable UI rendering"
+      - "Configurable component behavior"
+      - "Feature toggling"
+    benefits:
+      - "Flexible component behavior"
+      - "Runtime behavior switching"
+      - "Cleaner component code"
+    tradeoffs:
+      - "Additional interfaces"
+      - "Potential over-engineering for simple cases"
+    related_patterns:
+      - "component-factory-001"
+      - "service-observer-001"
+  
+  - id: "component-observer-001"
+    name: "Component Observer Pattern"
+    category: "behavioral"
+    applicable_tiers: ["component", "module"]
+    description: "Allows components to subscribe to and react to events"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          class DataStore {
+            private listeners: ((data: any) => void)[] = [];
+            
+            subscribe(listener: (data: any) => void): () => void {
+              this.listeners.push(listener);
+              return () => {
+                this.listeners = this.listeners.filter(l => l !== listener);
+              };
+            }
+            
+            notify(data: any): void {
+              this.listeners.forEach(listener => listener(data));
+            }
+          }
+          
+          function DataComponent() {
+            const [data, setData] = useState(null);
+            
+            useEffect(() => {
+              const unsubscribe = dataStore.subscribe(newData => {
+                setData(newData);
+              });
+              
+              return unsubscribe;
+            }, []);
+            
+            return <div>{data ? renderData(data) : 'Loading...'}</div>;
+          }
+    use_cases:
+      - "Real-time UI updates"
+      - "State synchronization"
+      - "Reactive components"
+    benefits:
+      - "Loose coupling"
+      - "Real-time reactivity"
+      - "Consistent state management"
+    tradeoffs:
+      - "Potential memory leaks"
+      - "Complex debugging"
+      - "Performance considerations"
+    related_patterns:
+      - "service-pubsub-001"
+      - "module-mediator-001"
+
+  # Module Patterns
+  - id: "module-orchestrator-001"
+    name: "Module Orchestrator Pattern"
+    category: "structural"
+    applicable_tiers: ["module"]
+    description: "Coordinates multiple components to create a cohesive feature"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          class UserManagementModule {
+            private userList: UserListComponent;
+            private userForm: UserFormComponent;
+            private userSearch: SearchComponent;
+            private userService: UserService;
+            
+            constructor() {
+              this.userList = new UserListComponent({
+                onSelect: this.handleUserSelect.bind(this)
+              });
+              
+              this.userForm = new UserFormComponent({
+                onSubmit: this.handleUserSubmit.bind(this)
+              });
+              
+              this.userSearch = new SearchComponent({
+                onSearch: this.handleSearch.bind(this)
+              });
+              
+              this.userService = new UserService();
+            }
+            
+            async initialize(): Promise<void> {
+              const users = await this.userService.getUsers();
+              this.userList.setUsers(users);
+            }
+            
+            private handleUserSelect(userId: string): void {
+              const user = this.userService.getUserById(userId);
+              this.userForm.setUser(user);
+            }
+            
+            private handleUserSubmit(userData: any): void {
+              this.userService.updateUser(userData);
+              this.initialize();
+            }
+            
+            private handleSearch(query: string): void {
+              const results = this.userService.searchUsers(query);
+              this.userList.setUsers(results);
+            }
+            
+            render(): JSX.Element {
+              return (
+                <div>
+                  {this.userSearch.render()}
+                  <div className="flex">
+                    {this.userList.render()}
+                    {this.userForm.render()}
+                  </div>
+                </div>
+              );
+            }
+          }
+    use_cases:
+      - "Feature implementation"
+      - "Component coordination"
+      - "State management"
+    benefits:
+      - "Clean component interfaces"
+      - "Centralized coordination"
+      - "Better separation of concerns"
+    tradeoffs:
+      - "Additional abstraction layer"
+      - "Potential complexity"
+    related_patterns:
+      - "component-factory-001"
+      - "module-mediator-001"
+  
+  - id: "module-mediator-001"
+    name: "Module Mediator Pattern"
+    category: "behavioral"
+    applicable_tiers: ["module"]
+    description: "Enables components to communicate without direct references"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          class ModuleMediator {
+            private components: Map<string, any> = new Map();
+            
+            register(name: string, component: any): void {
+              this.components.set(name, component);
+            }
+            
+            notify(sender: string, event: string, data: any): void {
+              this.components.forEach((component, name) => {
+                if (name !== sender && component.handleEvent) {
+                  component.handleEvent(event, data);
+                }
+              });
+            }
+          }
+          
+          class FilterComponent {
+            private mediator: ModuleMediator;
+            
+            constructor(mediator: ModuleMediator) {
+              this.mediator = mediator;
+              mediator.register('filter', this);
+            }
+            
+            applyFilter(filter: any): void {
+              this.mediator.notify('filter', 'filter-changed', filter);
+            }
+          }
+          
+          class ListComponent {
+            private mediator: ModuleMediator;
+            private data: any[] = [];
+            
+            constructor(mediator: ModuleMediator) {
+              this.mediator = mediator;
+              mediator.register('list', this);
+            }
+            
+            handleEvent(event: string, data: any): void {
+              if (event === 'filter-changed') {
+                this.applyFilter(data);
+              }
+            }
+            
+            applyFilter(filter: any): void {
+              // Apply filter to data
+            }
+          }
+    use_cases:
+      - "Component communication"
+      - "Event handling"
+      - "Loose coupling"
+    benefits:
+      - "Decoupled components"
+      - "Centralized communication"
+      - "Easier testing"
+    tradeoffs:
+      - "Potential complexity"
+      - "Indirect communication flow"
+    related_patterns:
+      - "component-observer-001"
+      - "module-orchestrator-001"
+  
+  # Service Patterns
+  - id: "service-001"
+    name: "Service Pattern"
+    category: "structural"
+    applicable_tiers: ["service"]
+    description: "Encapsulates business logic in a dedicated service class with clear interfaces"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          interface AuthService {
+            login(username: string, password: string): Promise<User>;
+            logout(): Promise<void>;
+            getCurrentUser(): User | null;
+            isAuthenticated(): boolean;
+          }
+          
+          class AuthServiceImpl implements AuthService {
+            private currentUser: User | null = null;
+            
+            async login(username: string, password: string): Promise<User> {
+              try {
+                const response = await api.post('/auth/login', { username, password });
+                this.currentUser = response.data.user;
+                return this.currentUser;
+              } catch (error) {
+                console.error('Login failed', error);
+                throw new Error('Authentication failed');
+              }
+            }
+            
+            async logout(): Promise<void> {
+              await api.post('/auth/logout');
+              this.currentUser = null;
+            }
+            
+            getCurrentUser(): User | null {
+              return this.currentUser;
+            }
+            
+            isAuthenticated(): boolean {
+              return this.currentUser !== null;
+            }
+          }
+    use_cases:
+      - "Authentication"
+      - "Data access"
+      - "Business logic"
+    benefits:
+      - "Clear service boundaries"
+      - "Testable interfaces"
+      - "Separation of concerns"
+    tradeoffs:
+      - "Additional abstraction"
+      - "Potential over-engineering"
+    related_patterns:
+      - "service-singleton-001"
+      - "service-repository-001"
+  
+  - id: "service-singleton-001"
+    name: "Service Singleton Pattern"
+    category: "creational"
+    applicable_tiers: ["service"]
+    description: "Ensures a service has only one instance throughout the application"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          class LoggingService {
+            private static instance: LoggingService;
+            private logs: string[] = [];
+            
+            private constructor() {
+              // Private constructor to prevent direct construction calls
+            }
+            
+            static getInstance(): LoggingService {
+              if (!LoggingService.instance) {
+                LoggingService.instance = new LoggingService();
+              }
+              
+              return LoggingService.instance;
+            }
+            
+            log(message: string, level: string = 'info'): void {
+              const logEntry = `[${level.toUpperCase()}] ${new Date().toISOString()} - ${message}`;
+              this.logs.push(logEntry);
+              console.log(logEntry);
+            }
+            
+            getLogs(): string[] {
+              return [...this.logs];
+            }
+          }
+          
+          // Usage
+          const logger = LoggingService.getInstance();
+          logger.log('Application started');
+    use_cases:
+      - "Logging"
+      - "Configuration"
+      - "Shared resources"
+    benefits:
+      - "Shared state"
+      - "Controlled resource access"
+      - "Consistent service instances"
+    tradeoffs:
+      - "Global state"
+      - "Testing difficulties"
+      - "Tight coupling"
+    related_patterns:
+      - "service-001"
+      - "service-repository-001"
+
+  - id: "service-repository-001"
+    name: "Service Repository Pattern"
+    category: "structural"
+    applicable_tiers: ["service"]
+    description: "Separates data access logic from business logic"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          interface UserRepository {
+            findById(id: string): Promise<User | null>;
+            findAll(): Promise<User[]>;
+            create(user: User): Promise<User>;
+            update(id: string, user: User): Promise<User>;
+            delete(id: string): Promise<void>;
+          }
+          
+          class PostgresUserRepository implements UserRepository {
+            async findById(id: string): Promise<User | null> {
+              const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+              return result.rows[0] || null;
+            }
+            
+            async findAll(): Promise<User[]> {
+              const result = await db.query('SELECT * FROM users');
+              return result.rows;
+            }
+            
+            async create(user: User): Promise<User> {
+              const result = await db.query(
+                'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+                [user.name, user.email]
+              );
+              return result.rows[0];
+            }
+            
+            async update(id: string, user: User): Promise<User> {
+              const result = await db.query(
+                'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
+                [user.name, user.email, id]
+              );
+              return result.rows[0];
+            }
+            
+            async delete(id: string): Promise<void> {
+              await db.query('DELETE FROM users WHERE id = $1', [id]);
+            }
+          }
+          
+          class UserService {
+            private userRepository: UserRepository;
+            
+            constructor(userRepository: UserRepository) {
+              this.userRepository = userRepository;
+            }
+            
+            async getUserById(id: string): Promise<User | null> {
+              return this.userRepository.findById(id);
+            }
+            
+            async createUser(userData: any): Promise<User> {
+              // Validation, business logic, etc.
+              return this.userRepository.create(userData);
+            }
+          }
+    use_cases:
+      - "Data access"
+      - "Database operations"
+      - "Data persistence"
+    benefits:
+      - "Separation of concerns"
+      - "Testable data access"
+      - "Swappable implementations"
+    tradeoffs:
+      - "Additional boilerplate"
+      - "Potential complexity"
+    related_patterns:
+      - "service-001"
+      - "platform-adapter-001"
+
+  # Platform Patterns
+  - id: "platform-adapter-001"
+    name: "Platform Adapter Pattern"
+    category: "structural"
+    applicable_tiers: ["platform"]
+    description: "Adapts external platform APIs to a consistent interface"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          interface StorageService {
+            uploadFile(file: File, path: string): Promise<string>;
+            downloadFile(path: string): Promise<Blob>;
+            deleteFile(path: string): Promise<void>;
+            listFiles(directory: string): Promise<string[]>;
+          }
+          
+          class S3StorageAdapter implements StorageService {
+            private s3Client: AWS.S3;
+            private bucketName: string;
+            
+            constructor(config: { bucketName: string, region: string }) {
+              this.s3Client = new AWS.S3({ region: config.region });
+              this.bucketName = config.bucketName;
+            }
+            
+            async uploadFile(file: File, path: string): Promise<string> {
+              const params = {
+                Bucket: this.bucketName,
+                Key: path,
+                Body: file,
+                ContentType: file.type
+              };
+              
+              await this.s3Client.upload(params).promise();
+              return `https://${this.bucketName}.s3.amazonaws.com/${path}`;
+            }
+            
+            async downloadFile(path: string): Promise<Blob> {
+              const params = {
+                Bucket: this.bucketName,
+                Key: path
+              };
+              
+              const response = await this.s3Client.getObject(params).promise();
+              return new Blob([response.Body as Buffer], { type: response.ContentType });
+            }
+            
+            async deleteFile(path: string): Promise<void> {
+              const params = {
+                Bucket: this.bucketName,
+                Key: path
+              };
+              
+              await this.s3Client.deleteObject(params).promise();
+            }
+            
+            async listFiles(directory: string): Promise<string[]> {
+              const params = {
+                Bucket: this.bucketName,
+                Prefix: directory
+              };
+              
+              const response = await this.s3Client.listObjectsV2(params).promise();
+              return (response.Contents || []).map(item => item.Key as string);
+            }
+          }
+    use_cases:
+      - "Storage platform integration"
+      - "API abstraction"
+      - "Vendor-neutral interfaces"
+    benefits:
+      - "Consistent interfaces"
+      - "Swappable implementations"
+      - "Encapsulated platform details"
+    tradeoffs:
+      - "Additional abstraction layer"
+      - "Potential feature loss"
+    related_patterns:
+      - "service-001"
+      - "platform-factory-001"
+  
+  - id: "platform-factory-001"
+    name: "Platform Factory Pattern"
+    category: "creational"
+    applicable_tiers: ["platform"]
+    description: "Creates platform adapters based on configuration"
+    implementation:
+      example:
+        language: "typescript"
+        snippet: |
+          class StorageFactory {
+            static createStorage(config: StorageConfig): StorageService {
+              switch (config.type) {
+                case 'S3':
+                  return new S3StorageAdapter({
+                    bucketName: config.bucketName,
+                    region: config.region
+                  });
+                  
+                case 'GCS':
+                  return new GCSStorageAdapter({
+                    bucketName: config.bucketName,
+                    projectId: config.projectId
+                  });
+                  
+                case 'LOCAL':
+                  return new LocalStorageAdapter({
+                    baseDir: config.baseDir
+                  });
+                  
+                default:
+                  throw new Error(`Unsupported storage type: ${config.type}`);
+              }
+            }
+          }
+          
+          // Usage
+          const storageService = StorageFactory.createStorage({
+            type: 'S3',
+            bucketName: 'my-app-files',
+            region: 'us-west-2'
+          });
+    use_cases:
+      - "Platform selection"
+      - "Environment-specific configuration"
+      - "Testing with mock platforms"
+    benefits:
+      - "Configuration-driven platform selection"
+      - "Consistent interface"
+      - "Simplified platform switching"
+    tradeoffs:
+      - "Additional abstraction layer"
+      - "Configuration complexity"
+    related_patterns:
+      - "platform-adapter-001"
+      - "service-singleton-001"
+
+# AI Extension Guidelines:
+# 1. Add new patterns with unique IDs
+# 2. Specify applicable tiers (component, module, service, platform)
+# 3. Include concrete implementation examples
+# 4. Document benefits and tradeoffs
+# 5. Link to related patterns 

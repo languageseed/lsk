@@ -1,0 +1,8 @@
+# LSK Build Order (Optional)
+build_order:
+  layers:
+    - layer: "[Layer Name]"
+      description: "[What the layer provides]"
+      features: []
+  feature_dependencies: []
+  build_notes: []

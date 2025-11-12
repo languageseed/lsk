@@ -1,0 +1,10 @@
+# LSK Capability (Optional)
+capabilities:
+  - name: "[Capability Name]"
+    description: "[Business-facing functionality]"
+    user_journeys: []
+    features: []
+    emergent_features: []
+    audience: []
+    access_level: "[default|restricted|admin]"
+    enabled_by_default: true

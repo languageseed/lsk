@@ -1,0 +1,8 @@
+# LSK Coverage Report (Optional)
+coverage_report:
+  total_features: 0
+  features_without_journeys: []
+  ui_elements_without_features: []
+  user_journeys_without_features: []
+  agents_without_catalog: []
+  recommendations: []

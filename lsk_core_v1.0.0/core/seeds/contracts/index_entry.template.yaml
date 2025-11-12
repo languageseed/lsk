@@ -1,0 +1,12 @@
+# LSK Index Entry (Optional)
+- name: "[Feature Name]"
+  path: "lask/[feature_file].yaml"
+  domain: "[Domain]"
+  group: "[Group]"
+  build_layer: "[Build Layer]"
+  ingress: []
+  egress: []
+  tags: []
+  execution_scope: "[informational|advisory|delegated|executive]"
+  referenced_in_journeys: []
+  conformance: "draft"

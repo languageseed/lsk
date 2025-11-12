@@ -1,0 +1,85 @@
+# LSK Core v5.0 - .gitignore
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# User-specific LSK files (project artifacts, not framework)
+# Keep these local to each project using LSK
+.lsk/artifacts/*.local.*
+.lsk/temp/
+.lsk/cache/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+
+# Environment files (if users add them to their LSK workflow)
+.env
+.env.local
+.env.*.local
+
+# Node modules (if using npm scripts for validation)
+node_modules/
+
+# Python (if using Python scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+ENV/
+env/
+
+# MacOS
+.AppleDouble
+.LSOverride
+
+# Windows
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Keep these files
+!core/templates/**
+!core/contracts/**
+!core/seeds/**
+!docs/**
+!scripts/**
+!lessons-learned/**

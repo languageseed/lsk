@@ -1,0 +1,9 @@
+# LSK User Journey (Optional)
+user_journeys:
+  - name: "[Journey Name]"
+    value_statement: "As a [user], I want to [do something] so that [benefit]."
+    route: "[UI Route]"
+    ui_elements: []
+    features_involved: []
+    emergent_feature: null
+    conformance: "draft"

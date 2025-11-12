@@ -1,0 +1,202 @@
+# LSKv4 - Pipeline Contract
+# Version: 4.0.0
+# Last Updated: 2025-08-24
+#
+# This file defines the structured phase execution workflow for contract-driven development.
+# It formalizes the lifecycle of feature implementation into clear, repeatable phases.
+
+metadata:
+  version: "4.0.0"
+  last_updated: "2025-08-24"
+  source_codebase: "lskv4"
+  contract_type: "pipeline"
+  validation_rules:
+    - "Must define clear phases"
+    - "Must specify phase transitions"
+    - "Must include checkpoint management"
+
+pipeline:
+  description: "Structured phase execution for contract-driven development"
+  
+  standard_phases:
+    - id: "definition"
+      name: "Definition"
+      description: "Define the contract, scope, and interfaces"
+      required: true
+      deliverables:
+        - "Contract specification"
+        - "Interface definitions"
+        - "Scope boundaries"
+      entry_criteria: []
+      exit_criteria:
+        - "Contract document created"
+        - "Interfaces defined"
+        - "Scope approved"
+      
+    - id: "validation"
+      name: "Validation"
+      description: "Create stubs and verify contract adherence"
+      required: true
+      deliverables:
+        - "Interface stubs"
+        - "Mock implementations"
+        - "Test cases"
+      entry_criteria:
+        - "Definition phase complete"
+      exit_criteria:
+        - "All interfaces have stubs"
+        - "Contracts validated"
+        - "Test cases defined"
+      
+    - id: "implementation"
+      name: "Implementation"
+      description: "Build the actual functionality according to the contract"
+      required: true
+      deliverables:
+        - "Working implementation"
+        - "Unit tests"
+        - "Documentation"
+      entry_criteria:
+        - "Validation phase complete"
+      exit_criteria:
+        - "Implementation complete"
+        - "Tests passing"
+        - "Documentation updated"
+      
+    - id: "integration"
+      name: "Integration"
+      description: "Wire modules together using only defined interfaces"
+      required: true
+      deliverables:
+        - "Integrated components"
+        - "Integration tests"
+      entry_criteria:
+        - "Implementation phase complete"
+      exit_criteria:
+        - "Components integrated"
+        - "Integration tests passing"
+      
+    - id: "uat"
+      name: "User Acceptance Testing"
+      description: "Simulate behavior, validate functionality, and flag gaps"
+      required: true
+      deliverables:
+        - "UAT test cases"
+        - "UAT results"
+        - "Gap analysis"
+      entry_criteria:
+        - "Integration phase complete"
+      exit_criteria:
+        - "UAT completed"
+        - "All critical issues resolved"
+      
+    - id: "certify"
+      name: "Certification"
+      description: "Mark the contract phase as complete, with hash reference"
+      required: true
+      deliverables:
+        - "Certification document"
+        - "Hash reference"
+      entry_criteria:
+        - "UAT phase complete"
+      exit_criteria:
+        - "Contract certified"
+        - "Hash reference created"
+
+  phase_states:
+    - id: "not_started"
+      name: "Not Started"
+      description: "Phase has not begun"
+      
+    - id: "in_progress"
+      name: "In Progress"
+      description: "Phase is currently active"
+      
+    - id: "paused"
+      name: "Paused"
+      description: "Phase started but temporarily paused"
+      
+    - id: "complete"
+      name: "Complete"
+      description: "Phase successfully completed"
+      
+    - id: "skipped"
+      name: "Skipped"
+      description: "Phase intentionally skipped (requires justification)"
+      
+    - id: "blocked"
+      name: "Blocked"
+      description: "Phase cannot proceed due to dependencies"
+
+  checkpoint_management:
+    description: "How checkpoints are created and managed"
+    format: "checkpoint@{contract_name}_{phase_id}_{date}.md"
+    required_fields:
+      - "contract_reference"
+      - "phase_id"
+      - "timestamp"
+      - "status"
+      - "summary"
+      - "next_steps"
+    optional_fields:
+      - "blockers"
+      - "decisions"
+      - "reference_materials"
+    
+  certification:
+    description: "Process for certifying completed phases"
+    methods:
+      - id: "hash"
+        name: "Hash Certification"
+        description: "Generate cryptographic hash of checkpoint and deliverables"
+        
+      - id: "signature"
+        name: "Digital Signature"
+        description: "Apply digital signature to certification document"
+        
+      - id: "review"
+        name: "Peer Review"
+        description: "Required review and approval by team member"
+
+  enforcement_modes:
+    - id: "strict"
+      name: "Strict Mode"
+      description: "Phases must complete in sequence, no skipping allowed"
+      
+    - id: "lenient"
+      name: "Lenient Mode"
+      description: "Allows some phase flexibility, skipping with justification"
+      
+    - id: "experimental"
+      name: "Experimental Mode"
+      description: "For research or exploratory work, minimal enforcement"
+
+  integration:
+    contract_reference:
+      description: "How pipeline status is tracked in contracts"
+      example: |
+        phases:
+          definition:
+            complete: true
+            checkpoint: checkpoint@auth-service_definition_2025-08-24.md
+          validation:
+            in_progress: true
+            last_update: 2025-08-24T10:22Z
+          implementation:
+            complete: false
+    
+    plan_file:
+      description: "Phase plan file structure"
+      filename: "phase.plan.yaml"
+      example: |
+        current_phase: validation
+        next_phase: implementation
+        checkpoints:
+          definition: checkpoint@auth-service_definition_2025-08-24.md
+          validation: checkpoint@auth-service_validation_2025-08-24_inprogress.md
+
+# AI Extension Guidelines:
+# 1. Do not modify standard phases
+# 2. May add recommended phase transitions
+# 3. May suggest custom phases for specific scenarios
+# 4. May enhance certification or checkpoint management 

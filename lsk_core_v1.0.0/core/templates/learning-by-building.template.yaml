@@ -1,0 +1,301 @@
+# Learning by Building Template
+# Use this when you need to build something you don't fully understand yet
+
+metadata:
+  template_type: "learning_by_building"
+  purpose: "Prototype to understand domain, not just validate approach"
+  philosophy: "Sometimes you can't design it because you don't understand it yet"
+
+# The Core Question
+understanding_gap:
+  what_you_need_to_build: |
+    # Example: "Knowledge graph service"
+    # Example: "Real-time collaborative editor"
+    # Example: "Distributed cache"
+    
+  what_you_dont_understand: |
+    # Be honest about knowledge gaps
+    # Example: "I don't really know what a knowledge graph IS"
+    # Example: "I've never built real-time sync before"
+    # Example: "I don't understand distributed consensus"
+    
+  why_research_isnt_enough: |
+    # Why reading docs/papers won't be sufficient
+    # Example: "Papers are too theoretical, need to see it work"
+    # Example: "Docs assume you understand the concepts already"
+    # Example: "Need to feel how it behaves, not just read about it"
+
+# Prototype Sequence Plan
+prototype_sequence:
+  # Prototype 1: Simplest Possible Thing
+  - prototype_id: 1
+    goal: "Understand basic concept"
+    question: |
+      # What's the absolute simplest version that demonstrates the core idea?
+      # Example: "What's the simplest graph structure?"
+      # Example: "What's the simplest real-time sync?"
+      
+    what_to_build: |
+      # Bare minimum implementation
+      # Example: "Nodes as objects, edges as array"
+      # Example: "Two windows, send messages via WebSocket"
+      
+    time_box: "1-3 hours"
+    
+    expected_learnings:
+      - ""  # What you expect to learn
+      - ""  # What concepts will become clear
+    
+    expected_breakages:
+      - ""  # What you expect won't work
+      - ""  # What edge cases you'll discover
+
+  # Prototype 2: Add Core Operations  
+  - prototype_id: 2
+    goal: "Understand how it's actually used"
+    question: |
+      # What operations are fundamental to this concept?
+      # Example: "How do you actually query a graph?"
+      # Example: "How do you keep state in sync?"
+      
+    builds_on: "Prototype 1"
+    what_to_add: |
+      # Core operations to try
+      # Example: "Add graph traversal"
+      # Example: "Add conflict resolution"
+      
+    time_box: "2-4 hours"
+    
+    expected_learnings:
+      - ""  # What you expect to learn about usage
+      - ""  # What patterns will emerge
+
+  # Prototype 3: Hit the Limits
+  - prototype_id: 3
+    goal: "Understand why specialized tools exist"
+    question: |
+      # Why don't people just build this themselves?
+      # Example: "Why do graph databases exist?"
+      # Example: "Why use CRDTs instead of simple merge?"
+      
+    builds_on: "Prototype 2"
+    what_to_attempt: |
+      # Try to make it production-ready
+      # Example: "Add complex query patterns"
+      # Example: "Handle high concurrency"
+      
+    time_box: "2-4 hours"
+    
+    expected_revelations:
+      - ""  # AHA moments about complexity
+      - ""  # Understanding why tools/libraries exist
+
+# Learning Documentation
+learning_journey:
+  # After each prototype, capture what you learned
+  
+  prototype_1_learnings:
+    what_the_concept_is: |
+      # In your own words, what IS this thing?
+      # Example: "A graph is nodes with typed edges between them"
+      
+    how_its_different_from_assumptions: |
+      # What surprised you?
+      # Example: "It's not just a fancy data structure, it's a query paradigm"
+    
+    core_operations_discovered:
+      - ""  # What operations are fundamental
+      
+    what_broke:
+      - ""  # Edge cases found
+  
+  prototype_2_learnings:
+    how_its_actually_used: |
+      # Usage patterns that emerged
+      # Example: "Most queries are traversals, not exact matches"
+      
+    why_naive_approach_fails: |
+      # Limitations discovered
+      # Example: "Can't efficiently query bidirectionally"
+    
+    patterns_that_emerged:
+      - ""  # Recurring patterns
+      
+    what_broke:
+      - ""  # New edge cases
+  
+  prototype_3_learnings:
+    why_specialized_tools_exist: |
+      # The "AHA" moment
+      # Example: "Now I understand why Neo4j exists - query optimization is HARD"
+      
+    what_to_build_vs_use: |
+      # Build vs buy decision
+      # Example: "Use Neo4j for queries, build lightweight cache layer"
+    
+    fundamental_constraints:
+      - ""  # Limitations you can't easily overcome
+      
+    what_broke:
+      - ""  # Final edge cases
+
+# Final Understanding
+now_i_understand:
+  domain_knowledge_gained: |
+    # What you now understand that you couldn't have learned from docs
+    # Example: "A knowledge graph is about RELATIONSHIPS, not just data storage"
+    # Example: "Graph queries think in paths, not tables"
+    
+  correct_solution_approach: |
+    # Now that you understand, what's the right approach?
+    # Example: "Use Neo4j for graph operations, add domain-specific service layer"
+    # Example: "Hybrid: graph DB for complex queries, in-memory for hot paths"
+    
+  what_to_build_clean: |
+    # What to build in clean version
+    # Example: "Domain-specific query API, not generic graph operations"
+    
+  what_to_use_existing: |
+    # What to use off-the-shelf
+    # Example: "Neo4j for core graph database, don't reinvent"
+    
+  anti_patterns_to_avoid: |
+    # What NOT to do (learned from prototypes)
+    # Example: "Don't try to build generic graph query engine"
+    # Example: "Don't use arrays for edge lookup - need indexing"
+
+# ROI Analysis
+time_investment:
+  prototype_hours: 0  # Total time prototyping
+  learning_value: ""  # What you learned
+  clean_implementation_hours: 0  # Time to build clean version
+  total_hours: 0
+  
+  alternative_approach_estimated:
+    research_only: 0  # Hours reading without building
+    wrong_implementation: 0  # Hours building wrong solution
+    discovery_and_rework: 0  # Hours discovering it's wrong
+    total_waste: 0
+  
+  roi: |
+    # Time saved by learning through prototyping
+    # Example: "Saved 35 hours by learning what NOT to build"
+    # Example: "Would have built wrong abstractions without prototypes"
+
+# AI Collaboration Strategy
+ai_prompts:
+  starting_prototype_1: |
+    I need to learn what a [concept] actually is by building it.
+    
+    I don't fully understand [concept] yet, and reading docs isn't helping.
+    I need to build something to see how it works.
+    
+    Help me build the SIMPLEST possible version that demonstrates the core idea.
+    Keep it ultra minimal - just enough to see it work.
+    
+    Goal: Understand what [concept] IS
+    Not goal: Build production-ready version
+    
+  after_prototype_breaks: |
+    My prototype for [concept] broke when I tried [scenario].
+    
+    This is great - I'm learning! What does this teach me about how [concept] works?
+    What's the fundamental principle I'm missing?
+    
+  transitioning_to_next_prototype: |
+    I learned [key insights] from prototype [N].
+    
+    Now I want to understand [next question].
+    Help me extend the prototype to explore this aspect.
+    
+  after_all_prototypes: |
+    I've built 3 prototypes and learned:
+    - Prototype 1: [Core concept understanding]
+    - Prototype 2: [Usage patterns]
+    - Prototype 3: [Why specialized tools exist]
+    
+    Now I understand [concept] well enough to design the right solution.
+    Help me architect a clean implementation that:
+    - Uses [existing tool] for [what it's good at]
+    - Builds custom [specific component] for [our needs]
+    - Avoids [anti-patterns discovered]
+
+# Success Criteria
+prototype_success:
+  understanding_gained:
+    - "Can explain concept in own words"
+    - "Understand why specialized tools exist"
+    - "Know what to build vs use off-shelf"
+    - "Aware of fundamental constraints"
+    - "Can design appropriate solution"
+  
+  not_just_code_working:
+    note: |
+      Success isn't "prototype works"
+      Success is "now I understand the domain"
+      
+      The prototype can (should!) be messy/broken.
+      The learning is what matters.
+
+# Example: Knowledge Graph Service
+example:
+  concept: "Knowledge Graph Service"
+  
+  initial_state:
+    understanding: "I've heard of knowledge graphs but don't really know what they are"
+    need: "Need to build service that stores related concepts"
+    research_done: "Read some docs, still fuzzy on what makes it a 'graph'"
+  
+  prototype_sequence:
+    - id: 1
+      goal: "What is a graph?"
+      built: "Nodes as objects, edges as array"
+      learned: "A graph is nodes + typed edges"
+      broke: "Can't efficiently find relationships"
+      time: "2 hours"
+      
+    - id: 2
+      goal: "How do you query a graph?"
+      built: "Bidirectional indexing + traversal"
+      learned: "Graph operations are about paths/traversal"
+      broke: "Gets slow, can't do complex queries"
+      time: "3 hours"
+      
+    - id: 3
+      goal: "Why use a graph database?"
+      built: "Attempted query pattern matching"
+      learned: "AHA - now I see why Neo4j exists!"
+      broke: "Reinventing Neo4j poorly"
+      time: "4 hours"
+  
+  final_understanding:
+    now_knows: |
+      - Knowledge graph = data model focused on relationships
+      - Query paradigm = traversal and pattern matching
+      - Graph DB optimizes these specific operations
+      - My use case = hybrid approach (Neo4j + custom layer)
+    
+    correct_solution: |
+      Use Neo4j for graph operations
+      Build domain-specific service layer on top
+      Cache hot paths in memory
+      Focus on our specific query patterns, not generic graph
+    
+    time_saved: |
+      9 hours prototyping saved ~35 hours of wrong implementation
+      Plus gained understanding that wouldn't come from docs alone
+
+# Key Principle
+philosophy: |
+  "For a long time when building knowledge graph services I had no idea 
+  what it actually was but I had to learn it as I went and see the prototypes..."
+  
+  You can't design what you don't understand.
+  You can't understand without building.
+  Therefore: Build to learn, then design properly.
+  
+  The prototypes aren't wasted time - they're education.
+  The failed approaches aren't mistakes - they're insights.
+  
+  Sometimes the fastest path to the right solution is through several wrong ones.
+

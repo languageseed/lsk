@@ -1,0 +1,450 @@
+# LSKv4.2 - Enhanced Pipeline with Risk Assessment & Options Analysis
+# Version: 4.2.0
+# Last Updated: 2025-10-11
+# Changes from 4.1: Added risk_assessment and options_analysis phases
+
+metadata:
+  version: "4.2.0"
+  last_updated: "2025-10-11"
+  contract_type: "pipeline"
+  changelog:
+    - version: "4.2.0"
+      date: "2025-10-11"
+      changes:
+        - "Added risk_assessment phase for identifying uncertainties"
+        - "Added poc_validation phase for validating assumptions"
+        - "Added options_analysis phase for architectural discussion"
+        - "Based on empirical analysis of successful AI-assisted development patterns"
+
+# Enhanced 8-Phase Pipeline
+phases:
+  - id: "definition"
+    name: "Definition"
+    description: "Define requirements, constraints, and success criteria"
+    emoji: "📋"
+    
+    goals:
+      - "Clear problem statement"
+      - "Measurable acceptance criteria"
+      - "Explicit constraints documented"
+      - "Success criteria defined"
+    
+    exit_criteria:
+      - "Requirements clearly articulated and unambiguous"
+      - "Acceptance criteria are measurable and testable"
+      - "Constraints and dependencies documented"
+      - "Stakeholders aligned on scope"
+      - "AI has demonstrated correct understanding"
+    
+    templates:
+      - "context.pack.yaml"
+      - "preflight-checklist.md"
+    
+    typical_duration: "1-4 hours"
+    
+    conversation_quality_indicators:
+      - "AI asks relevant clarifying questions (not basic 'what do you mean?')"
+      - "AI's understanding matches your intent"
+      - "No fundamental misunderstandings"
+  
+  - id: "validation"
+    name: "Validation"
+    description: "Validate requirements are complete, feasible, and testable"
+    emoji: "✅"
+    
+    goals:
+      - "Requirements are internally consistent"
+      - "Acceptance criteria are achievable"
+      - "Dependencies are available"
+      - "Constraints are realistic"
+    
+    exit_criteria:
+      - "No conflicting requirements"
+      - "All acceptance criteria are testable"
+      - "Technical feasibility confirmed"
+      - "Resource requirements understood"
+    
+    templates:
+      - "acceptance.checklist.md"
+    
+    typical_duration: "30 minutes - 2 hours"
+  
+  # NEW PHASE 1: Risk Assessment
+  - id: "risk_assessment"
+    name: "Risk Assessment"
+    description: "Identify high-risk/high-uncertainty areas before committing to implementation"
+    emoji: "🎯"
+    
+    goals:
+      - "Identify what you're LEAST certain about"
+      - "List critical assumptions that could be wrong"
+      - "Prioritize risks by impact and likelihood"
+      - "Design lean PoCs for highest-risk areas"
+    
+    exit_criteria:
+      - "High-risk areas explicitly identified"
+      - "Critical assumptions documented"
+      - "PoC plans designed for validation (4-8 hours each)"
+      - "Risk mitigation strategies defined"
+      - "Decision: Proceed to PoCs OR risks acceptable OR reconsider approach"
+    
+    templates:
+      - "risk-assessment.template.yaml"
+      - "recipes/risk-assessment-poc.recipe.md"
+    
+    typical_duration: "30 minutes assessment + 4-8 hours per PoC"
+    
+    key_questions:
+      - "What could cause this project to fail?"
+      - "What assumptions am I making that could be wrong?"
+      - "What have I never built before?"
+      - "Where could performance/scalability be an issue?"
+      - "What integration points are uncertain?"
+    
+    success_pattern: |
+      30 minutes of risk identification + 4-8 hour lean PoCs = 
+      Save weeks of rework by failing fast on wrong approaches
+    
+    ai_prompt_suggestion: |
+      "Help me identify the highest-risk/highest-uncertainty areas in this project.
+      For each risk, suggest a minimal PoC (4-8 hours) to validate the assumption."
+  
+  # NEW PHASE 2: PoC Validation
+  - id: "poc_validation"
+    name: "PoC Validation"
+    description: "Execute lean proof-of-concepts to validate critical assumptions"
+    emoji: "🧪"
+    
+    goals:
+      - "Validate or invalidate critical assumptions"
+      - "Fail fast on approaches that won't work"
+      - "Build confidence in risky areas"
+      - "Document learnings from experiments"
+    
+    exit_criteria:
+      - "Critical PoCs executed within time budget"
+      - "Success/failure criteria evaluated"
+      - "Assumptions marked as validated/invalidated/inconclusive"
+      - "Clear decision: Proceed / Pivot / Extend PoC"
+      - "Learnings documented for future reference"
+    
+    templates:
+      - "risk-assessment.template.yaml (validation_results section)"
+    
+    typical_duration: "4-8 hours per PoC"
+    
+    disciplines:
+      - "Strict time boxing (do not extend)"
+      - "Ruthless scope cutting (absolute minimum only)"
+      - "Focus on answering the core question"
+      - "Document learnings even from failures"
+    
+    success_pattern: |
+      Design experiments that can FAIL.
+      If PoC can't fail, it's not testing anything valuable.
+      Celebrate negative results - they save weeks of development.
+  
+  # NEW PHASE 3: Options Analysis
+  - id: "options_analysis"
+    name: "Options Analysis"
+    description: "Discuss architectural approaches with validated risk knowledge"
+    emoji: "🔀"
+    
+    goals:
+      - "Present 2-4 architectural options"
+      - "Analyze trade-offs for each option"
+      - "Make informed decision based on validated risks"
+      - "Document decision rationale"
+    
+    exit_criteria:
+      - "Multiple options considered with trade-offs"
+      - "Decision made with clear reasoning"
+      - "Trade-offs explicitly accepted"
+      - "Alternative approaches documented"
+      - "Team aligned on chosen approach"
+    
+    templates:
+      - "options-analysis.template.yaml"
+    
+    typical_duration: "30 minutes - 2 hours"
+    
+    discussion_format:
+      prompt: |
+        "Based on validated risks, provide 3-4 architectural options:
+        
+        For each option, analyze:
+        - Implementation complexity (1-10)
+        - Performance characteristics
+        - Scalability considerations
+        - Maintenance burden
+        - Integration with existing system
+        - Risks and mitigation strategies
+        
+        Format as comparison table, then recommend with reasoning."
+    
+    success_pattern: |
+      "Let's discuss approaches before coding" appeared in ALL 
+      top-rated (9.0+) conversations. Prevents premature optimization.
+  
+  - id: "implementation"
+    name: "Implementation"
+    description: "Build the solution with validated knowledge and chosen architecture"
+    emoji: "⚡"
+    
+    goals:
+      - "Implement validated architecture"
+      - "Follow chosen patterns and approaches"
+      - "Apply learnings from PoCs"
+      - "Maintain code quality standards"
+    
+    exit_criteria:
+      - "Core functionality implemented"
+      - "Code follows agreed patterns"
+      - "Unit tests passing"
+      - "Code reviewed and approved"
+      - "Technical debt documented"
+    
+    quality_gates:
+      - metric: "test_coverage"
+        target: ">80% code coverage"
+        validation: "Run coverage report"
+        required: true
+      - metric: "linter_errors"
+        target: "0 critical errors, <5 warnings"
+        validation: "Linter output"
+        required: true
+      - metric: "code_review"
+        target: "Code reviewed and approved"
+        validation: "Review checklist completed"
+        required: true
+      - metric: "documentation"
+        target: "API endpoints documented, key functions commented"
+        validation: "Documentation review"
+        required: true
+      - metric: "spike_learnings"
+        target: "If spike-and-refine used, learnings documented in .lsk/lessons-learned/"
+        validation: "Check for spike results documentation"
+        required: false
+      - metric: "artifact_metadata"
+        target: "Key artifacts have metadata filled out"
+        validation: "Check artifact-metadata.yaml files"
+        required: false
+    
+    templates:
+      - "checkpoint.md"
+      - "recipes/quick-code-review.recipe.md"
+      - "artifact-metadata.template.yaml"
+    
+    typical_duration: "Variable (hours to weeks)"
+    
+    conversation_practices:
+      - "Use progressive context building (not information dumps)"
+      - "Provide evidence when debugging (logs, metrics, stack traces)"
+      - "After 2-3 failed attempts, question the approach"
+      - "Share domain knowledge and architectural insights"
+  
+  - id: "integration"
+    name: "Integration"
+    description: "Integrate with existing systems and validate end-to-end flow"
+    emoji: "🔗"
+    
+    goals:
+      - "Successfully integrate with dependencies"
+      - "End-to-end flow works"
+      - "Integration tests pass"
+      - "System behavior validated"
+    
+    exit_criteria:
+      - "Integration with all dependencies successful"
+      - "End-to-end scenarios tested"
+      - "Integration tests passing"
+      - "Performance acceptable under realistic load"
+      - "Error handling validated"
+    
+    quality_gates:
+      - metric: "integration_tests"
+        target: "All integration tests passing"
+        validation: "Test suite execution"
+        required: true
+      - metric: "regression_testing"
+        target: "No new failures in existing test suite"
+        validation: "Full test suite comparison (before/after)"
+        required: true
+      - metric: "service_boundaries"
+        target: "If multi-service, ≤3 dependencies per service"
+        validation: "Dependency graph review"
+        required: false
+      - metric: "api_response_time"
+        target: "<200ms for typical requests"
+        validation: "Performance testing"
+        required: true
+      - metric: "error_rate"
+        target: "<1% error rate under normal load"
+        validation: "Load testing results"
+        required: true
+    
+    templates:
+      - "context.integration.template.yaml"
+    
+    typical_duration: "1-4 hours"
+  
+  - id: "uat"
+    name: "User Acceptance Testing"
+    description: "Validate solution meets user needs and acceptance criteria"
+    emoji: "👥"
+    
+    goals:
+      - "All acceptance criteria verified"
+      - "User workflows validated"
+      - "Edge cases tested"
+      - "User feedback incorporated"
+    
+    exit_criteria:
+      - "All acceptance criteria met"
+      - "User workflows function correctly"
+      - "Edge cases handled appropriately"
+      - "Performance meets requirements"
+      - "User sign-off obtained"
+    
+    templates:
+      - "acceptance.checklist.md"
+    
+    typical_duration: "1-4 hours"
+  
+  - id: "certify"
+    name: "Certification"
+    description: "Final validation and documentation before deployment"
+    emoji: "🎯"
+    
+    goals:
+      - "Solution ready for production"
+      - "Documentation complete"
+      - "Deployment plan validated"
+      - "Rollback plan documented"
+    
+    exit_criteria:
+      - "All tests passing (unit, integration, UAT)"
+      - "Documentation complete and accurate"
+      - "Deployment checklist completed"
+      - "Monitoring and alerting configured"
+      - "Team trained on solution"
+    
+    templates:
+      - "checkpoint.md"
+    
+    typical_duration: "30 minutes - 2 hours"
+
+# Pipeline Modes
+modes:
+  strict:
+    description: "All phases required, strict exit criteria"
+    skip_allowed: false
+    justification_required: false
+    
+  lenient:
+    description: "Phases can be skipped with justification"
+    skip_allowed: true
+    justification_required: true
+    
+  adaptive:
+    description: "Phase order and requirements adapt to project needs"
+    skip_allowed: true
+    justification_required: true
+    phase_reordering_allowed: true
+
+# Conversation Quality Tracking (NEW)
+conversation_metrics:
+  effectiveness_scale: "1-10 (10 = excellent)"
+  
+  quality_indicators:
+    high_quality:
+      - "AI understood requirements on first explanation"
+      - "AI asked relevant clarifying questions"
+      - "No fundamental misunderstandings"
+      - "Solutions aligned with constraints"
+      - "Minimal course corrections needed (<2)"
+    
+    medium_quality:
+      - "Required 2-3 clarifications"
+      - "Some assumptions needed correction"
+      - "Generally on track with minor deviations"
+    
+    low_quality:
+      - "Frequent misunderstandings (3+)"
+      - "Required 'start again' reset"
+      - "AI made incorrect assumptions repeatedly"
+      - "Needed emphatic corrections"
+  
+  tracking_per_phase:
+    - "exchanges_count: Number of back-and-forth exchanges"
+    - "course_corrections: Times AI needed correction"
+    - "start_again_used: Whether conversation needed reset"
+    - "effectiveness_score: 1-10 rating"
+    - "lessons_learned: What would you do differently"
+
+# Success Patterns (NEW - Based on Empirical Analysis)
+success_patterns:
+  progressive_disclosure:
+    description: "Build context layer by layer, not all at once"
+    effectiveness: "9.0+ conversation rating"
+    
+  evidence_based:
+    description: "Gather evidence before proposing solutions"
+    effectiveness: "Prevents assumption-based failures"
+    
+  discuss_before_implement:
+    description: "Explore options before committing to implementation"
+    effectiveness: "Present in ALL 9.0+ conversations"
+    
+  validate_assumptions:
+    description: "Use lean PoCs to validate risky assumptions early"
+    effectiveness: "Saves weeks of potential rework"
+    
+  emphatic_correction:
+    description: "Strong corrections when AI misunderstands"
+    effectiveness: "Immediate recovery vs prolonged confusion"
+
+# Anti-Patterns to Avoid (NEW)
+anti_patterns:
+  information_dump:
+    problem: "Providing entire codebase at once"
+    impact: "AI overwhelmed, misses key details"
+    solution: "Use progressive disclosure instead"
+    
+  assumption_cascade:
+    problem: "AI makes assumption, builds elaborate solution on wrong foundation"
+    impact: "Wasted effort on wrong solution"
+    solution: "Validate assumptions explicitly before proceeding"
+    
+  repeated_similar_failures:
+    problem: "Trying similar approaches 3+ times without questioning approach"
+    impact: "Hours wasted on wrong path"
+    solution: "After 2-3 failures, step back and reconsider approach"
+    
+  premature_implementation:
+    problem: "Jump to implementation before validating risks or discussing options"
+    impact: "Build wrong thing or discover issues late"
+    solution: "Use risk_assessment and options_analysis phases"
+
+# Empirical Data (Based on Conversation Analysis)
+empirical_insights:
+  average_conversation_rating: "8.1/10"
+  top_rated_conversations: "9.0+ had specific patterns"
+  
+  success_factors:
+    - "Clear initial context (present in 8/9 high-quality conversations)"
+    - "Progressive complexity building (7/9 high-quality)"
+    - "Evidence-based decisions (6/9 high-quality)"
+    - "Discussion before implementation (5/9 high-quality)"
+    - "Risk validation with PoCs (new addition based on user insight)"
+  
+  failure_factors:
+    - "Unclear goals"
+    - "Assumption-based development"
+    - "Information dumps"
+    - "No validation of risky assumptions"
+  
+  recovery_success_rate: "90% (9/10 conversations recovered after corrections)"
+  
+  time_saved_by_poc_validation: "Estimated 10-20x ROI on PoC time investment"
+

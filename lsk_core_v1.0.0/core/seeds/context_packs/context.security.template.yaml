@@ -1,0 +1,203 @@
+# Context Pack Template - Security & Compliance
+# Copy and fill this YAML, then paste relevant sections into your AI tool.
+
+metadata:
+  task_id: ""
+  title: ""
+  owner: ""
+  created_at: ""
+  updated_at: ""
+  notes: []
+
+objective:
+  problem_statement: |
+    # Example: "Implement GDPR compliance for user data handling and deletion"
+    # Example: "Add OAuth 2.0 authentication with role-based access control"
+    # Example: "Conduct security review of payment processing implementation"
+    # Example: "Implement SOC 2 compliance controls for data access logging"
+    
+    # Your security/compliance challenge:
+  constraints:
+    # Example: "Must comply with PCI DSS Level 1 requirements"
+    # Example: "Cannot store sensitive data in application logs"
+    # Example: "Must maintain backward compatibility with existing auth system"
+    # Example: "Audit trail required for all data access (compliance requirement)"
+    - ""
+    - ""
+  acceptance_criteria:
+    # Example: "All user data requests processed within GDPR 30-day requirement"
+    # Example: "Authentication tokens expire after 15 minutes of inactivity"
+    # Example: "All payment data encrypted at rest and in transit"
+    # Example: "Access logs capture user, action, timestamp, and IP address"
+    - ""
+    - ""
+
+context:
+  security_requirements:
+    # Specific security standards and requirements:
+    # - standard: "GDPR"
+    #   requirements: ["Right to deletion", "Data portability", "Consent management"]
+    # - standard: "SOC 2 Type II"
+    #   requirements: ["Access controls", "System monitoring", "Data encryption"]
+    # - standard: "OWASP Top 10"
+    #   requirements: ["Input validation", "Authentication", "Session management"]
+    - standard: ""
+      requirements: []
+  threat_model:
+    # Potential security threats to consider:
+    # - threat: "SQL injection in user input fields"
+    #   impact: "Data breach, unauthorized access"
+    #   mitigation: "Parameterized queries, input validation"
+    # - threat: "Session hijacking"
+    #   impact: "Account takeover"
+    #   mitigation: "Secure session tokens, HTTPS only"
+    - threat: ""
+      impact: ""
+      mitigation: ""
+  sensitive_data:
+    # Types of sensitive data involved:
+    # - type: "Personal Identifiable Information (PII)"
+    #   examples: ["email addresses", "phone numbers", "user profiles"]
+    #   protection: "Encryption at rest, access logging"
+    # - type: "Payment information"
+    #   examples: ["credit card numbers", "billing addresses"]
+    #   protection: "PCI DSS compliance, tokenization"
+    - type: ""
+      examples: []
+      protection: ""
+  code_targets:
+    # Example patterns:
+    - path: "src/middleware/auth.ts"
+      reason: "Contains authentication logic that needs security review"
+      include:
+        - "Token validation functions"
+        - "Session management"
+        - "Permission checking"
+      exclude:
+        - "Utility functions (not security-related)"
+    # - path: "src/services/user-data.ts"
+    #   reason: "Handles user data operations requiring GDPR compliance"
+    #   include:
+    #     - "Data export functions"
+    #     - "Data deletion methods"
+    #     - "Consent management"
+    #   exclude:
+    #     - "Data validation (separate concern)"
+  compliance_documentation:
+    # Existing compliance documentation:
+    # - document: "Privacy Policy"
+    #   last_updated: "2025-01-15"
+    #   covers: ["Data collection", "Usage", "Retention", "User rights"]
+    # - document: "Security Assessment"
+    #   last_updated: "2024-12-01"
+    #   covers: ["Vulnerability scan", "Penetration testing", "Risk assessment"]
+    - document: ""
+      last_updated: ""
+      covers: []
+  audit_requirements:
+    # What needs to be logged/tracked:
+    # - "All user data access with timestamp and user ID"
+    # - "Failed authentication attempts with IP address"
+    # - "Data export/deletion requests and completion status"
+    # - "Administrative privilege usage"
+    - ""
+  diffs:
+    # Security-relevant recent changes:
+    - ref: ""
+      summary: ""
+  glossary:
+    # Security/compliance terms:
+    - term: "PII"
+      definition: "Personally Identifiable Information - data that can identify an individual"
+    # - term: "RBAC"
+    #   definition: "Role-Based Access Control - permissions based on user roles"
+  dependencies:
+    # Security-related libraries and tools:
+    - name: "bcrypt"
+      version: "^5.1.0"
+      purpose: "Password hashing with salt"
+    # - name: "helmet"
+    #   version: "^7.0.0"
+    #   purpose: "Security headers for Express.js"
+
+# Security-specific governance
+governance:
+  spaces:
+    - name: "regulatory_requirements"
+      scope: "compliance standards and legal requirements"
+      sources: ["GDPR documentation", "SOC 2 requirements", "industry standards"]
+    - name: "threat_landscape"
+      scope: "security threats and attack vectors"
+      sources: ["OWASP guidelines", "security assessments", "incident reports"]
+    - name: "data_classification"
+      scope: "types of data and protection requirements"
+      sources: ["data inventory", "privacy policies", "classification schemes"]
+    - name: "security_controls"
+      scope: "implemented security measures and their effectiveness"
+      sources: ["security policies", "audit reports", "monitoring systems"]
+  direction:
+    # Example security implementation flow:
+    start_point: "Security gap identified or compliance requirement introduced"
+    current_state: "Requirements analyzed, threat model documented, controls planned"
+    decisions:
+      # - "Use OAuth 2.0 with PKCE for authentication rather than custom tokens"
+      # - "Implement data encryption at rest using AES-256"
+      # - "Store audit logs in separate database for compliance isolation"
+      - ""
+    pending_decisions:
+      # - "Choose between JWT and session tokens for API authentication"
+      # - "Determine data retention period for audit logs"
+      # - "Select third-party service for identity verification"
+      - ""
+    target_outcome: "Security controls implemented, compliance requirements met, audit trail established"
+    options:
+      # - "Implement custom RBAC vs use third-party authorization service"
+      # - "Encrypt individual fields vs full database encryption"
+      # - "Real-time compliance monitoring vs periodic audit reviews"
+      - ""
+    next_steps:
+      # - "Implement input validation and sanitization"
+      # - "Add comprehensive audit logging"
+      # - "Configure security headers and HTTPS enforcement"
+      - ""
+
+prompt_inputs:
+  task_kind: "review"  # Often review for security, generate for new controls
+  primary_prompt_id: "refactor-001"  # For security improvements
+  supplemental_prompts:
+    # - "doc-gen-001"           # For security documentation
+    # - "component-test-001"    # For security testing
+    - ""
+  examples:
+    # Examples of security implementation patterns:
+    # - "OWASP secure coding practices for input validation"
+    # - "GDPR-compliant data deletion implementation"
+    # - "OAuth 2.0 flow with proper token management"
+    # - "Audit logging pattern with sensitive data protection"
+    - ""
+
+outputs:
+  expected_artifacts:
+    - name: "Security Implementation"
+      path: ""
+      description: "Code implementing required security controls"
+    - name: "Compliance Documentation"
+      path: ""
+      description: "Updated policies and procedures for compliance"
+    # - name: "Security Tests"
+    #   path: ""
+    #   description: "Tests validating security controls work correctly"
+    # - name: "Audit Trail Implementation"
+    #   path: ""
+    #   description: "Logging system for compliance requirements"
+  review_checklist:
+    - "All sensitive data properly encrypted and protected"
+    - "Authentication and authorization working correctly"
+    - "Input validation prevents injection attacks"
+    - "Audit logging captures all required events"
+    - "Compliance requirements fully addressed"
+    - "Security headers and HTTPS properly configured"
+    - "Error messages don't leak sensitive information"
+    - "Session management follows security best practices"
+    - "Data retention and deletion policies implemented"
+    - "Security testing covers all implemented controls"

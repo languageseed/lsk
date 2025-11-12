@@ -1,0 +1,55 @@
+# LSKv4 - Phase Plan
+# This file tracks the progress of contract implementation through the pipeline phases.
+
+pipeline:
+  mode: "strict"  # Options: strict, lenient, experimental
+  contract_name: "{{contract_name}}"  # Replace with actual contract name
+
+current_phase: "definition"  # Current active phase
+next_phase: "validation"     # Next phase to begin
+
+phases:
+  definition:
+    status: "in_progress"    # not_started, in_progress, paused, complete, skipped, blocked
+    started: "{{current_date}}"  # ISO format date when phase started
+    checkpoint: null          # Will reference checkpoint file when created
+    
+  validation:
+    status: "not_started"
+    started: null
+    checkpoint: null
+    
+  implementation:
+    status: "not_started"
+    started: null
+    checkpoint: null
+    
+  integration:
+    status: "not_started"
+    started: null
+    checkpoint: null
+    
+  uat:
+    status: "not_started"
+    started: null
+    checkpoint: null
+    
+  certify:
+    status: "not_started"
+    started: null
+    checkpoint: null
+
+checkpoints:
+  # Will be populated as checkpoints are created
+  # Example: definition: checkpoint@auth-service_definition_2024-04-08.md
+
+blockers:
+  # List any blockers preventing progress
+  # - description: "Waiting for API spec from team X"
+  #   reported: "2024-04-08"
+  #   owner: "Team X"
+
+notes:
+  # Additional context or notes about the implementation
+  # - "This implementation follows the XYZ pattern"
+  # - "Special considerations for security requirements" 

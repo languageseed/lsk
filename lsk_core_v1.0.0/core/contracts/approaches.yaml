@@ -1,0 +1,293 @@
+# LSKv4 - Architectural Approaches
+# Version: 4.0.0
+# Last Updated: 2025-08-24
+# 
+# This file documents architectural approaches organized by tier.
+# Use the metadata section to track changes and dependencies.
+
+metadata:
+  version: "4.0.0"
+  last_updated: "2025-08-24"
+  source_codebase: "lskv4"
+  contract_type: "architectural_approach"
+  validation_rules:
+    - "Must include clear benefits and tradeoffs"
+    - "Must provide concrete examples"
+    - "Must specify when to use/not use"
+    - "Must indicate applicable tiers"
+
+approaches:
+  # Component Approaches
+  - id: "component-driven-001"
+    name: "Component-Driven Development"
+    category: "development"
+    applicable_tiers: ["component"]
+    description: "Building applications bottom-up, starting with individual components and then combining them"
+    when_to_use:
+      - "Building design systems"
+      - "Creating reusable component libraries"
+      - "When visual consistency is critical"
+    when_not_to_use:
+      - "Complex state management requirements"
+      - "Tightly integrated features"
+      - "When components need extensive context"
+    benefits:
+      - "Improved reusability"
+      - "Easier testing"
+      - "Better visual consistency"
+      - "Parallel development"
+    tradeoffs:
+      - "Can lead to over-abstraction"
+      - "May require additional integration work"
+      - "Can be challenging to handle global state"
+    example_implementation:
+      codebase: "lskv4"
+      components:
+        - "Button Component"
+        - "Form Component"
+        - "Card Component"
+        - "Table Component"
+    related_patterns:
+      - "component-factory-001"
+      - "component-strategy-001"
+
+  - id: "atomic-design-001"
+    name: "Atomic Design"
+    category: "organizational"
+    applicable_tiers: ["component"]
+    description: "Breaking down interfaces into atoms, molecules, organisms, templates, and pages"
+    when_to_use:
+      - "Building complex UI systems"
+      - "Need for scalable design systems"
+      - "Large development teams"
+    when_not_to_use:
+      - "Simple UIs with few components"
+      - "Rapid prototyping"
+      - "Teams unfamiliar with the methodology"
+    benefits:
+      - "Systematic approach to UI"
+      - "Clear component hierarchy"
+      - "Consistent design language"
+      - "Better component reuse"
+    tradeoffs:
+      - "Learning curve"
+      - "Potential over-classification"
+      - "Additional organizational overhead"
+    example_implementation:
+      codebase: "lskv4"
+      hierarchy:
+        - "Atoms: Button, Input, Icon"
+        - "Molecules: SearchBar, FormField, Card"
+        - "Organisms: NavBar, UserProfile, Dashboard"
+        - "Templates: LoginPage, ProfilePage"
+        - "Pages: Home, Settings, Analytics"
+    related_patterns:
+      - "component-factory-001"
+
+  # Module Approaches
+  - id: "feature-module-001"
+    name: "Feature Module Architecture"
+    category: "organizational"
+    applicable_tiers: ["module"]
+    description: "Organizing code by feature rather than by type, with each module containing everything needed for a feature"
+    when_to_use:
+      - "Large applications with distinct features"
+      - "Teams organized around features"
+      - "Need for feature-level encapsulation"
+    when_not_to_use:
+      - "Small applications with few features"
+      - "Highly shared code across features"
+      - "Teams organized by function (UI, backend, etc.)"
+    benefits:
+      - "Better feature encapsulation"
+      - "Clearer code organization"
+      - "Easier feature development"
+      - "Improved team autonomy"
+    tradeoffs:
+      - "Potential code duplication"
+      - "Challenge of shared utilities"
+      - "Integration complexity"
+    example_implementation:
+      codebase: "lskv4"
+      modules:
+        - "User Management"
+        - "Authentication"
+        - "Dashboard"
+        - "Reports"
+    related_patterns:
+      - "module-orchestrator-001"
+      - "module-mediator-001"
+
+  - id: "composite-component-001"
+    name: "Composite Component Architecture"
+    category: "structural"
+    applicable_tiers: ["module"]
+    description: "Building larger components by composing smaller ones, with clear hierarchies and responsibilities"
+    when_to_use:
+      - "Complex UI components"
+      - "Reusable patterns across the application"
+      - "Need for component consistency"
+    when_not_to_use:
+      - "Simple components"
+      - "Highly dynamic components"
+      - "Components with complex state"
+    benefits:
+      - "Reusable component compositions"
+      - "Consistent patterns"
+      - "Easier maintenance"
+      - "Better separation of concerns"
+    tradeoffs:
+      - "Potential complexity"
+      - "Performance considerations"
+      - "Learning curve"
+    example_implementation:
+      codebase: "lskv4"
+      compositions:
+        - "DataTable = Table + Pagination + Search + Filter"
+        - "UserDashboard = Header + Sidebar + MainContent"
+        - "FormWizard = StepNavigation + FormStep + Actions"
+    related_patterns:
+      - "module-orchestrator-001"
+      - "component-strategy-001"
+
+  # Service Approaches
+  - id: "service-oriented-001"
+    name: "Service-Oriented Architecture"
+    category: "distributed"
+    applicable_tiers: ["service"]
+    description: "Architecture pattern where functionality is organized into independent services that communicate through well-defined interfaces"
+    when_to_use:
+      - "Building modular systems with clear boundaries"
+      - "Need for independent scaling of components"
+      - "Requirement for loose coupling between features"
+    when_not_to_use:
+      - "Simple, monolithic applications"
+      - "Tightly coupled systems"
+      - "Performance-critical applications requiring direct communication"
+    benefits:
+      - "Modularity and maintainability"
+      - "Independent scaling"
+      - "Clear service boundaries"
+      - "Easier testing and deployment"
+    tradeoffs:
+      - "Increased complexity in service communication"
+      - "Potential performance overhead"
+      - "More complex deployment requirements"
+    example_implementation:
+      codebase: "lskv4"
+      services:
+        - "Authentication Service"
+        - "User Service"
+        - "Notification Service"
+        - "Analytics Service"
+    related_patterns:
+      - "service-001"
+      - "service-repository-001"
+
+  - id: "event-driven-001"
+    name: "Event-Driven Architecture"
+    category: "distributed"
+    applicable_tiers: ["service", "module"]
+    description: "Architecture pattern where system components communicate through events, enabling asynchronous processing and loose coupling"
+    when_to_use:
+      - "Real-time communication requirements"
+      - "Asynchronous processing needs"
+      - "Decoupled system components"
+    when_not_to_use:
+      - "Simple request-response flows"
+      - "Synchronous processing requirements"
+      - "Tightly coupled operations"
+    benefits:
+      - "Real-time updates"
+      - "Asynchronous processing"
+      - "Loose coupling"
+      - "Better scalability"
+    tradeoffs:
+      - "Complex event flow management"
+      - "Potential event ordering issues"
+      - "Debugging complexity"
+    example_implementation:
+      codebase: "lskv4"
+      components:
+        - "Event bus"
+        - "Event handlers"
+        - "Event publishers"
+        - "Event subscribers"
+    related_patterns:
+      - "component-observer-001"
+      - "service-repository-001"
+
+  # Platform Approaches
+  - id: "cloud-native-001"
+    name: "Cloud-Native Architecture"
+    category: "infrastructure"
+    applicable_tiers: ["platform"]
+    description: "Designing systems specifically to take advantage of cloud computing capabilities"
+    when_to_use:
+      - "Building scalable, resilient applications"
+      - "Need for elastic infrastructure"
+      - "Microservices architecture"
+    when_not_to_use:
+      - "Simple applications with stable loads"
+      - "Applications with strict on-premises requirements"
+      - "Legacy systems with tight coupling"
+    benefits:
+      - "Scalability"
+      - "Resilience"
+      - "Automated operations"
+      - "Reduced infrastructure management"
+    tradeoffs:
+      - "Increased complexity"
+      - "Cloud provider dependency"
+      - "Potential cost implications"
+    example_implementation:
+      codebase: "lskv4"
+      components:
+        - "Containerized services"
+        - "Orchestration with Kubernetes"
+        - "Infrastructure as Code"
+        - "Monitoring and observability"
+    related_patterns:
+      - "platform-adapter-001"
+      - "service-oriented-001"
+
+  - id: "serverless-001"
+    name: "Serverless Architecture"
+    category: "infrastructure"
+    applicable_tiers: ["platform"]
+    description: "Building applications without managing servers, using Function-as-a-Service (FaaS) and managed services"
+    when_to_use:
+      - "Event-driven applications"
+      - "Variable workloads"
+      - "Quick time-to-market requirements"
+    when_not_to_use:
+      - "Long-running processes"
+      - "Applications requiring consistent performance"
+      - "Legacy applications"
+    benefits:
+      - "Reduced operational overhead"
+      - "Pay-per-use pricing"
+      - "Automatic scaling"
+      - "Faster development"
+    tradeoffs:
+      - "Cold start issues"
+      - "Vendor lock-in"
+      - "Limited execution time"
+      - "Debugging challenges"
+    example_implementation:
+      codebase: "lskv4"
+      components:
+        - "Lambda/Cloud Functions"
+        - "API Gateway"
+        - "Managed databases"
+        - "Event triggers"
+    related_patterns:
+      - "platform-adapter-001"
+      - "platform-factory-001"
+
+# AI Extension Guidelines:
+# 1. Add new approaches with unique IDs
+# 2. Specify applicable tiers (component, module, service, platform)
+# 3. Include concrete examples
+# 4. Document benefits and tradeoffs
+# 5. Link to related patterns 

@@ -1,0 +1,159 @@
+# Context Pack Template - Debugging & Troubleshooting
+# Copy and fill this YAML, then paste relevant sections into your AI tool.
+
+metadata:
+  task_id: ""
+  title: ""
+  owner: ""
+  created_at: ""
+  updated_at: ""
+  notes: []
+
+objective:
+  problem_statement: |
+    # Example: "Users report intermittent 500 errors when uploading files larger than 10MB"
+    # Example: "Authentication service randomly fails for 3% of login attempts"
+    # Example: "Database connection pool exhaustion occurs every 2-3 days"
+    
+    # Your debugging challenge:
+  constraints:
+    # Example: "Cannot restart production services during business hours"
+    # Example: "Must preserve all existing user data during investigation"
+    # Example: "Limited access to production logs (privacy/security)"
+    - ""
+    - ""
+  acceptance_criteria:
+    # Example: "Identify root cause of intermittent failures"
+    # Example: "Implement fix that reduces error rate to under 0.1%"
+    # Example: "Provide monitoring to detect similar issues in future"
+    - ""
+    - ""
+
+context:
+  issue_details:
+    # Specific details about the problem:
+    # - "Error occurs during file upload after progress reaches 80%"
+    # - "Affects 3% of users, seems random across user types"
+    # - "Started happening after deployment on 2025-01-15"
+    - ""
+    - ""
+  error_evidence:
+    # Include error messages, logs, stack traces:
+    # - "Error: ECONNRESET - Connection reset by peer"
+    # - "Database timeout after 30 seconds"
+    # - "Memory usage spikes to 95% before failure"
+    - ""
+    - ""
+  reproduction_steps:
+    # How to reproduce the issue (if known):
+    # 1. "Login as standard user"
+    # 2. "Navigate to file upload page"
+    # 3. "Upload file larger than 10MB"
+    # 4. "Error occurs around 80% progress"
+    - ""
+    - ""
+  code_targets:
+    # Example patterns:
+    - path: "src/services/file-upload.ts"
+      reason: "Contains file upload logic where error occurs"
+      include:
+        - "Upload progress tracking"
+        - "Error handling functions"
+        - "Connection management"
+      exclude:
+        - "File validation logic (working correctly)"
+    # - path: "src/middleware/auth.ts"
+    #   reason: "Authentication middleware related to login failures"
+    #   include:
+    #     - "Token validation"
+    #     - "Session management"
+    #   exclude:
+    #     - "Password hashing (not the issue)"
+  recent_changes:
+    # What changed recently that might be related:
+    - ref: ""
+      summary: ""
+      date: ""
+  environment_info:
+    # System environment details:
+    # - "Node.js v18.17.0, Express 4.18.2"
+    # - "PostgreSQL 15.3, Redis 7.0.11" 
+    # - "Deployed on AWS ECS with 2GB memory limit"
+    - ""
+  glossary:
+    # Define domain-specific terms:
+    - term: ""
+      definition: ""
+  dependencies:
+    # Relevant libraries that might be involved:
+    - name: ""
+      version: ""
+      purpose: ""
+
+# Debugging-specific governance
+governance:
+  spaces:
+    - name: "error_evidence"
+      scope: "logs, error messages, stack traces"
+      sources: ["application logs", "error monitoring", "user reports"]
+    - name: "system_state"
+      scope: "system behavior when error occurs"
+      sources: ["monitoring dashboards", "database logs", "infrastructure metrics"]
+    - name: "code_analysis"
+      scope: "relevant code that might contain the bug"
+      sources: ["source code", "recent changes", "related functions"]
+  direction:
+    # Example debugging flow:
+    start_point: "Error reported by users, initial investigation started"
+    current_state: "Error reproduced, logs collected, suspect code identified"
+    decisions:
+      # - "Focus on file upload service rather than frontend upload component"
+      # - "Investigate connection pooling before looking at file processing logic"
+      - ""
+    pending_decisions:
+      # - "Whether to add more detailed logging vs fix suspected root cause"
+      # - "Roll back recent deployment vs implement targeted fix"
+      - ""
+    target_outcome: "Root cause identified, fix implemented, monitoring added"
+    options:
+      # - "Add comprehensive logging to identify exact failure point"
+      # - "Implement graceful degradation for large file uploads"
+      # - "Review connection pool configuration and limits"
+      - ""
+    next_steps:
+      # - "Analyze connection pool metrics during error occurrence"
+      # - "Add debug logging to file upload service"
+      # - "Test with various file sizes to identify threshold"
+      - ""
+
+prompt_inputs:
+  task_kind: "review"  # Usually review/analyze for debugging
+  primary_prompt_id: "refactor-001"  # For fixing identified issues
+  supplemental_prompts:
+    # - "doc-gen-001"  # For documenting the fix
+    - ""
+  examples:
+    # Examples of debugging approaches:
+    # - "Binary search approach: isolate the failing component"
+    # - "Add structured logging at key decision points"
+    # - "Compare working vs failing request patterns"
+    - ""
+
+outputs:
+  expected_artifacts:
+    - name: "Root Cause Analysis"
+      path: ""
+      description: "Document identifying the exact cause of the issue"
+    - name: "Fix Implementation"
+      path: ""
+      description: "Code changes that resolve the issue"
+    # - name: "Monitoring Enhancements"
+    #   path: ""
+    #   description: "Additional monitoring to catch similar issues"
+  review_checklist:
+    - "Root cause clearly identified and verified"
+    - "Fix addresses the root cause, not just symptoms"
+    - "Similar edge cases considered and handled"
+    - "Monitoring added to detect regression"
+    - "Fix tested with original reproduction steps"
+    - "Documentation updated with troubleshooting guidance"

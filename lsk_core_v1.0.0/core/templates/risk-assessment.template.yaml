@@ -1,0 +1,318 @@
+# Risk Assessment & Uncertainty Validation Template
+# Use this BEFORE committing to full implementation to identify and de-risk uncertain aspects
+
+metadata:
+  task_id: ""
+  phase: "risk_assessment"
+  created_at: ""
+  purpose: "Identify high-risk/high-uncertainty areas and validate assumptions early"
+
+risk_assessment:
+  project_overview: |
+    # Brief description of what you're planning to build
+    # Example: "Build real-time collaborative document editor with WebSocket sync"
+    # Example: "Migrate 500GB PostgreSQL database to distributed architecture"
+    # Example: "Integrate LLM-powered code review into CI/CD pipeline"
+
+  # CRITICAL: What are you LEAST certain about?
+  high_uncertainty_areas:
+    # These are the "unknown unknowns" - aspects you're not sure will work
+    
+    - area: ""
+      uncertainty_description: |
+        # What specifically are you uncertain about?
+        # Example: "Not sure if WebSocket can handle 10K concurrent users"
+        # Example: "Unclear if our data model will work with document graph"
+        # Example: "Unknown if LLM API latency will be acceptable in CI pipeline"
+      
+      why_this_matters: |
+        # What's the impact if this doesn't work?
+        # Example: "If WebSockets don't scale, entire architecture is wrong"
+        # Example: "If graph queries are slow, UX will be unacceptable"
+        # Example: "If LLM is too slow, developers won't use the feature"
+      
+      current_assumptions: []
+        # What are you assuming to be true?
+        # Example: "Assuming WebSocket connections are lightweight"
+        # Example: "Assuming Neo4j can handle our query patterns"
+        # Example: "Assuming LLM responses in 2-3 seconds"
+      
+      risk_level: ""  # critical | high | medium | low
+      
+      impact_if_wrong: ""  # blocks_project | major_rework | minor_adjustment
+
+  # What could make this project fail?
+  critical_risks:
+    - risk: ""
+      likelihood: ""  # high | medium | low
+      impact: ""  # critical | high | medium | low
+      
+      mitigation_strategy: |
+        # How could we reduce this risk?
+        # Example: "Load test with 10K simulated connections"
+        # Example: "Prototype the graph query patterns"
+        # Example: "Benchmark LLM API with production-like payloads"
+
+  # What assumptions need validation?
+  assumptions_to_validate:
+    - assumption: ""
+      confidence: ""  # high | medium | low
+      
+      validation_method: |
+        # How can we test this assumption quickly?
+        # Example: "Build minimal WebSocket server, load test with 10K clients"
+        # Example: "Create sample data, run graph queries, measure latency"
+        # Example: "Send 100 code snippets to LLM, measure response times"
+      
+      validation_effort: ""  # hours or days
+      validation_priority: ""  # must_do | should_do | nice_to_have
+
+# Proof of Concept (PoC) Planning
+proof_of_concepts:
+  # Super lean experiments to validate high-risk areas
+  
+  - poc_id: "poc-001"
+    name: ""
+    
+    purpose: |
+      # What question does this PoC answer?
+      # Example: "Can WebSocket handle 10K concurrent connections?"
+      # Example: "Is LLM latency acceptable for CI/CD integration?"
+      # Example: "Can we query document graph in <100ms?"
+    
+    success_criteria:
+      # How will you know if this worked?
+      - ""  # Example: "Handles 10K connections with <100ms latency"
+      - ""  # Example: "LLM responds in <3 seconds for 90% of requests"
+      - ""  # Example: "Graph queries complete in <100ms for typical documents"
+    
+    failure_criteria:
+      # What indicates this approach won't work?
+      - ""  # Example: "Latency exceeds 500ms with 1K connections"
+      - ""  # Example: "LLM takes >10 seconds for any request"
+      - ""  # Example: "Query time grows exponentially with document size"
+    
+    scope_minimal:
+      # What's the ABSOLUTE MINIMUM to test the hypothesis?
+      what_to_build: |
+        # Example: "Simple WebSocket server that echoes messages"
+        # Example: "Single endpoint that calls LLM API with sample code"
+        # Example: "Mock document graph with 100 nodes, run queries"
+      
+      what_to_skip: |
+        # Example: "Skip authentication, error handling, UI"
+        # Example: "Skip actual code analysis, just test LLM latency"
+        # Example: "Skip real documents, use synthetic data"
+      
+      time_budget: ""  # Example: "4 hours max"
+      
+    implementation_approach: |
+      # Step-by-step super lean approach
+      # Example:
+      # 1. Spin up basic WebSocket server (1 hour)
+      # 2. Write load testing script (1 hour)
+      # 3. Run tests with increasing connections (1 hour)
+      # 4. Measure and document results (1 hour)
+    
+    exit_decision:
+      if_success: |
+        # What do we do if PoC validates the approach?
+        # Example: "Proceed with WebSocket architecture"
+        # Example: "Design full LLM integration pipeline"
+      
+      if_failure: |
+        # What do we do if PoC shows this won't work?
+        # Example: "Pivot to polling architecture"
+        # Example: "Reconsider LLM in CI/CD, move to async analysis"
+      
+      if_inconclusive: |
+        # What if results are unclear?
+        # Example: "Extend PoC to test with realistic data"
+        # Example: "Consult with expert on WebSocket optimization"
+
+# Lean Testing Strategy
+lean_validation:
+  philosophy: |
+    # The goal is to FAIL FAST and LEARN QUICKLY
+    # 
+    # Better to spend 4 hours learning an approach won't work
+    # than 4 weeks building the wrong thing.
+    #
+    # Ask: "What's the smallest experiment that could prove us wrong?"
+  
+  validation_sequence:
+    # Order matters - validate highest risk items first
+    - priority: 1
+      what_to_validate: ""
+      estimated_effort: ""
+      blocks_what: ""  # What can't proceed without this?
+    
+    - priority: 2
+      what_to_validate: ""
+      estimated_effort: ""
+      blocks_what: ""
+
+# AI Collaboration Prompts for Risk Assessment
+
+ai_prompts:
+  risk_identification: |
+    Review this project plan and identify the highest-risk/highest-uncertainty areas:
+    
+    [Paste project overview]
+    
+    For each risk area, suggest:
+    1. What could go wrong?
+    2. How likely is it to be a problem?
+    3. What's the impact if it doesn't work?
+    4. How could we validate this quickly?
+  
+  poc_design: |
+    Help me design a minimal proof of concept to validate this assumption:
+    
+    Assumption: [What you're assuming to be true]
+    Risk if wrong: [Impact]
+    Current confidence: [Low/Medium/High]
+    
+    Design the SMALLEST experiment that could:
+    1. Validate this assumption is correct, OR
+    2. Prove this assumption is wrong
+    
+    Time budget: [Hours/Days]
+    
+    Focus on: What can we skip to keep this lean?
+  
+  failure_scenario_analysis: |
+    What are the most likely failure scenarios for this approach?
+    
+    Approach: [Your planned solution]
+    Constraints: [Technical, time, resource constraints]
+    
+    For each failure scenario:
+    1. How likely is it?
+    2. Would we catch it early or late?
+    3. How could we test for this before full implementation?
+
+# Documentation of Validation Results
+
+validation_results:
+  - poc_id: ""
+    executed_date: ""
+    time_spent: ""
+    
+    results: |
+      # What did you learn?
+      # Example: "WebSocket handles 8K connections before degrading"
+      # Example: "LLM latency averages 4.5 seconds - too slow for CI/CD"
+      # Example: "Graph queries scale linearly to 1000 nodes"
+    
+    decision: |
+      # What did you decide based on these results?
+      # Example: "Proceeding with WebSocket, will optimize for 8K limit"
+      # Example: "Pivoting to async analysis, not real-time in CI/CD"
+      # Example: "Graph approach validated, moving to implementation"
+    
+    assumptions_validated: []
+      # Which assumptions were confirmed?
+    
+    assumptions_invalidated: []
+      # Which assumptions were wrong?
+    
+    new_questions: []
+      # What new uncertainties emerged?
+
+# Example: Real-World Risk Assessment
+
+example:
+  project: "Real-time collaborative document editor"
+  
+  high_uncertainty_areas:
+    - area: "Conflict resolution"
+      uncertainty: "Not sure how to handle simultaneous edits to same paragraph"
+      assumptions:
+        - "Operational transforms will work for our use case"
+        - "We can implement OT in 2 weeks"
+      risk_level: "critical"
+      
+      poc_plan:
+        question: "Can we implement basic OT for text in 8 hours?"
+        minimal_scope:
+          - "Two browser windows editing same text"
+          - "Simple insert/delete operations only"
+          - "No formatting, no undo, no persistence"
+        time_budget: "8 hours"
+        success_criteria: "Edits from both windows merge correctly"
+        failure_criteria: "Text becomes corrupted or desynchronized"
+    
+    - area: "WebSocket scaling"
+      uncertainty: "Can server handle 1000 concurrent users?"
+      assumptions:
+        - "Node.js WebSocket server can handle 1K connections"
+        - "Single server sufficient for MVP"
+      risk_level: "high"
+      
+      poc_plan:
+        question: "What's the connection limit before degradation?"
+        minimal_scope:
+          - "Echo server with connection counter"
+          - "Load testing script with simulated clients"
+          - "Measure latency vs connection count"
+        time_budget: "4 hours"
+        success_criteria: "Handles 1K connections with <200ms latency"
+        failure_criteria: "Degradation below 500 connections"
+  
+  validation_sequence:
+    - priority: 1  # Must validate first
+      validate: "Conflict resolution (OT)"
+      reason: "Blocks entire architecture decision"
+      effort: "8 hours"
+    
+    - priority: 2  # Can validate in parallel or after
+      validate: "WebSocket scaling"
+      reason: "Affects infrastructure planning"
+      effort: "4 hours"
+
+# Tips for Effective Risk Assessment
+
+tips:
+  - tip: "Start with 'What could make this project fail?' not 'What should we build?'"
+    
+  - tip: "Validate critical assumptions BEFORE writing production code"
+    
+  - tip: "Time-box PoCs strictly - if you can't test it in 4-8 hours, scope is too big"
+    
+  - tip: "Better to discover a flawed approach in 4 hours than 4 weeks"
+    
+  - tip: "Ask AI: 'What assumptions am I making that could be wrong?'"
+    
+  - tip: "Design experiments that can FAIL - if PoC can't fail, it's not testing anything"
+    
+  - tip: "Document what you learned even if PoC fails - that's valuable knowledge"
+    
+  - tip: "Celebrate fast failures - they save time and money"
+
+# Conversation Checkpoint: After Risk Assessment
+
+checkpoint_template: |
+  ## Risk Assessment Complete
+  
+  ### High-Risk Areas Identified
+  1. [Area] - [Why it's risky] - [Validation plan]
+  2. [Area] - [Why it's risky] - [Validation plan]
+  
+  ### PoCs to Execute
+  - [ ] [PoC name] - [Time budget] - [Success/failure criteria]
+  - [ ] [PoC name] - [Time budget] - [Success/failure criteria]
+  
+  ### Critical Assumptions
+  - [Assumption] - Confidence: [Low/Med/High] - Validation: [Method]
+  - [Assumption] - Confidence: [Low/Med/High] - Validation: [Method]
+  
+  ### Decision
+  - [ ] Proceed with PoCs before full implementation
+  - [ ] Risks are acceptable, proceed to implementation
+  - [ ] Risks too high, reconsider approach
+  
+  ### Next Steps
+  1. [First PoC to execute]
+  2. [Validation sequence]
+

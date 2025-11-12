@@ -1,0 +1,229 @@
+# Artifact Metadata Template
+# Links development artifacts to LSK patterns, decisions, and quality metrics
+# Inspired by LSK_UX artefact management system
+
+metadata:
+  artifact_id: ""  # Unique identifier (e.g., "doceater-api-v1", "user-auth-module")
+  artifact_name: ""  # Human-readable name
+  artifact_type: ""  # code, documentation, test, config, design, database, api
+  version: "1.0.0"
+  created_at: ""  # ISO 8601 format: 2025-10-11T10:30:00Z
+  updated_at: ""
+  created_by: ""
+  status: "draft"  # draft, in_progress, review, complete, deprecated
+  
+  # Brief description of what this artifact is
+  description: |
+    # What is this artifact?
+    # Example: "Core API module for document processing with PDF extraction"
+    # Example: "User authentication service with JWT token management"
+    # Example: "Database migration scripts for v2.0 schema"
+
+# Link to LSK project context
+project_context:
+  project_name: ""
+  linked_context_pack: ""  # Path to context pack: .lsk/context-packs/project-name.yaml
+  linked_phase_plan: ""  # Path to phase plan: .lsk/phase-plans/project-name.yaml
+  linked_checkpoint: ""  # Path to checkpoint: .lsk/checkpoints/checkpoint@phase_date.md
+  current_phase: ""  # definition, validation, risk_assessment, implementation, etc.
+  
+  # Links to related artifacts
+  related_artifacts:
+    - artifact_id: ""
+      relationship: ""  # depends_on, implements, replaces, extends, tests
+
+# LSKv4.1.3 Patterns Applied
+patterns_applied:
+  risk_assessment:
+    used: false  # true if risk assessment was performed
+    template_path: ""  # .lsk/risks/artifact-risk-assessment.yaml
+    poc_results: []  # List of PoC results
+    risks_identified: 0
+    risks_mitigated: 0
+    
+  spike_and_refine:
+    used: false  # true if spike-and-refine approach was used
+    spike_duration: ""  # e.g., "4 hours", "2 days"
+    spike_results: ""  # Path to spike results document
+    learnings_documented: ""  # Path to learnings document
+    refinement_completed: false
+    
+  workspace_organization:
+    used: false  # true if spec/implementation separation used
+    spec_location: ""  # Path to specification (if separated)
+    impl_location: ""  # Path to implementation (if separated)
+    
+  service_boundaries:
+    used: false  # true if multi-service architecture
+    service_name: ""
+    dependencies: []  # List of upstream services
+    consumers: []  # List of downstream services
+    integration_points: 0
+    
+  core_first_development:
+    used: false  # true if core-first sequencing used
+    core_validated: false  # Phase 1: Core proven
+    basic_ui_added: false  # Phase 2: Usable
+    production_ready: false  # Phase 3: Deployed
+    polished: false  # Phase 4: Final UI
+
+# Implementation details
+implementation:
+  language: ""  # python, typescript, javascript, rust, go, etc.
+  framework: ""  # fastapi, express, react, svelte, django, etc.
+  
+  location:
+    primary_path: ""  # Main file or directory
+    additional_paths: []  # Related files/directories
+    
+  dependencies:
+    # External dependencies
+    - name: ""
+      version: ""
+      purpose: ""
+    
+  configuration:
+    # Environment variables, config files, etc.
+    config_files: []
+    env_variables: []
+
+# Quality metrics
+quality_metrics:
+  testing:
+    test_coverage: ""  # e.g., "85%", "unknown"
+    test_files: []  # Paths to test files
+    test_types: []  # unit, integration, e2e, performance
+    all_tests_passing: false
+    
+  code_quality:
+    linter_errors: ""  # e.g., "0 critical", "3 warnings"
+    code_review_status: ""  # not_reviewed, in_review, approved
+    complexity_score: ""  # If available
+    
+  documentation:
+    api_docs: false  # API documentation exists
+    code_comments: ""  # well_commented, some_comments, minimal
+    readme: false  # README.md exists
+    architecture_docs: false  # Architecture documented
+    
+  performance:
+    response_time: ""  # e.g., "<200ms", "unknown"
+    memory_usage: ""  # e.g., "50MB", "unknown"
+    benchmarked: false  # Performance benchmarks run
+    
+  security:
+    security_review: false  # Security review completed
+    vulnerabilities: ""  # e.g., "0 critical", "unknown"
+    authentication: ""  # implemented, not_needed, pending
+    authorization: ""  # implemented, not_needed, pending
+
+# Development decisions
+decisions:
+  # Key decisions made during development
+  - decision_date: ""
+    decision: |
+      # What was decided?
+      # Example: "Used FastAPI instead of Flask for async support"
+    rationale: |
+      # Why was this decision made?
+      # Example: "FastAPI provides native async/await and automatic API docs"
+    alternatives_considered: []
+    impact: ""  # low, medium, high
+    
+  # Technical debt identified
+  technical_debt:
+    - description: ""
+      severity: ""  # low, medium, high, critical
+      plan_to_address: ""
+      created_at: ""
+
+# Validation and acceptance
+validation:
+  acceptance_criteria:
+    - criterion: ""
+      status: ""  # not_started, in_progress, complete, blocked
+      
+  integration_testing:
+    tested_with: []  # Other components/services tested with
+    integration_status: ""  # not_tested, in_progress, passing, failing
+    
+  user_acceptance:
+    uat_completed: false
+    uat_date: ""
+    uat_results: ""  # Path to UAT results
+    user_feedback: []
+
+# Deployment information
+deployment:
+  deployment_status: ""  # not_deployed, dev, staging, production
+  deployment_date: ""
+  deployment_environment: ""  # development, staging, production
+  
+  infrastructure:
+    hosting: ""  # local, vps, cloud, container
+    scaling: ""  # fixed, horizontal, vertical
+    monitoring: false  # Monitoring configured
+    logging: false  # Logging configured
+    
+  rollback_plan:
+    plan_exists: false
+    rollback_tested: false
+
+# Change history
+change_history:
+  - version: "1.0.0"
+    date: ""
+    changes: []
+    breaking_changes: []
+    migration_required: false
+
+# Notes and observations
+notes:
+  - date: ""
+    author: ""
+    note: |
+      # Free-form notes
+      # Example: "Initial spike revealed async processing was critical"
+      # Example: "User feedback requested mobile-first design"
+
+# AI collaboration context
+ai_collaboration:
+  # If this artifact was created/modified with AI assistance
+  ai_assisted: false
+  ai_tool: ""  # cursor, copilot, claude, chatgpt, etc.
+  prompts_used: []  # LSK prompts or patterns used
+  ai_suggestions_adopted: []
+  human_overrides: []  # Where human judgement overrode AI suggestions
+
+# Success metrics specific to this artifact
+success_metrics:
+  # How will we know this artifact is successful?
+  - metric: ""
+    target: ""
+    current: ""
+    status: ""  # on_track, at_risk, achieved
+
+# Related resources
+resources:
+  documentation_links: []
+  design_files: []
+  api_specs: []
+  related_tickets: []
+  pull_requests: []
+
+# LSK-specific tracking
+lsk_tracking:
+  patterns_effectiveness:
+    # How well did LSK patterns work for this artifact?
+    - pattern: "risk_assessment"
+      effectiveness: ""  # very_helpful, helpful, neutral, not_helpful
+      time_saved: ""  # e.g., "2 hours", "1 week"
+      would_use_again: true
+      notes: ""
+      
+  lessons_for_lsk:
+    # Lessons that could improve LSK framework
+    - lesson: ""
+      suggested_improvement: ""
+      date: ""
+

@@ -1,0 +1,14 @@
+# LSK Feature Contract (Optional)
+name: "[Feature Name]"
+domain: "[Domain]"
+group: "[Feature Group]"
+parent_feature: null
+description: "[What this feature does and why it matters]"
+build_layer: "[Layer Name]"
+depends_on: []
+ingress: []
+egress: []
+tags: []
+execution_scope: "[informational|advisory|delegated|executive]"
+referenced_in_journeys: []
+conformance: "draft"
